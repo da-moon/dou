@@ -1,0 +1,176 @@
+{
+    "appConfig": {},
+    "description": "Test the various AWS Lambda Blue Green Deployment",
+    "keepWaitingPipelines": false,
+    "lastModifiedBy": "anonymous",
+    "limitConcurrent": true,
+    "parameterConfig": [],
+    "schema": "1",
+    "spelEvaluator": "v4",
+    "stages": [
+      {
+        "account": "aws-dev",
+        "aliasName": "live",
+        "deploymentStrategy": "$BLUEGREEN",
+        "destroyOnFail": true,
+        "functionName": "lambda-dev-01-spinroute",
+        "healthCheckType": "$LAMBDA",
+        "name": "AWS Lambda Route",
+        "outputArtifact": {
+          "account": "embedded-artifact",
+          "artifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "a333288f-fe83-481d-b5f1-d9d804c946b5",
+            "name": "output",
+            "reference": "IlRlc3QgZ29lcyBzcGxhdCEi",
+            "type": "embedded/base64"
+          }
+        },
+        "payloadArtifact": {
+          "account": "embedded-artifact",
+          "artifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "1db66735-6680-4480-bed4-a16b8a3aa822",
+            "name": "payload",
+            "reference": "ewoidGhpbmciOiAidGVzdCIKfQ==",
+            "type": "embedded/base64"
+          }
+        },
+        "refId": "23",
+        "region": "us-west-2",
+        "requisiteStageRefIds": [
+          "27"
+        ],
+        "stageEnabled": {
+          "expression": "true",
+          "type": "expression"
+        },
+        "timeout": 30,
+        "trafficPercentA": 50,
+        "type": "Aws.LambdaTrafficRoutingStage",
+        "versionNameA": "$LATEST",
+        "versionNameB": "$PREVIOUS"
+      },
+      {
+        "account": "aws-dev",
+        "cloudProvider": "aws",
+        "deadLetterConfig": {
+          "targetArn": ""
+        },
+        "detailName": "",
+        "enableLambdaAtEdge": false,
+        "envVariables": {},
+        "functionName": "lambda-bar-lambda-bar-foo",
+        "functionUid": "foo",
+        "handler": "function.intermittent_ps_handler",
+        "memorySize": 128,
+        "name": "AWS Lambda Deployment",
+        "publish": false,
+        "refId": "24",
+        "region": "us-west-2",
+        "requisiteStageRefIds": [],
+        "role": "arn:aws:iam::439114917687:role/ps_lambda_execution_role",
+        "runtime": "python3.8",
+        "s3bucket": "dou-armory-spinnaker-lambdas",
+        "s3key": "function.py.zip",
+        "securityGroupIds": [],
+        "stackName": "bar",
+        "subnetIds": [],
+        "tags": {
+          "ps-dou/owner": "DOU"
+        },
+        "timeout": 3,
+        "tracingConfig": {
+          "mode": "PassThrough"
+        },
+        "type": "Aws.LambdaDeploymentStage"
+      },
+      {
+        "account": "aws-dev",
+        "executionCount": 1,
+        "functionName": "lambda-bar-lambda-bar-foo",
+        "name": "AWS Lambda Invoke",
+        "payloadArtifact": {
+          "account": "embedded-artifact",
+          "artifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "fda6537a-5997-4af6-b54c-8e30209ec3da",
+            "name": "payload-thing",
+            "reference": "ewogICJmYWlsdXJlUmF0ZSI6IDAKfQ==",
+            "type": "embedded/base64"
+          }
+        },
+        "refId": "25",
+        "region": "us-west-2",
+        "requisiteStageRefIds": [
+          "24"
+        ],
+        "timeout": 3,
+        "type": "Aws.LambdaInvokeStage"
+      },
+      {
+        "account": "aws-dev",
+        "aliases": [
+          "live"
+        ],
+        "cloudProvider": "aws",
+        "deadLetterConfig": {
+          "targetArn": ""
+        },
+        "description": "Lambda Python JSON Input Function",
+        "detailName": "01",
+        "enableLambdaAtEdge": false,
+        "envVariables": {},
+        "functionName": "lambda-dev-01-spinroute",
+        "functionUid": "spinroute",
+        "handler": "function.simple_ps_handler",
+        "memorySize": 128,
+        "name": "AWS Lambda Deployment",
+        "publish": true,
+        "refId": "26",
+        "region": "us-west-2",
+        "requisiteStageRefIds": [],
+        "role": "arn:aws:iam::439114917687:role/ps_lambda_execution_role",
+        "runtime": "python3.8",
+        "s3bucket": "dou-armory-spinnaker-lambdas",
+        "s3key": "function.py.zip",
+        "securityGroupIds": [],
+        "stackName": "dev",
+        "subnetIds": [],
+        "tags": {
+          "owner": "david.perez@armory.io"
+        },
+        "timeout": 3,
+        "tracingConfig": {
+          "mode": "PassThrough"
+        },
+        "type": "Aws.LambdaDeploymentStage",
+        "vpcId": "vpc-07849ec65412253e0"
+      },
+      {
+        "account": "aws-dev",
+        "aliasName": "live",
+        "executionCount": 1,
+        "functionName": "lambda-dev-01-spinroute",
+        "name": "AWS Lambda Invoke name",
+        "payloadArtifact": {
+          "account": "embedded-artifact",
+          "artifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "15760cdd-ac1a-4f06-977f-fd7badd1653f",
+            "name": "payload",
+            "reference": "ewoidGhpbmciOiAiaG9sYSIKfQ==",
+            "type": "embedded/base64"
+          }
+        },
+        "refId": "27",
+        "region": "us-west-2",
+        "requisiteStageRefIds": [
+          "26"
+        ],
+        "timeout": 3,
+        "type": "Aws.LambdaInvokeStage"
+      }
+    ],
+    "triggers": []
+  }
