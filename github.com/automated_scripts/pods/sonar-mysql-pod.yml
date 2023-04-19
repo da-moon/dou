@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "sonar-mysql"
+  labels:
+    service: sonar-mysql
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "sonar-mysql-data"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /sonar_mysql_data/_data
+  containers:
+  - name: sonar-mysql
+    image: mysql:5.6.25
+    env:
+    - name: "MYSQL_ROOT_PASSWORD"
+      value: "e51818c0a77310573"
+    - name: "MYSQL_USER"
+      value: "sonar"
+    - name: "MYSQL_PASSWORD"
+      value: "sonar"
+    - name: "MYSQL_DATABASE"
+      value: "sonar"
+    ports:
+    - name: sonar-myadmin
+      containerPort: 3306
+    volumeMounts:
+    - name: "sonar-mysql-data"
+      mountPath: "/var/lib/mysql"

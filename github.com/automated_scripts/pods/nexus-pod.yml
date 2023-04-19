@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "nexus"
+  labels:
+    service: "nexus"
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "nexus-sonatype-work"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /nexus_sonatype_work/_data
+  containers:
+  - name: nexus
+    image: accenture/adop-nexus:0.1.3
+    ports:
+    - name: p8081
+      containerPort: 8081
+    env:
+    - name: "NEXUS_BASE_URL"
+      value: "http://35.167.188.87/nexus"
+    - name: "LDAP_SEARCH_BASE"
+      value: "dc=ldap,dc=example,dc=com"
+    - name: "LDAP_ENABLED"
+      value: "true"
+    - name: "LDAP_URL"
+      value: "ldap"
+    - name: "LDAP_BIND_DN"
+      value: "cn=admin,dc=ldap,dc=example,dc=com"
+    - name: "LDAP_USER_PASSWORD_ATTRIBUTE"
+      value: "userPassword"
+    - name: "LDAP_USER_BASE_DN"
+      value: "ou=people"
+    - name: "LDAP_GROUP_BASE_DN"
+      value: "ou=groups"
+    - name: "LDAP_BIND_PASSWORD"
+      value: "e5fdb71de4379485"
+    - name: LDAP_PORT
+      value: "389"
+    volumeMounts:
+    - name: "nexus-sonatype-work"
+      mountPath: "/sonatype-work"

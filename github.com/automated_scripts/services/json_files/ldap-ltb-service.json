@@ -1,0 +1,27 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "ldap-ltb",
+    "creationTimestamp": null,
+    "labels": {
+      "service": "ldap-ltb"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "80",
+        "protocol": "TCP",
+        "port": 80,
+        "targetPort": 80
+      }
+    ],
+    "selector": {
+      "service": "ldap-ltb"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

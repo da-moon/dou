@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "ldap-phpadmin"
+  labels:
+    service: ldap-phpadmin
+    name: "devops"
+  namespace: "devops"
+spec:
+  containers:
+  - name: ldap-phpadmin
+    image: accenture/adop-ldap-phpadmin:0.1.0
+    env:
+    - name: "LDAP_SERVER_NAME"
+      value: "LDAP"
+    - name: "LDAP_SERVER_HOST"
+      value: "ldap"
+    - name: "LDAP_SERVER_PORT"
+      value: "389"
+    - name: "LDAP_SERVER_BIND_ID"
+      value: "cn=admin,dc=ldap,dc=example,dc=com"
+    - name: "LDAP_SERVER_BASE_DN"
+      value: "dc=ldap,dc=example,dc=com"
+    ports:
+    - name: p80
+      containerPort: 80

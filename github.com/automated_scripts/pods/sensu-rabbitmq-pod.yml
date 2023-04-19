@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "sensu-rabbitmq"
+  labels:
+    service: "sensu-rabbitmq"
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "sensu-rabbitmq-data"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /sensu_rabbitmq_data/_data
+  containers:
+  - name: sensu-rabbitmq
+    image: rabbitmq:3.5.7-management
+    ports:
+    - containerPort: 5672
+      protocol: TCP
+    - containerPort: 5671
+      protocol: TCP
+    - containerPort: 15672
+      protocol: TCP
+    - containerPort: 15671
+      protocol: TCP
+    volumeMounts:
+    - name: "sensu-rabbitmq-data"
+      mountPath: "/var/lib/rabbitmq"

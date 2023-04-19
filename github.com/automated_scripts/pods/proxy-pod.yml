@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "proxy"
+  labels:
+    service: proxy
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "nginx-config"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /nginx_config/_data
+  - name: "nginx-releasenote"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /nginx_releasenote/_data
+  - name: "logs-area"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /logs/nginx
+  containers:
+  - name: proxy
+    image: digitalonus/proxy:0.1.1
+    env:
+#    - name: "constraint:tier"
+#      value: "=public"
+    - name: "LDAP_SERVER"
+      value: "ldap:389"
+    - name: "LDAP_USERNAME"
+      value: "cn=admin,dc=ldap,dc=example,dc=com"
+    - name: "LDAP_PASSWORD"
+      value: "e5fdb71de4379485"
+    - name: "LDAP_USER_BASE_DN"
+      value: "ou=people,dc=ldap,dc=example,dc=com"
+    - name: "LDAP_GROUP_ATTRIBUTE"
+      value: "member"
+    - name: "LDAP_USER_ID_ATTRIBUTE"
+      value: "cn"
+    - name: "LDAP_USER_OBJECT_CLASS"
+      value: "inetOrgPerson"
+    ports:
+    - name: 'p80'
+      containerPort: 80
+    - name: 'p443'
+      containerPort: 443
+    volumeMounts:
+    - name: "nginx-config"
+      mountPath: "/etc/nginx/"
+    - name: "nginx-releasenote"
+      mountPath: "/usr/share/nginx/html/"
+    - name: "logs-area"
+      mountPath: "/var/log/nginx"

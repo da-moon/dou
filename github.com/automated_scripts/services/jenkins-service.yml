@@ -1,0 +1,21 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jenkins
+  creationTimestamp: 
+  labels:
+    service: jenkins
+  namespace: devops
+spec:
+  ports:
+  - name: '8080'
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  - name: '50000'
+    protocol: TCP
+    port: 50000
+    targetPort: 50000
+  selector:
+    service: jenkins
