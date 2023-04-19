@@ -1,0 +1,15 @@
+@import "./fonts/fonts.css";
+
+body {
+  margin: 0;
+  font-family: Quicksand Light, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  background: url(image/rm373batch2-04.jpg) no-repeat center center / cover;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace, quicksand Light;
+}

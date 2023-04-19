@@ -1,0 +1,33 @@
+image: node:latest
+
+stages:
+  - build
+  - build image
+
+build:
+  stage: build
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules
+  script:
+    - npm config set legacy-peer-deps true
+    - npm cache clean --force
+    - rm -rf node_modules
+    - npm i web-vitals --save-dev
+    - npm install --save modulename --legacy-peer-deps
+    - npm run build
+
+build image:
+  stage: build image
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - npm config set legacy-peer-deps true
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+
