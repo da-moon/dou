@@ -1,0 +1,12 @@
+{
+  "userId": "a7e22ca8-52d3-11ec-bf63-0242ac130002",
+  "company": "Digital On Us",
+  "project": "Resume Builder",
+  "job-role": "Java Programmer",
+  "location" : "Mexico",
+  "current": true,
+  "start-date": "01-01-2022",
+  "end-date": "01-02-202",
+  "toPresent": false,
+  "description": "Create a resume builder tool"
+}

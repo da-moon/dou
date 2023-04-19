@@ -1,0 +1,26 @@
+[
+  {
+    "id": "a7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "userId": "a7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "institutionName": "Oracle",
+    "certificationName": "Java Programmer",
+    "link" : "http://www.test.com/",
+    "year": "01-01-2000"
+  },
+  {
+    "id": "a7e22ca8-52d3-11ec-bf63-0242ac130003",
+    "userId": "a7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "institutionName": "IBM",
+    "certificationName": "Python Programmer",
+    "link" : "http://www.test.com/",
+    "year": "01-01-2000"
+  },
+  {
+    "id": "a7e22ca8-52d3-11ec-bf63-0242ac130004",
+    "userId": "a7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "institutionName": "Google",
+    "certificationName": "Android Programmer",
+    "link" : "http://www.test.com/",
+    "year": "01-01-2000"
+  }
+]

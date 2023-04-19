@@ -1,0 +1,10 @@
+{
+    "request" : {
+        "urlPath" : "/api/v1/user-management/example",
+        "method" : "GET"
+    },
+    "response" : {
+        "status" : 200,
+        "body" : "Hello World"
+    }
+}
