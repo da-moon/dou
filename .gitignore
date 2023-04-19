@@ -1,0 +1,10 @@
+# .tfstate files
+.terraform
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+# Ignore Backend Files
+backend.tf
