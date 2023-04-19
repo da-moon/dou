@@ -1,0 +1,131 @@
+[
+  {
+    "name": "cfg-ctp-poc",
+    "acctid": "344776024863"
+  },
+  {
+    "name": "cfg-digital-prod",
+    "acctid": "641688799653"
+  },
+  {
+    "name": "cfg-digital-p-1",
+    "acctid": "418760984170"
+  },
+  {
+    "name": "cfg-digital-dev",
+    "acctid": "089613030395"
+  },
+  {
+    "name": "cfg-edo-prod",
+    "acctid": "833673263127"
+  },
+  {
+    "name": "cfg-edo-p-1",
+    "acctid": "739146443995"
+  },
+  {
+    "name": "cfg-edo-dev",
+    "acctid": "228873353375"
+  },
+  {
+    "name": "cfg-entsvc-prod",
+    "acctid": "440102540000"
+  },
+  {
+    "name": "cfg-entsvc-p-1",
+    "acctid": "142367722740"
+  },
+  {
+    "name": "cfg-entsvc-dev",
+    "acctid": "749622116802"
+  },
+  {
+    "name": "cfg-iam-prod",
+    "acctid": "365712642638"
+  },
+  {
+    "name": "cfg-iam-p-1",
+    "acctid": "278751585619"
+  },
+  {
+    "name": "cfg-iam-dev",
+    "acctid": "567819553439"
+  },
+  {
+    "name": "cfg-paas-p-2",
+    "acctid": "817344341083"
+  },
+  {
+    "name": "cfg-shared-services",
+    "acctid": "793022030544"
+  },
+  {
+    "name": "cfg-shared-p-1",
+    "acctid": "435188853256"
+  },
+  {
+    "name": "cfg-shared-p-2",
+    "acctid": "500034180852"
+  },
+  {
+    "name": "cfg-network-services",
+    "acctid": "757969136896"
+  },
+  {
+    "name": "cfg-consumer-dev",
+    "acctid": "660023206487"
+  },
+  {
+    "name": "cfg-consumer-p-1",
+    "acctid": "100234483533"
+  },
+  {
+    "name": "cfg-consumer-prod",
+    "acctid": "757711625144"
+  },
+  {
+    "name": "cfg-commercial-dev",
+    "acctid": "684306313380"
+  },
+  {
+    "name": "cfg-commercial-p-1",
+    "acctid": "148314272987"
+  },
+  {
+    "name": "cfg-commercial-prod",
+    "acctid": "206711183398"
+  },
+  {
+    "name": "cfg-security-services",
+    "acctid": "436968214673"
+  },
+  {
+    "name": "cfg-security-p-1",
+    "acctid": "073159480496"
+  },
+  {
+    "name": "cfg-security-p-2",
+    "acctid": "001217043492"
+  },
+  {
+    "name": "cfg-network-p-2",
+    "acctid": "517861195751"
+  },
+  {
+    "name": "cfg-paas-p-1",
+    "acctid": "188963064027"
+  },
+  {
+    "name": "cfg-paas-prod",
+    "acctid": "531712482413"
+  },
+
+  {
+    "name": "cfg-shared-logging1",
+    "acctid": "212724946526"
+  },
+  {
+    "name": "cfg-network-p-1",
+    "acctid": "946620176267"
+  }
+]
