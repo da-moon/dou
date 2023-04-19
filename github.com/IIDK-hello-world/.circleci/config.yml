@@ -1,0 +1,49 @@
+version: 2.1
+workflows:
+    iidk:
+        jobs:
+            - "build":
+                context: CaaS
+                filters:
+                    branches:
+                        only: main
+
+jobs:
+    "build":
+        docker:
+            - image: hashicorp/packer:latest
+
+        steps:
+            - checkout
+            - run:
+                name: Export config file
+                command: |
+                    echo "WHERE AM I EXPORT? "
+                    pwd
+                    ls
+                    echo export $(grep -v '^#' build.config | xargs) >> $BASH_ENV
+            - run:
+                name: Checkout the IIDK repository to build
+                command: |
+                    echo "WHERE AM I IIDK REPO? "
+                    pwd
+                    ls
+                    git clone -b $IIDK_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@${IIDK_GIT_URL} ./iidk
+            - run:
+                name: Set playbook for packer build
+                command: |
+                    PLAYBOOK=`echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]'`
+                    echo "Export variables to BASH_ENV"
+                    echo "export PKR_VAR_playbook=$PLAYBOOK" >> $BASH_ENV
+                    echo "export PKR_VAR_secret_key=${AWS_SECRET_ACCESS_KEY}" >> $BASH_ENV
+                    echo "export PKR_VAR_access_key=$AWS_ACCESS_KEY_ID" >> $BASH_ENV
+                    echo "export PKR_VAR_name=$CIRCLE_PROJECT_REPONAME" >> $BASH_ENV
+                    echo "export PKR_VAR_version=$CIRCLE_BUILD_NUM" >> $BASH_ENV
+            - run:
+                name: Call packer build
+                command: |
+                    echo "WHERE AM I PACKER BUILD? "
+                    pwd
+                    ls -la iidk
+                    cd iidk/build/server
+                    packer build -var-file=${PLATFORM}_variables.pkrvars.hcl ${PLATFORM}.pkr.hcl

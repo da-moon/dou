@@ -1,0 +1,6 @@
+---
+- hosts: iidk-hello-world
+  become: true
+  user: ubuntu
+  roles:
+    - iidk
