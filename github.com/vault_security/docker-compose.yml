@@ -1,0 +1,38 @@
+#version: '2'
+#services:
+  myvault:
+    image: vault:0.7.3
+    container_name: myvault
+    net: local_network
+    ports:
+      - "127.0.0.1:8200:8200"
+    volumes:
+      - ./vault_conf/file:/vault/file:rw
+      - ./vault_conf/config:/vault/config:rw
+    cap_add:
+      - IPC_LOCK
+    entrypoint: vault server -config=/vault/config/
+    environment:
+    - VAULT_ADDR=http://127.0.0.1:8200
+    - KEY1=r6+m5yHvKKA0rtByJkzpkAjZoMWQW8OtSSaerT5Oz2oB
+    - KEY2=I/UQGFxcupkCPtIyOSXZSXfC+m/HpmLBKMjHWRrK6wAC
+    - KEY3=YqJZXUFQyNyVr7YCnXltGwAvFSMGUGFxeW6XIwSO+mQD
+    - KEY4=SFilDY8skeic3fbiYni/c9of5b1aZjkUBmxOI0yq6CcE
+    - KEY5=CQ/sSJIg460LTJLSxiQLIa3yCvGbkDqkV8oeWVLu+UMF
+    - ROOT_TOKEN=4100d2fd-e457-7c36-c6ef-ed2d84eb33c6
+
+  postgres:
+    image: postgres:9
+    container_name: postgres
+    net: local_network
+    ports:
+    - "5432:5432"
+    environment:
+    - POSTGRES_DB=meetup
+    - POSTGRES_USER=myuser
+    - POSTGRES_PASSWORD=mypass
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data:rw
+
+
+#connection_url="postgresql://myuser:mypass@postgres:5432/postgres"
