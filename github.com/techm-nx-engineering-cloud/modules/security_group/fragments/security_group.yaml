@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'VPC'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterSecurityGroupName:
+    Description: 'Security Group Name'
+    Type: String
+  ParameterGroupDescrip:
+    Description: 'Security group description'
+    Type: String
+  ParameterVPCId:
+    Type: String
+    Description: 'VPC for the sg'
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      Tags:
+      - Key: Name
+        Value:
+          Ref: ParameterSecurityGroupName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+      GroupName:
+        Ref: ParameterSecurityGroupName
+      GroupDescription: 
+        Ref: ParameterGroupDescrip
+      VpcId:
+        Ref: ParameterVPCId
+

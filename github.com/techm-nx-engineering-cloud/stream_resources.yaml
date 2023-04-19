@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "NX Implementation. Summary: Create AppStream, Workspaces"
+Resources:
+  ResourceAppstream:
+    Type: TechM::NX::AppStream::MODULE
+    Properties:
+      ParameterDomainName: shared.nx.com
+      ParameterOU: 'OU=shared,DC=shared,DC=nx,DC=com'
+      ParameterSAName: 'SAName'
+      ParameterSAPassword: 'SAPassword'
+      ParameterStackName: 'module-stack'
+      ParameterStackPersistentSettings: 'true'
+      ParameterSettingsGroup: 'settingsgroup'
+      ParameterAppStreamFleet: 'module-fleet'
+      ParameterAppStreamImage: 'Amazon-AppStream2-Sample-Image-02-04-2019'
+      ParameterAppStreamInstanceType: 'stream.standard.small'
+      ParameterAppStreamFleetType: 'ON_DEMAND'
+      ParameterAppStreamCapacity: '1'
+      ParameterSecurityGroupAppStream: !GetAtt ResourceSGNxPublicSecurityGroup.GroupId
+      ParameterFleetStreamView: 'DESKTOP'
+      ParameterAppSFleetStart: 'true'
+      ParameterSubnet1: !GetAtt ResourceSubnetAppstream1Subnet.SubnetId
+      ParameterSubnet2: !GetAtt ResourceSubnetAppstream2Subnet.SubnetId
+      ParameterVersion: 1

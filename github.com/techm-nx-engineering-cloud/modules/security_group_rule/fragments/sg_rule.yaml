@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Security group ingress'
+Parameters:
+  ParameterIpProtocol:
+    Description: 'Ip Protocol for new rule'
+    Type: String
+  ParameterFromPort:
+    Description: 'Port for new rule'
+    Type: Number
+  ParameterToPort:
+    Description: 'Port for new rule'
+    Type: Number
+  ParameterSGId:
+    Description: 'Security group id in which new rule will be added'
+    Type: String
+  ParameterSGSource:
+    Description: 'Source security group id to add in the rule'
+    Type: String
+  ParameterSGType:
+    Description: 'CIDR or Security Group Id'
+    Type: String
+Conditions:
+  CIDR:
+    !Equals [!Ref ParameterSGType, 'cidr'] 
+  SGID:
+    !Not [Condition: CIDR]
+Resources:
+  InboundRuleCIDR:
+    Condition: CIDR
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: 
+        Ref: ParameterIpProtocol
+      FromPort: 
+        Ref: ParameterFromPort
+      ToPort: 
+        Ref: ParameterToPort
+      GroupId: 
+        Ref: ParameterSGId
+      CidrIp:
+        Ref: ParameterSGSource
+  InboundRuleSGId:
+    Condition: SGID
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: 
+        Ref: ParameterIpProtocol
+      FromPort: 
+        Ref: ParameterFromPort
+      ToPort: 
+        Ref: ParameterToPort
+      GroupId: 
+        Ref: ParameterSGId
+      SourceSecurityGroupId:
+        Ref: ParameterSGSource

@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'NatGateWay Module definition'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterEIPNatGWName:
+    Description: 'Elastic IP NatGateWay name'
+    Type: String
+  ParameterSubnetId:
+    Description: 'Subnet Id to atach the nat gateway'
+    Type: String
+  ParameterNATGatewayName:
+    Description: 'Nat gateway Name'
+    Type: String
+Resources:
+  EIPNatGW:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+      - Key: Name
+        Value:
+          Ref: ParameterEIPNatGWName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      SubnetId:
+        Ref: ParameterSubnetId
+      AllocationId: !GetAtt EIPNatGW.AllocationId
+      Tags:
+      - Key: Name
+        Value: 
+          Ref: ParameterNATGatewayName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion

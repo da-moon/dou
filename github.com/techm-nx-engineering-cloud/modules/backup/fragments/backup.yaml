@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Backup Module definition'
+Parameters:
+    ParameterVersion:
+      Type: Number
+      Description: 'Version'
+    ParameterBackupName:
+      Description: 'Backup name'
+      Type: String
+    ParameterResourceARN:
+      Description: 'Backup resource ARN'
+      Type: String
+    ParameterBackupSchedule:
+      Description: 'The time in which the backup will be made, e.g. cron(0 11 ? * * *)'
+      Type: String
+    ParameterBackupRetDays:
+      Description: 'Backup retention days'
+      Type: String
+    ParameterAppName:
+      Description: 'Application Name'
+      Type: String
+      Default: 'NX'
+    ParameterBackupIAMRoleARN:
+      Description: 'IAM Role to allows the AWS Backup Service to take scheduled backups and restore'
+      Type: String
+Resources:
+  ResourceBackupVault:
+    Type: AWS::Backup::BackupVault
+    Properties: 
+      BackupVaultName: 
+        !Join 
+          - ''
+          - - !Ref ParameterBackupName
+            - '-backup-vault'
+      BackupVaultTags: 
+          - Key : Application
+            Value: !Ref ParameterAppName
+          - Key: "Version"
+            Value: !Ref ParameterVersion
+  ResourceBackupPlan:
+    Type: AWS::Backup::BackupPlan
+    Properties: 
+      BackupPlan: 
+        BackupPlanName: 
+          !Join
+            - ''
+            - - !Ref ParameterBackupName
+              - '-backup-plan'
+        BackupPlanRule: 
+          -
+            CompletionWindowMinutes: 300
+            Lifecycle: 
+                DeleteAfterDays: !Ref ParameterBackupRetDays
+            RuleName:
+              !Join
+                - ''
+                - - !Ref ParameterBackupName
+                  - '-'
+                  - !Ref ParameterBackupRetDays
+                  - '-day-retention'
+            
+            ScheduleExpression: !Ref ParameterBackupSchedule
+            StartWindowMinutes: 60
+            TargetBackupVault: !Ref ResourceBackupVault
+  ResourceBackupSelection:
+    Type: AWS::Backup::BackupSelection
+    Properties: 
+      BackupPlanId: !Ref ResourceBackupPlan
+      BackupSelection: 
+        IamRoleArn: !Ref ParameterBackupIAMRoleARN
+        Resources: [!Ref ParameterResourceARN]
+        SelectionName: 
+          !Join 
+            - ''
+            - - !Ref ParameterBackupName
+              - '-selection'
+

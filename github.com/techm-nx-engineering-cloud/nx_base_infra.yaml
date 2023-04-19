@@ -1,0 +1,539 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "NX Implementation. Summary: Create VPC, Managed AD, Certificate Authority, ADFS, FSx."
+Resources:
+  ResourceNXVPC:
+    Type: TechM::NX::VPC::MODULE
+    Properties:
+      ParameterVPCCidrBlock: 10.1.0.0/16
+      ParameterVPCName: nx-vpc
+      ParameterIGWName: 'nx-igw'
+      ParameterVersion: 1
+  ResourceSharedNXVPC:
+    Type: TechM::NX::VPC::MODULE
+    Properties:
+      ParameterVPCCidrBlock: 10.2.0.0/16
+      ParameterVPCName: shared-nx-vpc
+      ParameterIGWName: 'shared-nx-igw'
+      ParameterVersion: 1
+  ResourcePeeringConnection:
+    Type: AWS::EC2::VPCPeeringConnection
+    DependsOn: 
+    - ResourceNXVPC 
+    - ResourceSharedNXVPC
+    Properties:
+      VpcId: !Ref ResourceSharedNXVPCVPC
+      PeerVpcId: !Ref ResourceNXVPCVPC
+      Tags:
+        - Key: Name
+          Value: "shared-nx-peering"
+        - Key: Version
+          Value: 1
+  ResourceSubnetNxPublic: 
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceNXVPC
+    Properties:
+      ParameterSubnetServers: 10.1.0.64/26
+      ParameterAvailabilityZone: 
+        Fn::Select:
+        - 0
+        - Fn::GetAZs:
+            Ref: "AWS::Region"
+      ParameterPublicIP: 'true'
+      ParameterSubnetName: 'nx-public-1'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetAppstream1:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceNXVPC
+    Properties:
+      ParameterSubnetServers: 10.1.2.0/23
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 0
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'false'
+      ParameterSubnetName: 'nx-appstream-1'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxAppstream2:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceNXVPC
+    Properties:
+      ParameterSubnetServers: 10.1.4.0/23
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 1
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'false'
+      ParameterSubnetName: 'nx-appstream-2'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxWorkspace1:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceNXVPC
+    Properties:
+      ParameterSubnetServers: 10.1.6.0/23
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 0
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'false'
+      ParameterSubnetName: 'nx-workspace-1'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxWorkspace2:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceNXVPC
+    Properties:
+      ParameterSubnetServers: 10.1.8.0/23
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 0
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'false'
+      ParameterSubnetName: 'nx-workspace-2'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxSharedPublic1:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceSharedNXVPC
+    Properties:
+      ParameterSubnetServers: 10.2.32.0/19
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 0
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'true'
+      ParameterSubnetName: 'nx-shared-public-1'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxSharedPublic2:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceSharedNXVPC
+    Properties:
+      ParameterSubnetServers: 10.2.64.0/19
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 1
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'true'
+      ParameterSubnetName: 'nx-shared-public-2'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxSharedPrivate1:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceSharedNXVPC
+    Properties:
+      ParameterSubnetServers: 10.2.96.0/19
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 0
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'false'
+      ParameterSubnetName: 'nx-shared-private-1'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSubnetNxSharedPrivate2:
+    Type: TechM::NX::Subnet::MODULE
+    DependsOn: ResourceSharedNXVPC
+    Properties:
+      ParameterSubnetServers: 10.2.128.0/19
+      ParameterAvailabilityZone: 
+        Fn::Select:
+          - 1
+          - Fn::GetAZs:
+              Ref: "AWS::Region"
+      ParameterPublicIP: 'false'
+      ParameterSubnetName: 'nx-shared-private-2'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceNatGWNX:
+    Type: TechM::NX::NATGW::MODULE
+    DependsOn: ResourceSubnetNxPublic
+    Properties:
+      ParameterEIPNatGWName: 'nx-nat-eip'
+      ParameterNATGatewayName: 'nx-natgw'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxPublicSubnet.SubnetId
+      ParameterVersion: 1
+  ResourceNatGWNXShared1:
+    Type: TechM::NX::NATGW::MODULE
+    DependsOn: ResourceSubnetNxSharedPublic1
+    Properties:
+      ParameterEIPNatGWName: 'nx-shared-1-nat-eip'
+      ParameterNATGatewayName: 'nx-natgw-1'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxSharedPublic1Subnet.SubnetId
+      ParameterVersion: 1
+  ResourceNatGWNXShared2:
+    Type: TechM::NX::NATGW::MODULE
+    DependsOn: ResourceSubnetNxSharedPublic2
+    Properties:
+      ParameterEIPNatGWName: 'nx-shared-2-nat-eip'
+      ParameterNATGatewayName: 'nx-natgw-2'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxSharedPublic2Subnet.SubnetId
+      ParameterVersion: 1
+  ResourceSGNxPublic:
+    Type: TechM::NX::SecGroup::MODULE
+    Properties:
+      ParameterSecurityGroupName: 'nx-public-sg'
+      ParameterGroupDescrip: 'NX public security group'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSGNxPrivate:
+    Type: TechM::NX::SecGroup::MODULE
+    Properties:
+      ParameterSecurityGroupName: 'nx-private-sg'
+      ParameterGroupDescrip: 'NX private security group'
+      ParameterVPCId: !GetAtt ResourceNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSGSharedNxPublic:
+    Type: TechM::NX::SecGroup::MODULE
+    Properties:
+      ParameterSecurityGroupName: 'shared-nx-public-sg'
+      ParameterGroupDescrip: 'Shared NX public security group'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSGSharedNxPrivate:
+    Type: TechM::NX::SecGroup::MODULE
+    Properties:
+      ParameterSecurityGroupName: 'shared-nx-private-sg'
+      ParameterGroupDescrip: 'Shared NX private security group'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterVersion: 1
+  ResourceSGRuleSGNXPublic:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 3389
+      ParameterToPort: 3389
+      ParameterSGId: !Ref ResourceSGNxPublicSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSGNXPrivateAll:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: '-1'
+      ParameterFromPort: 0
+      ParameterToPort: 0
+      ParameterSGId: !Ref ResourceSGNxPrivateSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSGNXPrivateSG:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: '-1'
+      ParameterFromPort: 0
+      ParameterToPort: 0
+      ParameterSGId: !Ref ResourceSGNxPrivateSecurityGroup
+      ParameterSGSource: !Ref ResourceSGNxPublicSecurityGroup
+      ParameterSGType: sgid
+  ResourceSGRuleSharedNXPub3389:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 3389
+      ParameterToPort: 3389
+      ParameterSGId: !Ref ResourceSGSharedNxPublicSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPub80:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 80
+      ParameterToPort: 80
+      ParameterSGId: !Ref ResourceSGSharedNxPublicSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPub443:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 443
+      ParameterToPort: 443
+      ParameterSGId: !Ref ResourceSGSharedNxPublicSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPub53:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 53
+      ParameterToPort: 53
+      ParameterSGId: !Ref ResourceSGSharedNxPublicSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPrivAllTCP:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 0
+      ParameterToPort: 65535
+      ParameterSGId: !Ref ResourceSGSharedNxPrivateSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPrivAllUDP:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'udp'
+      ParameterFromPort: 0
+      ParameterToPort: 65535
+      ParameterSGId: !Ref ResourceSGSharedNxPrivateSecurityGroup
+      ParameterSGSource: 0.0.0.0/0
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPrivAllVPC:
+    Type: "TechM::NX::SGRule::MODULE"
+    Properties: 
+      ParameterIpProtocol: 'icmp'
+      ParameterFromPort: -1
+      ParameterToPort: -1
+      ParameterSGId: !Ref ResourceSGSharedNxPrivateSecurityGroup
+      ParameterSGSource: !GetAtt ResourceNXVPCVPC.CidrBlock
+      ParameterSGType: cidr
+  ResourceSGRuleSharedNXPriv53:
+    Type: "TechM::NX::SGRule::MODULE"
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 53
+      ParameterToPort: 53
+      ParameterSGId: !Ref ResourceSGSharedNxPrivateSecurityGroup
+      ParameterSGSource: !Ref ResourceSGSharedNxPublicSecurityGroup
+      ParameterSGType: sgid
+  ResourceSGRuleSharedNXPriv3389:
+    Type: TechM::NX::SGRule::MODULE
+    Properties: 
+      ParameterIpProtocol: 'tcp'
+      ParameterFromPort: 3389
+      ParameterToPort: 3389
+      ParameterSGId: !Ref ResourceSGSharedNxPrivateSecurityGroup
+      ParameterSGSource: !Ref ResourceSGSharedNxPublicSecurityGroup
+      ParameterSGType: sgid
+  ResourceRouteTableSharedNXPriv1:
+    Type: TechM::NX::RouteTable::MODULE
+    Properties:
+      ParameterVpcId: !Ref ResourceSharedNXVPCVPC
+      ParameterRTName: 'shared-nx-route-private-1'
+      ParameterCIDR: !GetAtt ResourceNXVPCVPC.CidrBlock
+      ParameterTarget: !Ref ResourcePeeringConnection
+      ParameterTargetGW: !GetAtt ResourceNatGWNXShared1NATGateway.NatGatewayId
+      ParameterIsNAT: 'true'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxSharedPrivate1Subnet.SubnetId
+      ParameterVersion: 1
+  ResourceRouteTableSharedNXPriv2:
+    Type: TechM::NX::RouteTable::MODULE
+    Properties:
+      ParameterVpcId: !Ref ResourceSharedNXVPCVPC
+      ParameterRTName: 'shared-nx-route-private-2'
+      ParameterCIDR: !GetAtt ResourceNXVPCVPC.CidrBlock
+      ParameterTarget: !Ref ResourcePeeringConnection
+      ParameterTargetGW: !GetAtt ResourceNatGWNXShared2NATGateway.NatGatewayId
+      ParameterIsNAT: 'true'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxSharedPrivate2Subnet.SubnetId
+      ParameterVersion: 1
+  ResourceRouteTableSharedNXPublic:
+    Type: TechM::NX::RouteTable::MODULE
+    Properties:
+      ParameterVpcId: !Ref ResourceSharedNXVPCVPC
+      ParameterRTName: 'shared-nx-route-public'
+      ParameterCIDR: !GetAtt ResourceNXVPCVPC.CidrBlock
+      ParameterTarget: !Ref ResourcePeeringConnection
+      ParameterTargetGW: !GetAtt ResourceSharedNXVPCInternetGateway.InternetGatewayId
+      ParameterIsNAT: 'false'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxSharedPublic1Subnet.SubnetId
+      ParameterVersion: 1
+  ResourceRouteTableNXPrivate:
+    Type: TechM::NX::RouteTable::MODULE
+    Properties:
+      ParameterVpcId: !Ref ResourceNXVPCVPC
+      ParameterRTName: 'nx-route-private'
+      ParameterCIDR: !GetAtt ResourceSharedNXVPCVPC.CidrBlock
+      ParameterTarget: !Ref ResourcePeeringConnection
+      ParameterTargetGW: !GetAtt ResourceNatGWNXNATGateway.NatGatewayId
+      ParameterIsNAT: 'true'
+      ParameterSubnetId: !GetAtt ResourceSubnetAppstream1Subnet.SubnetId
+      ParameterVersion: 1
+  ResourceSubnAsscAppstream2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref ResourceRouteTableNXPrivateRouteTable
+      SubnetId: !Ref ResourceSubnetNxAppstream2Subnet
+  ResourceSubnAssWorkspace1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref ResourceRouteTableNXPrivateRouteTable
+      SubnetId: !Ref ResourceSubnetNxWorkspace1Subnet
+  ResourceSubnAsscWorkspace2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref ResourceRouteTableNXPrivateRouteTable
+      SubnetId: !Ref ResourceSubnetNxWorkspace2Subnet
+  ResourceRouteTableNXPublic:
+    Type: TechM::NX::RouteTable::MODULE
+    Properties:
+      ParameterVpcId: !Ref ResourceNXVPCVPC
+      ParameterRTName: 'nx-route-public'
+      ParameterCIDR: !GetAtt ResourceSharedNXVPCVPC.CidrBlock
+      ParameterTarget: !Ref ResourcePeeringConnection
+      ParameterTargetGW: !GetAtt ResourceNXVPCInternetGateway.InternetGatewayId
+      ParameterIsNAT: 'false'
+      ParameterSubnetId: !GetAtt ResourceSubnetNxPublicSubnet.SubnetId
+      ParameterVersion: 1
+  ResourceAppstreamRole:
+    Type: TechM::NX::IAM::MODULE
+    Properties:
+      ParameterServiceType: 'appstream'
+      ParameterStringequals: 'true'
+      ParameterRoleName: 'appstream-nx-role-cf'
+      ParameterPolicyName: 'nx-appstream-saml-policy'
+      ParameterEffect: 'Allow'
+      ParameterAction: 
+      - appstream:Stream
+      ParameterResource: 'arn:aws:appstream:us-east-1:520983883852:stack/*'
+      ParameterManagedPolicyArns: 
+      - arn:aws:iam::aws:policy/service-role/AmazonAppStreamServiceAccess
+      ParameterVersion: 1
+  ResourceNXRole:
+    Type: TechM::NX::IAM::MODULE
+    Properties:
+      ParameterServiceType: 'nx'
+      ParameterStringequals: 'false'
+      ParameterRoleName: 'nx-role-cf'
+      ParameterPolicyName: 'nx-adfs-saml-policy'
+      ParameterEffect: 'Allow'
+      ParameterAction: 
+      - iam:ListPolicies
+      - iam:GenerateCredentialReport
+      - iam:GetAccountPasswordPolicy
+      - iam:DeleteAccountPasswordPolicy
+      - iam:ListSAMLProviders
+      - iam:GetServiceLastAccessedDetailsWithEntities
+      - iam:ListServerCertificates
+      - iam:ListRoles
+      - iam:GetServiceLastAccessedDetails
+      - iam:ListVirtualMFADevices
+      - iam:GetOrganizationsAccessReport
+      - iam:SetSecurityTokenServicePreferences
+      - iam:GetContextKeysForCustomPolicy
+      - iam:SimulateCustomPolicy
+      - iam:UpdateAccountPasswordPolicy
+      - iam:ListOpenIDConnectProviders
+      - iam:CreateAccountAlias
+      - iam:ListAccountAliases
+      - iam:ListUsers
+      - iam:ListGroups
+      - iam:GetAccountAuthorizationDetails
+      - iam:DeleteAccountAlias
+      - iam:GetCredentialReport
+      - iam:GetAccountSummary
+      - iam:CreateSAMLProvider
+      - iam:UpdateAssumeRolePolicy
+      - iam:*
+      ParameterResource: 'arn:aws:iam::520983883852:saml-provider/*'
+      ParameterManagedPolicyArns: 
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      - arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess
+      - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+      ParameterVersion: 1
+  ResourceWorkspaceRole:
+    Type: TechM::NX::IAM::MODULE
+    Properties:
+      ParameterServiceType: 'workspace'
+      ParameterStringequals: 'true'
+      ParameterRoleName: 'workspace-nx-role-cf'
+      ParameterPolicyName: 'nx-workspace-saml-policy'
+      ParameterEffect: 'Allow'
+      ParameterAction: 
+      - workspaces:Stream
+      ParameterResource: 'arn:aws:workspaces:us-east-1:520983883852:directory/*'
+      ParameterManagedPolicyArns: 
+      - arn:aws:iam::aws:policy/AmazonWorkSpacesAdmin
+      ParameterVersion: 1
+  ResourceSMSampleSecret:
+    Type: "TechM::NX::SM::MODULE"
+    Properties:
+      ParameterSecretName: 'NX-test-sample-secret'
+      ParameterSecretValue: 'juanbaas'
+      ParameterSecretDescription: 'Username for NX'
+      ParameterSecretType: 'simple'
+      ParameterVersion: 1
+  ResourceSMPassword:
+    Type: "TechM::NX::SM::MODULE"
+    Properties:
+      ParameterSecretName: 'NX-user-password-secret'
+      ParameterSecretValue: 'Nx@12345'
+      ParameterSecretDescription: 'Password for NX'
+      ParameterSecretType: 'password'
+      ParameterVersion: 1
+  ResourceManageAD:
+    Type: TechM::NX::ManagedAD::MODULE
+    Properties:
+      ParameterDirectoryName: 'shared.nx.com'
+      ParameterNetBiosName: 'shared'
+      ParameterAdministratorPassword: 'Sample@12345'
+      ParameterDirectoryServiceType: 'Microsoft AD,Standard'
+      ParameterVPCId: !GetAtt ResourceSharedNXVPCVPC.VpcId
+      ParameterSubnetId1: !GetAtt ResourceSubnetNxSharedPrivate1Subnet.SubnetId
+      ParameterSubnetId2: !GetAtt ResourceSubnetNxSharedPrivate2Subnet.SubnetId
+  ResourceFSx:
+    Type: "TechM::NX::FSx::MODULE"
+    DependsOn: ResourceManageAD
+    Properties:
+      ParameterFSxStorageCapacity: 32
+      ParameterFSxStorageType: 'SSD'
+      ParameterFSxName: 'FSxNX'
+      ParameterSubnetIds: [!Ref 'ResourceSubnetAppstream1Subnet', !Ref 'ResourceSubnetNxAppstream2Subnet'] 
+      ParameterPreferredSubnetId: !GetAtt ResourceSubnetAppstream1Subnet.SubnetId
+      ParameterSecurityGroupIds: !Ref ResourceSGNxPrivateSecurityGroup
+      ParameterFSxThroughput: '8'
+      ParameterDeployType: 'MULTI_AZ_1'
+      ParameterADId: !Ref ResourceManageADResourceManagedAD
+      ParameterVersion: 1
+  ResourceInstanceProfileForMemberServers:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles: 
+      -
+        Ref: ResourceNXRoleResourceNxRole
+  ResourceKeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: NxKeyPair
+  ResourceNXManagementServer:
+    Type: TechM::NX::EC2::MODULE 
+    Properties:
+      ParameterAMI: 'ami-0fc22514827f2e7de'
+      ParameterInstanceType: 't2.medium'
+      ParameterInstanceProfile: !Ref ResourceInstanceProfileForMemberServers
+      ParameterSubnet: !GetAtt ResourceSubnetNxPublicSubnet.SubnetId
+      ParameterSecurityGroup: !GetAtt ResourceSGNxPublicSecurityGroup.GroupId
+      ParameterKeyPair: !Ref ResourceKeyPair
+      ParameterInstanceName: 'nx-management-server'
+      ParameterVersion: 1
+  ResourceNXJumpServer:
+    Type: TechM::NX::EC2::MODULE 
+    Properties:
+      ParameterAMI: 'ami-0307655fcb954b39f'
+      ParameterInstanceType: 't2.medium'
+      ParameterInstanceProfile: !Ref ResourceInstanceProfileForMemberServers
+      ParameterSubnet: !GetAtt ResourceSubnetNxSharedPublic1Subnet.SubnetId
+      ParameterSecurityGroup: !GetAtt ResourceSGSharedNxPublicSecurityGroup.GroupId
+      ParameterKeyPair: !Ref ResourceKeyPair
+      ParameterInstanceName: 'nx-jump-server'
+      ParameterVersion: 1
+  ResourceNXDomainAdmin:
+    Type: TechM::NX::EC2::MODULE 
+    Properties:
+      ParameterAMI: 'ami-04e0ebd20d57a72c1'
+      ParameterInstanceType: 't2.medium'
+      ParameterInstanceProfile: !Ref ResourceInstanceProfileForMemberServers
+      ParameterSubnet: !GetAtt ResourceSubnetNxSharedPrivate1Subnet.SubnetId
+      ParameterSecurityGroup: !GetAtt ResourceSGSharedNxPrivateSecurityGroup.GroupId
+      ParameterKeyPair: !Ref ResourceKeyPair
+      ParameterInstanceName: 'nx-domain-admin'
+      ParameterVersion: 1

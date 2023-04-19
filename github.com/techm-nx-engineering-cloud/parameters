@@ -1,0 +1,4 @@
+ParameterRepoName = "NX-test"
+ParameterRepoDescription = "NX repository"
+ParameterRegion = "eu-west-1"
+ParameterStackName = "nx-ci-cd-juan"

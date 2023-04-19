@@ -1,0 +1,10 @@
+[
+    {
+        "ParameterKey": "ParameterRepoName",
+        "ParameterValue": "NX-test"
+    },
+    {
+        "ParameterKey": "ParameterS3Bucket",
+        "ParameterValue": "juan-nx"
+    }
+]

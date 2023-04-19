@@ -1,0 +1,10 @@
+[
+    {
+        "ParameterKey": "ParameterRepoName",
+        "ParameterValue": "NX-test"
+    },
+    {
+        "ParameterKey": "ParameterRepoDescription",
+        "ParameterValue": "codecommit repo test"
+    }
+]
