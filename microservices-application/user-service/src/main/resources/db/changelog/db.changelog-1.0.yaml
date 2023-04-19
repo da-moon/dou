@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1466006862728-4
+      author: german
+      changes:
+        - createTable:
+            tableName: user_profile
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_pkey
+                  name: user_name
+                  type: VARCHAR(255)
+              - column:
+                  name: address1
+                  type: VARCHAR(255)
+              - column:
+                  name: address2
+                  type: VARCHAR(255)
+        - loadData:
+            tableName: user_profile
+            columns:
+              - column:
+                  name: user_name
+                  type: STRING
+              - column:
+                  name: address1
+                  type: STRING
+              - column:
+                  name: address2
+                  type: STRING
+            file: db/changelog/users.csv

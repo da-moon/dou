@@ -1,0 +1,4 @@
+CREATE DATABASE catalog_db;
+GRANT ALL PRIVILEGES ON DATABASE catalog_db TO postgres;
+CREATE DATABASE user_db;
+GRANT ALL PRIVILEGES ON DATABASE user_db TO postgres;

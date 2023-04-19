@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1466006862728-4
+      author: german
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: product_pkey
+                  name: uuid
+                  type: VARCHAR(255)
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: stock_available
+                  type: INT
+        - loadData:
+            tableName: product
+            columns:
+              - column:
+                  name: uuid
+                  type: STRING
+              - column:
+                  name: type
+                  type: STRING
+              - column:
+                  name: title
+                  type: STRING
+              - column:
+                  name: stock_available
+                  type: NUMERIC
+            file: db/changelog/products.csv

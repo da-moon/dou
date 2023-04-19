@@ -1,0 +1,4 @@
+services:
+  catalogUrl: http://catalog:8081
+  userUrl: http://user:8082
+  cartUrl: http://cart:8083
