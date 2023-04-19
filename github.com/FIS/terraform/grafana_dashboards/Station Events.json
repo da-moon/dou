@@ -1,0 +1,1957 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 22,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [
+        "Line Level"
+      ],
+      "targetBlank": false,
+      "title": "Line Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "Station"
+      ],
+      "targetBlank": false,
+      "title": "Station Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 26,
+      "panels": [],
+      "repeat": "AssetID",
+      "title": "$AssetID",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 85.0001
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Net_Available",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Net_Available",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "fbb97ff3-1c75-4bc5-b786-efacb4a6503e",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Net_Available == true\n| summarize sum(State_Net_Available) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Unplanned_Down",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Unplanned_Down",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "3f22b9f2-4179-4d7a-b9d9-54a1f5df0fec",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Unplanned_Down == true\n| summarize sum(State_Unplanned_Down) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "B",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Availability",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "sum_State_Net_Available",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "sum_State_Unplanned_Down"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "disabled": true,
+          "id": "calculateField",
+          "options": {
+            "alias": "Result",
+            "binary": {
+              "left": "sum_State_Net_Available - sum_State_Unplanned_Down",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "sum_State_Net_Available"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Sum NetAvailable",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "sum_State_Net_Available"
+              ],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Sum Unplanned Down",
+            "binary": {
+              "left": "Sum NetAvailable",
+              "reducer": "sum"
+            },
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "sum_State_Unplanned_Down"
+              ],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "First Operation",
+            "binary": {
+              "left": "Sum NetAvailable",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Sum Unplanned Down"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Result",
+            "binary": {
+              "left": "First Operation",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "Sum NetAvailable"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Count"
+            },
+            "properties": [
+              {
+                "id": "max",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^Result$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Schedule_Is_Productive",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": 1
+                      },
+                      "property": {
+                        "name": "Schedule_Is_Productive",
+                        "type": "number"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "pluginVersion": "4.1.5",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where Schedule_Is_Productive == 1\n| summarize sum(Schedule_Is_Productive) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        },
+        {
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Breakdown",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Breakdown",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "pluginVersion": "4.1.5",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Breakdown == true\n| summarize sum(State_Breakdown) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "rawMode": false,
+          "refId": "B",
+          "resultFormat": "table"
+        },
+        {
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Breakdown",
+                    "type": "boolean"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "",
+                    "type": "string"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "pluginVersion": "4.1.5",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize count() by bin(Timestamp, 1m), State_Breakdown\n| order by Timestamp asc",
+          "querySource": "raw",
+          "rawMode": false,
+          "refId": "C",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "MTBF",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Sum Schedule",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "sum_Schedule_Is_Productive"
+              ],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Sum StateBreakdown",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "sum_State_Breakdown"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "First Operation",
+            "binary": {
+              "left": "Sum Schedule",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Sum StateBreakdown"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Total Count",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "count_"
+              ],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Result",
+            "binary": {
+              "left": "First Operation",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "Total Count"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "number",
+                "targetField": "Result"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Breakdown",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Breakdown",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "a3250ae5-4c69-44a8-97f1-2dcf277f30f2",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Breakdown == true\n| summarize sum(State_Breakdown) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "",
+                    "type": "string"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Breakdown",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "1bbc2df2-5a38-4c30-8b0e-547a6871a466",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Breakdown == true\n| summarize count() by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "B",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "MTTR",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Result",
+            "binary": {
+              "left": "sum_State_Breakdown",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "count_"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "$__timeInterval",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Stopped",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Stopped",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "071363d7-41e9-48e5-a69a-7ddf745b7fe5",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Stopped == true\n| summarize sum(State_Stopped) by bin(Timestamp, $__timeInterval)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Time Stopped",
+      "transformations": [],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^sum_State_Breakdown$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "$__timeInterval",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Breakdown",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Breakdown",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "a3250ae5-4c69-44a8-97f1-2dcf277f30f2",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Breakdown == true\n| summarize sum(State_Breakdown) by bin(Timestamp, $__timeInterval)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Time Breakdown",
+      "transformations": [],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "$__timeInterval",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "State_Cycling",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "b24031d9-9282-4278-829f-4342b213a5cf",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where State_Cycling == true\n| summarize sum(State_Cycling) by bin(Timestamp, $__timeInterval)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Time Cycling",
+      "transformations": [],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Occurrences",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 24,
+      "maxDataPoints": 4999,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.85,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Event_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "9d7047c6-9ba9-491e-955a-b4a84ed30c81",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize by bin(Timestamp, 1m), Event_Code\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Event_Desc",
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "f36a36f5-e631-447a-881a-9a1c7b6af395",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize by bin(Timestamp, 1m), Event_Desc\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "B",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Station Events",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Event_Code",
+                "Event_Desc"
+              ]
+            }
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Event_Code": {
+                "aggregations": [
+                  "count"
+                ],
+                "operation": "aggregate"
+              },
+              "Event_Desc": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Sub_State_Desc": {
+                "aggregations": []
+              },
+              "Timestamp": {
+                "aggregations": [
+                  "count"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [],
+            "match": "any",
+            "type": "include"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "barchart"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [
+    "Station",
+    "Events"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "Station 110",
+            "Station 140",
+            "Station 120",
+            "Station 130",
+            "Station 170",
+            "Station 150",
+            "Station 160",
+            "Station 190",
+            "Station 180"
+          ],
+          "value": [
+            "Station 110",
+            "Station 140",
+            "Station 120",
+            "Station 130",
+            "Station 170",
+            "Station 150",
+            "Station 160",
+            "Station 190",
+            "Station 180"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-azure-data-explorer-datasource",
+          "uid": "HYppU6unz"
+        },
+        "definition": "JPH\n| project Device_Alias",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Asset ID",
+        "multi": true,
+        "name": "AssetID",
+        "options": [],
+        "query": "JPH\n| project Device_Alias",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now-0m"
+  },
+  "timepicker": {
+    "nowDelay": "0m"
+  },
+  "timezone": "America/Detroit",
+  "title": "Station Events",
+  "uid": "UWUdQPsnz",
+  "version": 3,
+  "weekStart": ""
+}

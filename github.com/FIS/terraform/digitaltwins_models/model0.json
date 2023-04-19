@@ -1,0 +1,23 @@
+[
+    {
+        "@id": "dtmi:fis:model0;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 0 Enterprise Model",
+        "contents": [
+            {
+                "@type": "Relationship",
+                "@id": "dtmi:fis:model0:location;1",
+                "name": "location",
+                "target": "dtmi:fis:model1;1"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model0:thirdware;1",
+        "@type": "Interface",
+        "displayName": "Thirdware",
+        "extends": "dtmi:fis:model0;1"
+    }
+]

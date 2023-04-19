@@ -1,0 +1,2122 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 19,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "Line Level"
+      ],
+      "targetBlank": false,
+      "title": "Line Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "Station"
+      ],
+      "targetBlank": false,
+      "title": "Station Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 23,
+      "panels": [],
+      "repeat": "AssetID",
+      "title": "$AssetID",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "noValue": ".94",
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              },
+              {
+                "color": "super-light-orange",
+                "value": 90
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "AVERAGE"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "df788d08-ac60-47cd-a789-355924d80821",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize avg(Cycletime_Value) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "B",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Design_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "pluginVersion": "4.1.5",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize by bin(Timestamp, 1m), Cycletime_Design_Target\n| order by Timestamp asc",
+          "querySource": "raw",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Performance Efficiency",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Result ",
+            "binary": {
+              "left": "avg_Cycletime_Value",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "Cycletime_Design_Target"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^count_$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "AVERAGE"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "6e0a40b7-fa43-47e9-b3b4-187ddf3f1f50",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize count() by bin(Timestamp, 1m), Cycletime_Value\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Total Cycle Count",
+      "transformations": [
+        {
+          "disabled": true,
+          "id": "filterByRefId",
+          "options": {}
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "greater",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "Cycletime_Value"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^sum_Cycletime_Slow$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Slow",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "Cycletime_Slow",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "289331e8-132f-4cc3-8a24-5c851b2bdbd9",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where Cycletime_Slow == true\n| summarize sum(Cycletime_Slow) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Slow Cycle Count",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^count_$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "",
+                    "type": "string"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "Cycletime_Invalid",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "f9dbe2c7-f519-4dfd-af6e-4d317797282e",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where Cycletime_Invalid == true\n| summarize count() by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Invalid Cycle Count",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^sum_Cycletime_Overtime_Value$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Overtime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "fad8a915-5d46-494f-af09-cba0bc613f80",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize sum(Cycletime_Overtime_Value) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Overcycle Time",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-orange",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 5
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^Cycletime_Value$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": false
+                      },
+                      "property": {
+                        "name": "Cycletime_Invalid",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "e782804f-47f6-4cfd-8698-585f406a0e6b",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where Cycletime_Invalid == false\n| summarize by bin(Timestamp, 1m), Cycletime_Value\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Standard Cycle Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 5
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "min"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "min",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "6e0a40b7-fa43-47e9-b3b4-187ddf3f1f50",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize min(Cycletime_Value) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Min Cycle Time",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 5
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "6e0a40b7-fa43-47e9-b3b4-187ddf3f1f50",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize avg(Cycletime_Value) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Avg Cycle Time",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 5
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "/^max_Cycletime_Value$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "AVERAGE"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "max",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "6e0a40b7-fa43-47e9-b3b4-187ddf3f1f50",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize max(Cycletime_Value) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Max Cycle Time",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 5
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^sum_Cycletime_Value$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "b65b4af9-4daf-4560-b1b1-0f71a98f9dd6",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize sum(Cycletime_Value) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Total Cycle Time",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 7
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Cycletime_Invalid_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                },
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": true
+                      },
+                      "property": {
+                        "name": "Cycletime_Invalid",
+                        "type": "boolean"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "7a10afb2-b4e5-4acf-a129-868f99367332",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| where Cycletime_Invalid == true\n| summarize by bin(Timestamp, 1m), Cycletime_Invalid_Target\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Invalid Cycle Time ",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 23,
+        "x": 0,
+        "y": 9
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "aggregates": [
+            "AVERAGE"
+          ],
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Cycletime_Value",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyAlias": "",
+          "propertyId": "6e0a40b7-fa43-47e9-b3b4-187ddf3f1f50",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize by bin(Timestamp, 1m), Cycletime_Value\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Cycletime_Design_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "e782804f-47f6-4cfd-8698-585f406a0e6b",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize by bin(Timestamp, 1m), Cycletime_Design_Target\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "B",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "assetId": "$AssetID",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-azure-data-explorer-datasource",
+            "uid": "${DS_AZURE_IOT_ADX}"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Cycletime_Invalid_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "$AssetID"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "7a10afb2-b4e5-4acf-a129-868f99367332",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| where Device_Alias == $AssetID\n| summarize by bin(Timestamp, 1m), Cycletime_Invalid_Target\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyValueHistory",
+          "rawMode": false,
+          "refId": "C",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Cycle Times",
+      "transparent": true,
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [
+    "Station",
+    "CycleTimes"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "Station 110"
+          ],
+          "value": [
+            "Station 110"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-azure-data-explorer-datasource",
+          "uid": "HYppU6unz"
+        },
+        "definition": "JPH\n| project Device_Alias",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Asset ID",
+        "multi": true,
+        "name": "AssetID",
+        "options": [],
+        "query": "JPH\n| project Device_Alias",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "America/Detroit",
+  "title": "Station Cycle Times",
+  "uid": "c6YDwEynk",
+  "version": 3,
+  "weekStart": ""
+}

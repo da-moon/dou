@@ -1,0 +1,5933 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 23,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "Line Level"
+      ],
+      "targetBlank": false,
+      "title": "Line Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "Station"
+      ],
+      "targetBlank": false,
+      "title": "Station Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 2,
+        "x": 0,
+        "y": 0
+      },
+      "id": 50,
+      "options": {
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.0.8.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "f9156e75-2f7f-4e93-9dc6-2613fa92357d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 110",
+                        "name": "==",
+                        "value": "Station 110"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 110'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 110",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a5b3677e-7e51-46bf-a1d6-0bdaa92d092d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 120",
+                        "name": "==",
+                        "value": "Station 120"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 120'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 120",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 6,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 130",
+                        "name": "==",
+                        "value": "Station 130"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 130'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 130",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 8,
+        "y": 0
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a2a2b652-89ab-4c4f-a514-f1b3ca921ffa",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 140",
+                        "name": "==",
+                        "value": "Station 140"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 140'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 140",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 10,
+        "y": 0
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "3d42874b-18c4-48fa-a082-f617d224b2fc",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 150",
+                        "name": "==",
+                        "value": "Station 150"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 150'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 150",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 12,
+        "y": 0
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "6d093ed8-77a0-4c05-873b-d35a41171341",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 160",
+                        "name": "==",
+                        "value": "Station 160"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 160'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 160",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 0
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "75362c3a-0093-4773-a5d0-ccf493c182f4",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 170",
+                        "name": "==",
+                        "value": "Station 170"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 170'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 170",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 16,
+        "y": 0
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "7de31965-43d7-431a-8d63-06c3fb1f0740",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 180",
+                        "name": "==",
+                        "value": "Station 180"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 180'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 180",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 18,
+        "y": 0
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 190",
+                        "name": "==",
+                        "value": "Station 190"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 190'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 190",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 4
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "f9156e75-2f7f-4e93-9dc6-2613fa92357d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Bottleneck_Rank",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 110",
+                        "name": "==",
+                        "value": "Station 110"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 110'\n| summarize by bin(Timestamp, 1m), Bottleneck_Rank\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 4
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "none"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a5b3677e-7e51-46bf-a1d6-0bdaa92d092d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 6,
+        "y": 4
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Bottleneck_Rank",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 130",
+                        "name": "==",
+                        "value": "Station 130"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 130'\n| summarize by bin(Timestamp, 1m), Bottleneck_Rank\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 8,
+        "y": 4
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "none"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a2a2b652-89ab-4c4f-a514-f1b3ca921ffa",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 10,
+        "y": 4
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "none"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "3d42874b-18c4-48fa-a082-f617d224b2fc",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 12,
+        "y": 4
+      },
+      "id": 30,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "none"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "6d093ed8-77a0-4c05-873b-d35a41171341",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 4
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "none"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "75362c3a-0093-4773-a5d0-ccf493c182f4",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 16,
+        "y": 4
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "7de31965-43d7-431a-8d63-06c3fb1f0740",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Bottleneck_Rank",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 180",
+                        "name": "==",
+                        "value": "Station 180"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 180'\n| summarize by bin(Timestamp, 1m), Bottleneck_Rank\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 18,
+        "y": 4
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "none"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e1838b75-91e3-45bd-9810-c367f01db2fe",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Bottleneck Rank",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "f9156e75-2f7f-4e93-9dc6-2613fa92357d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 110",
+                        "name": "==",
+                        "value": "Station 110"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 110'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 8
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a5b3677e-7e51-46bf-a1d6-0bdaa92d092d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 120",
+                        "name": "==",
+                        "value": "Station 120"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 120'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 6,
+        "y": 8
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 130",
+                        "name": "==",
+                        "value": "Station 130"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 130'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 8,
+        "y": 8
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a2a2b652-89ab-4c4f-a514-f1b3ca921ffa",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 140",
+                        "name": "==",
+                        "value": "Station 140"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 140'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 10,
+        "y": 8
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "3d42874b-18c4-48fa-a082-f617d224b2fc",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 150",
+                        "name": "==",
+                        "value": "Station 150"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 150'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 12,
+        "y": 8
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "6d093ed8-77a0-4c05-873b-d35a41171341",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 160",
+                        "name": "==",
+                        "value": "Station 160"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 160'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 8
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "75362c3a-0093-4773-a5d0-ccf493c182f4",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 170",
+                        "name": "==",
+                        "value": "Station 170"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 170'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 16,
+        "y": 8
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "7de31965-43d7-431a-8d63-06c3fb1f0740",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 180",
+                        "name": "==",
+                        "value": "Station 180"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 180'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 18,
+        "y": 8
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sole_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 190",
+                        "name": "==",
+                        "value": "Station 190"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ef7805af-388b-4fbc-8662-1c2c3471d37c",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 190'\n| summarize by bin(Timestamp, 1m), Sole_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Sole Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 12
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "f9156e75-2f7f-4e93-9dc6-2613fa92357d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 110",
+                        "name": "==",
+                        "value": "Station 110"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 110'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 12
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a5b3677e-7e51-46bf-a1d6-0bdaa92d092d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 120",
+                        "name": "==",
+                        "value": "Station 120"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 120'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 6,
+        "y": 12
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 130",
+                        "name": "==",
+                        "value": "Station 130"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 130'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 8,
+        "y": 12
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a2a2b652-89ab-4c4f-a514-f1b3ca921ffa",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 140",
+                        "name": "==",
+                        "value": "Station 140"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 140'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 10,
+        "y": 12
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "3d42874b-18c4-48fa-a082-f617d224b2fc",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 150",
+                        "name": "==",
+                        "value": "Station 150"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 150'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 12,
+        "y": 12
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "6d093ed8-77a0-4c05-873b-d35a41171341",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 160",
+                        "name": "==",
+                        "value": "Station 160"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 160'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 12
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "75362c3a-0093-4773-a5d0-ccf493c182f4",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 170",
+                        "name": "==",
+                        "value": "Station 170"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 170'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 16,
+        "y": 12
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "7de31965-43d7-431a-8d63-06c3fb1f0740",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 180",
+                        "name": "==",
+                        "value": "Station 180"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 180'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 18,
+        "y": 12
+      },
+      "id": 47,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Shared_Bottleneck",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 190",
+                        "name": "==",
+                        "value": "Station 190"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "19caf0d0-abe4-4d03-9de4-c92a8a98d63a",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 190'\n| summarize by bin(Timestamp, 1m), Shared_Bottleneck\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Shared Bottleneck",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 16
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "f9156e75-2f7f-4e93-9dc6-2613fa92357d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": "Station 110"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 110'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 16
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 120",
+                        "name": "==",
+                        "value": "Station 120"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 120'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 6,
+        "y": 16
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 130",
+                        "name": "==",
+                        "value": "Station 130"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 130'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 8,
+        "y": 16
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a2a2b652-89ab-4c4f-a514-f1b3ca921ffa",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 140",
+                        "name": "==",
+                        "value": "Station 140"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 140'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 10,
+        "y": 16
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "3d42874b-18c4-48fa-a082-f617d224b2fc",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 150",
+                        "name": "==",
+                        "value": "Station 150"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 150'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 12,
+        "y": 16
+      },
+      "id": 33,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "6d093ed8-77a0-4c05-873b-d35a41171341",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 160",
+                        "name": "==",
+                        "value": "Station 160"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 160'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 16
+      },
+      "id": 38,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "75362c3a-0093-4773-a5d0-ccf493c182f4",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 170",
+                        "name": "==",
+                        "value": "Station 170"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 170'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 16,
+        "y": 16
+      },
+      "id": 43,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "7de31965-43d7-431a-8d63-06c3fb1f0740",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 180",
+                        "name": "==",
+                        "value": "Station 180"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 180'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 18,
+        "y": 16
+      },
+      "id": 48,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "State_Cycling",
+                    "type": "boolean"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 190",
+                        "name": "==",
+                        "value": "Station 190"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "e93e6663-71b3-450d-9eb8-a564a7d2af33",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 190'\n| summarize avg(State_Cycling) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Mean Active Time",
+      "type": "stat"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [
+    "Line Level"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Shift Constraints",
+  "uid": "NJLAO4lnz",
+  "version": 5,
+  "weekStart": ""
+}

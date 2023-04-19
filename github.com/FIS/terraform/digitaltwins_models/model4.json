@@ -1,0 +1,29 @@
+[
+    {
+        "@id": "dtmi:fis:model4;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 4  Machine Model",
+        "contents": [
+            {
+                "@type": "Relationship",
+                "@id": "dtmi:fis:model4:buffer;1",
+                "name": "buffer"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model4:chassisLine1;1",
+        "@type": "Interface",
+        "displayName": "32100 Chassis Line 1",
+        "extends": "dtmi:fis:model4;1"
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model4:chassisLine2;1",
+        "@type": "Interface",
+        "displayName": "32200 Chassis Line 2",
+        "extends": "dtmi:fis:model4;1"
+    }
+]

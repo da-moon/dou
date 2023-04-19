@@ -1,0 +1,37 @@
+[
+    {
+        "@id": "dtmi:fis:model3;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 3 System Model",
+        "contents": [
+            {
+                "@type": "Relationship",
+                "@id": "dtmi:fis:model3:location;1",
+                "name": "location",
+                "target": "dtmi:fis:model4;1"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model3:trim;1",
+        "@type": "Interface",
+        "displayName": "31000 Trim",
+        "extends": "dtmi:fis:model3;1"
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model3:chassis;1",
+        "@type": "Interface",
+        "displayName": "32000 Chassis",
+        "extends": "dtmi:fis:model3;1"
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model3:final;1",
+        "@type": "Interface",
+        "displayName": "33000 Final",
+        "extends": "dtmi:fis:model3;1"
+    }
+]

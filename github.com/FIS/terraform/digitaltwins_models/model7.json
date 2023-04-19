@@ -1,0 +1,84 @@
+[
+    {
+        "@id": "dtmi:fis:model7;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 7 Message Accumulator Model",
+        "contents": [
+            {
+                "@type": "Telemetry",
+                "name": "max_scale",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "min_scale",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "max_alarm_threshold",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "min_alarm_threshold",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "max_fault_threshold",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "min_fault_threshold",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "value",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "percentage_of_max",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "min_value",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "max_value",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "avg_value",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "avg_percent_of_scale",
+                "schema": "double"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model7:accumulator32100;1",
+        "@type": "Interface",
+        "displayName": "32100 Accumulator",
+        "extends": "dtmi:fis:model7;1"
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model7:accumulator32200;1",
+        "@type": "Interface",
+        "displayName": "32200 Accumulator",
+        "extends": "dtmi:fis:model7;1"
+    }
+]

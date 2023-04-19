@@ -1,0 +1,35 @@
+---
+directory: digitaltwins_models
+twins:
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32110", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32120", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32130", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32140", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32150", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32160", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32170", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32180", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32190", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  # For hierarchies
+  - { dtmi: "dtmi:fis:model0:thirdware;1", id: "Thirdware" }
+  - { dtmi: "dtmi:fis:model1:toledoAssembly;1", id: "Toledo_Assembly", rel_source: "Thirdware", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model2:assembly;1", id: "30000_Assembly", rel_source: "Toledo_Assembly", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model2:body;1", id: "10000_Body_In_White", rel_source: "Toledo_Assembly", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model2:paint;1", id: "20000_Paint", rel_source: "Toledo_Assembly", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model3:final;1", id: "33000_Final", rel_source: "30000_Assembly", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model3:trim;1", id: "31000_Trim", rel_source: "30000_Assembly", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model3:chassis;1", id: "32000_Chassis", rel_source: "30000_Assembly", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model4:chassisLine1;1", id: "32100_Chassis_Line_1", rel_source: "32000_Chassis", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model4:chassisLine2;1", id: "32100_Chassis_Line_2", rel_source: "32000_Chassis", rel_type: "location" }
+  - { dtmi: "dtmi:fis:model7:accumulator32100;1", id: "32100_Accumulator", rel_source: "32100_Chassis_Line_1", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model7:accumulator32200;1", id: "32200_Accumulator", rel_source: "32100_Chassis_Line_2", rel_type: "buffer" }
+  - { dtmi: "dtmi:fis:model5:station10;1", id: "32210", rel_source: "32100_Chassis_Line_2", rel_type: "buffer" }
+models:
+  - model0.json
+  - model1.json
+  - model2.json
+  - model3.json
+  - model4.json
+  - model5.json
+  - model6.json
+  - model7.json
