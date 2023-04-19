@@ -1,0 +1,15 @@
+galaxy_info:
+  author: Ramon Esparza
+  description: ansible role for mounting a volume
+  license: license (GPLv2, CC-BY, etc)
+
+  min_ansible_version: 2.4
+
+  platforms:
+   - name: Ubuntu
+     versions:
+     - all
+   - name: Debian
+     versions:
+     - all
+ 

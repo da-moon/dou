@@ -1,0 +1,46 @@
+{
+    "variables" : {
+        "token"  : "{{env `DIGITALOCEAN_TOKEN_DIGITAL`}}",
+        "provs"  : "provisioners",
+        "config" : "vault_config"
+    }, 
+    "builders" : [
+    {
+        "type" : "digitalocean",
+        "api_token": "{{user `token`}}",
+        "ssh_username" : "root",
+        "image" : "ubuntu-18-04-x64",
+        "region" : "nyc1",
+        "size" : "512mb",
+        "snapshot_name" : "vault-image"
+    }],
+    "provisioners" : [
+    {   
+        
+        "type" : "shell",
+        "script" :  "{{user `provs`}}/base.sh"
+    },
+    {
+        "type" : "shell",
+        "script" :  "{{user `provs`}}/vault.sh"
+    },
+    {
+        "type" : "shell",
+        "script" : "{{user `provs`}}/vault_setup.sh"
+    },
+    {
+        "type" : "file",
+        "source" : "{{user `provs`}}/{{user `config`}}/vault.service",
+        "destination" : "/etc/systemd/system/vault.service"
+    },
+    {
+        "type" : "file",
+        "source" : "{{user `provs`}}/{{user `config`}}/config.hcl",
+        "destination" : "/vault/config/config.hcl"
+    },
+    {
+        "type" : "shell",
+        "inline" : "systemctl enable vault.service"
+    }]
+    
+}

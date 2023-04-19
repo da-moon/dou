@@ -1,0 +1,6 @@
+---
+- hosts: jenkins_droplet
+  user: root
+  sudo: yes
+  roles:
+    - { role: "jenkins-role" }
