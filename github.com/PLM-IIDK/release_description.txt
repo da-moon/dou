@@ -1,0 +1,2 @@
+This is the full initial release of the IIDK frame work supporting AWS and AMI
+creation.

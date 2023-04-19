@@ -1,0 +1,10 @@
+packages:
+  install:
+    - jq
+   
+  purge:
+    - nano
+
+pip:
+  install:
+    - boto3

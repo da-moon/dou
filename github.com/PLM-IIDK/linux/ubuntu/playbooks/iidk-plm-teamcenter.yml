@@ -1,0 +1,6 @@
+---
+- hosts: iidk-plm-teamcenter
+  become: true
+  user: centos
+  roles:
+    - teamcenter
