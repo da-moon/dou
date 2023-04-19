@@ -1,0 +1,1 @@
+Module for AWS lambda basic with layer
