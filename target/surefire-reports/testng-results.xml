@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="3" total="4" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="All Test Suite" duration-ms="16972" started-at="2019-08-09T19:34:16Z" finished-at="2019-08-09T19:34:33Z">
+    <groups>
+    </groups>
+    <test name="/Users/victorcarrillo/Victor-Automation/SeleniumProjectPractice/src/test/java/Tests/FirstTests.java" duration-ms="16972" started-at="2019-08-09T19:34:16Z" finished-at="2019-08-09T19:34:33Z">
+      <class name="Tests.FirstTests">
+        <test-method status="PASS" signature="setup()[pri:0, instance:Tests.FirstTests@31dc339b]" name="setup" is-config="true" duration-ms="4615" started-at="2019-08-09T19:34:16Z" finished-at="2019-08-09T19:34:20Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method status="PASS" signature="shopWorkFlow()[pri:0, instance:Tests.FirstTests@31dc339b]" name="shopWorkFlow" duration-ms="12170" started-at="2019-08-09T19:34:20Z" finished-at="2019-08-09T19:34:32Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- shopWorkFlow -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:Tests.FirstTests@31dc339b]" name="tearDown" is-config="true" duration-ms="177" started-at="2019-08-09T19:34:32Z" finished-at="2019-08-09T19:34:33Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- Tests.FirstTests -->
+    </test> <!-- /Users/victorcarrillo/Victor-Automation/SeleniumProjectPractice/src/test/java/Tests/FirstTests.java -->
+  </suite> <!-- All Test Suite -->
+</testng-results>
