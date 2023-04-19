@@ -1,0 +1,19 @@
+# Example locals.tf file that will work with the default_service. Configure this file as "locals.tf" in the root
+# directory of your project
+
+# locals {
+
+service_name = "azure-caas-api"
+
+container_port = 8000
+
+resource_group_name = "valkyrie-test"
+
+vault_token = "s.ld1pH9dmRwW8ykIsXwtuemKQ"
+
+consul_token = "4118ff19-59c1-dde9-b61d-e049e62275b1"
+
+keys_dir = "django_secrets"
+
+
+#
