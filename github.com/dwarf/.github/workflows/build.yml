@@ -1,0 +1,220 @@
+name: Build & Deploy
+
+on:
+  repository_dispatch:
+    types: [e2e-tests-complete]
+
+jobs:
+  build_mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Build
+        run: |
+          echo "MacOs build is happening!!!"
+          cd src
+          pwd
+          ls -la
+          pip3 install pyinstaller
+          pip3 install -r requirements.txt
+          pip3 install -r requirements-darwin.txt
+
+          echo "Building dwarf onedir"
+          pyinstaller dwarf.spec
+
+          ../scripts/zip_it.sh
+          ../scripts/tar_it.sh $(../scripts/get_version.sh)
+
+      - name: Test Artifact
+        env:
+          OVERRIDE_KEYRING: true
+          DWARF_DISABLE_KEYRING: true
+          OKTA_SSO_USER: ${{ secrets.OKTA_SSO_USER }}
+          OKTA_SSO_PASSWORD: ${{ secrets.OKTA_SSO_PASSWORD }}
+          OKTA_EMBED_URL: ${{ secrets.OKTA_EMBED_URL }}
+          OKTA_MFA_SECRET: ${{ secrets.OKTA_MFA_SECRET }}
+          DEV_AUDIT_DISABLED: true
+          DEV_SYNC_DISABLED: true
+        run: |
+          echo "Adding dwarf binary to path"
+          cd src/dist/dwarf/
+          export PATH="$PATH:$(PWD)"
+          dwarf --version
+
+          #cd ../../
+
+          #echo "Testing MAC binary as okta user"
+          #python run_tests.py okta
+
+      - name: Get Version
+        id: version
+        run: |
+          cd src
+          # Parse version
+          VERSION=$(../scripts/get_version.sh)
+          echo "Setting release version to $VERSION"
+          echo "::set-env name=RELEASE_VERSION::$VERSION"
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+          VERSION: ${{ env.RELEASE_VERSION }}
+        run: |
+
+          dest="s3://dwarf-website/releases/cli/unstable/darwin/dwarf.zip"
+          aws s3 cp src/dwarf.zip $dest
+
+          echo "Deploying darwin dwarf to s3://dwarf-website/releases/cli/unstable/darwin/dwarf.tar.gz"
+          aws s3 cp src/dwarf.tar.gz s3://dwarf-website/releases/cli/unstable/darwin/dwarf.tar.gz
+
+  build_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update \
+          && sudo apt-get install libusb-1.0-0-dev libxmu-dev libxmu-headers \
+          freeglut3-dev libxext-dev libxi-dev libudev1 libudev-dev
+
+      - name: Build
+        run: |
+          echo "Linux build is happening!!!"
+          # install requirements
+
+          cd src
+          ls -la
+          pwd
+          pip3 install pyinstaller==3.5
+          pip3 install -r requirements.txt
+          pip3 install -r requirements-linux.txt
+
+          pyinstaller dwarf.spec
+
+          ../scripts/zip_it.sh
+          ../scripts/tar_it.sh $(../scripts/get_version.sh)
+
+
+      - name: Test Artifact
+        env:
+          DWARF_DISABLE_KEYRING: "true"
+          OVERRIDE_KEYRING: "true"
+        run: |
+          export TERM=linux
+          export TERMINFO=/etc/terminfo
+
+          echo "Adding dwarf binary to path"
+          cd src/dist/dwarf/
+          export "PATH=$PATH:$(pwd)"
+          cd ../../
+          dwarf --version
+
+          #echo "Testing Linux binary as bastion user"
+          #python run_tests.py bastion
+
+      - name: Get Version
+        id: version
+        run: |
+          cd src
+          # Parse version
+          VERSION=$(../scripts/get_version.sh)
+          echo "Setting release version to $VERSION"
+          echo "::set-env name=RELEASE_VERSION::$VERSION"
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+          VERSION: ${{ env.RELEASE_VERSION }}
+        run: |
+
+          echo "Deploying linux dwarf to $dest"
+          aws s3 cp src/dwarf.zip s3://dwarf-website/releases/cli/unstable/linux/dwarf.zip
+
+          echo "Deploying linux dwarf to s3://dwarf-website/releases/cli/unstable/linux/dwarf.tar.gz"
+          aws s3 cp src/dwarf.tar.gz s3://dwarf-website/releases/cli/unstable/linux/dwarf.tar.gz
+
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Build
+        shell: bash
+        run: |
+          echo "Windows build is happening!!!"
+          # install requirements
+
+          cd src
+          ls -la 
+          pwd
+          pip3 install pyinstaller
+          pip3 install -r requirements.txt
+          pip3 install -r requirements-windows.txt
+
+          pyinstaller dwarf.spec
+
+          ../scripts/tar_it.sh $(../scripts/get_version.sh)
+
+      - name: Zip
+        run: |
+          echo "Zipping!"
+          cd src/dist/
+          Compress-Archive dwarf dwarf.zip
+          mv dwarf.zip ../
+
+      - name: Test Artifact
+        run: |
+          echo "Adding dwarf binary to path"
+          cd src/dist/dwarf/
+          $env:path += ";."
+
+          echo "NORMAL VERSION NOW"
+          dwarf --version
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+        shell: bash
+        run: |
+          VERSION=$(./scripts/get_version.sh)
+          echo "Setting release version to $VERSION"
+          cd src/
+
+          echo "Deploying windows dwarf to s3://dwarf-website/releases/cli/unstable/windows/dwarf.zip"
+          aws s3 cp dwarf.zip "s3://dwarf-website/releases/cli/unstable/windows/dwarf.zip"
+
+          echo "Deploying windows dwarf to s3://dwarf-website/releases/cli/unstable/windows/dwarf.tar.gz"
+          aws s3 cp dwarf.tar.gz "s3://dwarf-website/releases/cli/unstable/windows/dwarf.tar.gz"
+
+  emit_build_complete:
+    runs-on: ubuntu-latest
+    needs:
+      - build_windows
+      - build_linux
+      - build_mac
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1.1.1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: DigitalOnUs/dwarf
+          event-type: build-complete
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
