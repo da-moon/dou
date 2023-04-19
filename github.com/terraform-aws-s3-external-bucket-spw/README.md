@@ -1,0 +1,1 @@
+Module for AWS s3 web resource bucket
