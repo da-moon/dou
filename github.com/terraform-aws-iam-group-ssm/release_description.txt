@@ -1,0 +1,1 @@
+Update the structure of the SSM and add CircleCI pipeline
