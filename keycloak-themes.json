@@ -1,0 +1,12 @@
+{
+  "themes": [
+    {
+      "name": "acme",
+      "types": ["login"]
+    },
+    {
+      "name": "techmahindra",
+      "types": ["login"]
+    }
+  ]
+}
