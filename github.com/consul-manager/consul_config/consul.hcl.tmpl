@@ -1,0 +1,54 @@
+data_dir = "consul-manager/consul_config"
+log_level = "DEBUG"
+
+datacenter         = "{{ env "DATACENTER" }}"
+node_name               = "{{ env "NAME" }}"
+
+{{if eq (env "SERVER") "true"}}
+ui     = true
+server = true
+bootstrap_expect = {{ env "CONSUL_SERVERS" }}
+{{end}}
+
+bind_addr   = "0.0.0.0"
+client_addr = "0.0.0.0"
+
+ports {
+  http  = 8500
+  https  = 8501
+  grpc  = 8502
+}
+
+advertise_addr     = "{{ env "HOST_IP" }}"
+advertise_addr_wan = "{{ env "HOST_IP" }}"
+
+{{if eq (env "SERVER") "true"}}
+# retry_join_wan = {{ env "HOST_LIST" }}
+{{end}}
+
+{{if eq (env "SERVER") "false"}}
+retry_join = ["172.20.20.21"]
+{{end}}
+
+enable_central_service_config = true
+
+connect {
+  enabled = true
+}
+
+acl = {
+  enabled        = {{ env "ACL" }}
+  default_policy = "deny"
+  down_policy    = "extend-cache"
+
+  tokens = {
+    default     = "{{ env "CONSUL_HTTP_TOKEN" }}"
+    replication = "{{ env "CONSUL_HTTP_TOKEN" }}"
+  }
+}
+
+verify_incoming        = false
+
+encrypt = "{{ env "CONSUL_ENCRYPT_KEY" }}"
+encrypt_verify_incoming = true
+encrypt_verify_outgoing = true

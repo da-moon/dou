@@ -1,0 +1,10 @@
+{
+	"clusterName": "innovationCluster",
+	"size": "1",
+	"consul_features":{
+		"bootstrap_acl": true,
+		"vault_backend": false
+	},
+	"env": "aws",
+	"instance_role": "bootstrapper"
+}

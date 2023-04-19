@@ -1,0 +1,8 @@
+{
+  "services": [
+    {
+      "name": "basic-backend-app",
+      "port": 5000
+    }
+  ]
+}

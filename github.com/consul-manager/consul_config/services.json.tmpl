@@ -1,0 +1,11 @@
+{
+    "services": [
+      {
+        "name": "{{ env "SERVICE_NAME" }}",
+        "tags": {{ env "TAGS" }},
+        "address": "{{ env "HOST_IP" }}",
+        "port": {{ env "PORT" }},
+        "token": "{{ env "CONSUL_HTTP_TOKEN" }}"
+      }
+    ]
+}
