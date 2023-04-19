@@ -1,0 +1,41 @@
+*
+!*/
+#  ────────────────────────────────────────────────────────────────────
+!/01-package/**
+!/02-provision/**
+!/03-configure/**
+!/contrib/**
+!/fixtures/**
+!/assets/**
+!/test/**
+!/docs/**
+!/examples/**
+#  ────────────────────────────────────────────────────────────────────
+!/**/.gitkeep
+#  ────────────────────────────────────────────────────────────────────
+!/.cspell/*.txt
+!/.vscode/**
+!/.devcontainer/**
+!/.gitlab/CODEOWNERS
+!/.gitlab/issue_templates/*.md
+!/.gitlab/issues/**/*.md
+!/.gitlab/workflows/*.yml
+#  ────────────────────────────────────────────────────────────────────
+!/.editorconfig
+!/.gitignore
+!/.dockerignore
+!/cspell.config.yaml
+!/.gitlab-ci.yml
+!/.markdownlintignore
+!/.stignore
+!/.versionrc
+!/.pre-commit-config.yaml
+!/LICENSE
+!/README.md
+!/commitlint.config.js
+!/Justfile
+!/Makefile
+!/Vagrantfile
+!/docker-bake.hcl
+!/CONTRIBUTING.md
+!/CHANGELOG.md

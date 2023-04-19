@@ -1,0 +1,18 @@
+flowchart LR
+  packaging --> provision
+  subgraph packaging[Packaging]
+    packaging_test[test]
+  end
+  subgraph provision[Provision]
+    provision_test[test]
+  end
+  subgraph deploy_and_configure[Deploy and Configure]
+    deploy_and_configure_test[test]
+  end
+  subgraph integration_and_api_tests[Integration And API tests]
+    integration_and_api_tests_test[test]
+  end
+  provision --> deploy_and_configure
+  deploy_and_configure --> integration_and_api_tests
+  Dir((<img src='https://iconscout.com/ms-icon-310x310.png' width='40' />))
+

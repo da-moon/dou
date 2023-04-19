@@ -1,0 +1,2 @@
+diagrams==0.21.1
+petname==2.6
