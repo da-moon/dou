@@ -1,0 +1,27 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "sensu-api",
+    "creationTimestamp": null,
+    "labels": {
+      "service": "sensu-api"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "4657",
+        "protocol": "TCP",
+        "port": 4657,
+        "targetPort": 4657
+      }
+    ],
+    "selector": {
+      "service": "sensu-api"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

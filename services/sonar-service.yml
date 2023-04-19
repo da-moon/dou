@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sonar
+  creationTimestamp:
+  labels:
+    service: sonar
+  namespace: devops
+spec:
+  ports:
+  - name: '9000'
+    protocol: TCP
+    port: 9000
+    targetPort: 9000
+  selector:
+    service: sonar
