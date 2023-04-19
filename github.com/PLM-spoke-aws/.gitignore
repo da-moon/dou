@@ -1,0 +1,14 @@
+# Secure Files
+*.pem
+*.crt
+*.pub
+*.key
+
+# Project Files
+.terraform/
+.terraform.tfstate.d/*/
+.terraform.tfstate*
+.terraform.tfvars
+terraform.tfvars*
+*.auto.tfvars
+terraform.tfstate
