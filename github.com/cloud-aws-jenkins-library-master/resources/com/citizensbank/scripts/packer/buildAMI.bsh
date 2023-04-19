@@ -1,0 +1,299 @@
+#!/bin/bash
+#
+#############################################################################
+#
+# © 2014 Citizens Financial Group, Inc. All rights reserved.
+#
+#############################################################################
+#
+# Name:         buildAMI.bsh
+# Author:       Michael LaRoche
+# Date:         September 11, 2019
+# Purpose:      This script assumes the desired role/enviroment for Packer builds and runs the build.
+#
+#
+#############################################################################
+#
+# Release History
+#
+# Version Date       Change Description                 Engineer
+# ------- ---------- ---------------------------------- ---------------------
+# 1.0     09/11/2019 Initial Release                    Michael LaRoche
+#
+#############################################################################
+#
+
+JQ="/bin/jq"
+AWS_ACCOUNT="$AMI_ACCOUNT"
+OS_TYPE_VER="$AMI_OS_TYPE"
+OS_TYPE=`echo $AMI_OS_TYPE | awk -F- '{ print $1 }'`
+AWS_ACCOUNT_ID=""
+ACCT_JSON="account.json"
+AWSCLI="/usr/local/bin/aws"
+PACKER="/opt/packer/packer"
+LIST=0
+MENU=0
+TMPFILE=""
+OS_JSON="../ami_config.json"
+
+# Export Jenkins CIDR for packer to restrict temporary SG
+
+export JENKINS_CIDR="10.240.4.0/26"
+
+echo "Account: $AMI_ACCOUNT"
+echo "OS Type: $AMI_OS_TYPE"
+
+
+USAGE="Usage: buildAMI.bsh [-l] [-m] [-a <account_name>]\n\n\t-l - List Accounts\n\t-m - Menu\n\t-a <accountname> - account name\n\nNote: You must specify one of -l, -m or -a <account name>.\n"
+
+error ()
+{
+  ERRCODE=$1
+  ERRMSG=$2
+  EXIT=$3
+
+  echo -e "\nError: $ERRCODE - $ERRMSG"
+
+  if [ "$EXIT" == "exit" ] ; then
+     [[ "$TMPFILE" != "" ]] && remove_tempfile
+     exit $ERRCODE
+  fi
+
+  return
+}
+
+#
+# Get command line options
+#
+
+options=$(getopt -o lma: --long redhat,windows,amazon -- "$@")
+
+[ $? -eq 0 ] || {
+    echo "$USAGE"
+    exit 1
+}
+
+eval set -- "$options"
+while true; do
+    case "$1" in
+    -l)
+        LIST=1
+        ;;
+    -m)
+        MENU=1
+        ;;
+    -a)
+        AWS_ACCOUNT=$2
+        ;;
+    --redhat)
+        OS_TYPE="redhat"
+        ;;
+    --amazon)
+        OS_TYPE="amazon"
+        ;;
+    --windows)
+        OS_TYPE="windows"
+        ;;
+    --)
+        shift
+        break
+        ;;
+    esac
+    shift
+done
+
+#
+# Set OS Specific Variables
+#
+
+case "$OS_TYPE" in
+redhat | amazon)
+        export NEXUS_URL_ARTIFACT="$NEXUS_URL"
+        export AMI_OWNER=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).owner" $OS_JSON`
+        export AMI_BOOTDISK=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).bootdisk" $OS_JSON`
+        export AMI_NAME=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Name" $OS_JSON`
+        export AMI_OS_VERSION_FILTER=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).amiosversionfilter" $OS_JSON`
+        export SATELLITE_SERVER=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).satelliteserver" $OS_JSON`
+        export ACTIVATION_KEY=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).activationkey" $OS_JSON`
+        export SAT_OS_VERSION=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).satosversion" $OS_JSON`
+        export REQUESTER=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Requester" $OS_JSON`
+        export APPID=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).ApplicationID" $OS_JSON`
+        export ENVIRONMENT=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Environment" $OS_JSON`
+        export CRITICALITY=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Criticality" $OS_JSON`
+        export SUPPORT=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Support" $OS_JSON`
+        export SUPPORT=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Schedule" $OS_JSON`
+        export BUSINESSMAPPING=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).BusinessMapping" $OS_JSON`
+        export ASSIGNMENT_GROUP=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).assignmentgroup" $OS_JSON`
+        export APPLICATION_NAME=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).applicationname" $OS_JSON`
+        export PLAYBOOK=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).playbook" $OS_JSON`
+
+        # If a playbook isn't specified, use the default
+        if [ "$PLAYBOOK" = "null" ]; then
+	        export PLAYBOOK="ami_postbuild.yml"
+        fi
+
+
+
+        OS_TYPE="linux"
+        ;;
+windows)
+        export AMI_OWNER=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).owner" $OS_JSON`
+        export AMI_DESCRIPTION=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).description" $OS_JSON`
+        export AMI_NAME=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Name" $OS_JSON`
+        export AMI_OS_VERSION_FILTER=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).amiosversionfilter" $OS_JSON`
+        export INSTANCE_TYPE=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).instancetype" $OS_JSON`
+        export AWS_POLL_DELAY_SECONDS="10"
+        export AWS_MAX_ATTEMPTS="400"
+        export APPID=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).ApplicationID" $OS_JSON`
+        export ENVIRONMENT=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Environment" $OS_JSON`
+        export CRITICALITY=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Criticality" $OS_JSON`
+        export SUPPORT=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Support" $OS_JSON`
+        export SUPPORT=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).Schedule" $OS_JSON`
+        export BUSINESSMAPPING=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).BusinessMapping" $OS_JSON`
+        export ASSIGNMENT_GROUP=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).assignmentgroup" $OS_JSON`
+        export APPLICATION_NAME=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).applicationname" $OS_JSON`
+        export PLAYBOOK=`$JQ -r ".[]| select(.os_type == \"$OS_TYPE_VER\" ).playbook" $OS_JSON`
+
+        # If a playbook isn't specified, use the default
+        if [ "$PLAYBOOK" = "null" ]; then
+	        export PLAYBOOK="ami_postbuild_windows.yml"
+        fi
+
+        ;;
+*)
+        error 22 "$USAGE" exit
+        ;;
+esac
+
+#
+# List Accounts
+#
+
+list_accounts()
+{
+
+  echo -e "\nThe following accounts can be selected:\n"
+
+  $JQ '.[] | .name' $ACCT_JSON | xargs -i echo -e "\t{}"
+
+  echo ""
+
+}
+
+remove_tempfile()
+{
+  rm -f $TMPFILE
+  [[ "$?" != "0" ]] && error 10 "WARNING: Unable to remove temporary file: $TMPFILE" return
+}
+
+#
+# Get AWS Account to work with
+#
+
+get_aws_account()
+{
+  CNT=1
+  echo ""
+  for MACCT in `$JQ -r '.[] | .name' $ACCT_JSON`
+  do
+    MACCTS[$CNT]="$MACCT"
+    echo -e "\t$CNT - $MACCT"
+    CNT=$(( $CNT + 1 ))
+  done
+  echo -e "\nMake your selection: \c"
+
+  read ANS
+
+  AWS_ACCOUNT=${MACCTS[$ANS]}
+
+  return
+}
+
+#
+# Get AWS Account number
+#
+
+get_aws_acct_num()
+{
+
+  while read ACCT ACCT_NUM; do
+    [[ "$ACCT" == "$AWS_ACCOUNT" ]] && AWS_ACCOUNT_ID=$ACCT_NUM
+  done < <($JQ -r '.[] | .name, .acctid' $ACCT_JSON | xargs -n2)
+
+  [[ "$AWS_ACCOUNT_ID" == "" ]] && error 8 "FAILED: Unable to set AWS Account ID!!" exit
+
+}
+
+#
+# MAIN
+#
+
+if [ "$LIST" == "1" ] ; then
+   list_accounts
+else
+   if [ "$AWS_ACCOUNT" == "" ] && [ "$MENU" == "0" ] ; then
+      error 11 "$USAGE" exit
+   fi
+
+   [[ "$MENU" == "1" ]] && get_aws_account
+
+   [[ "$AWS_ACCOUNT_ID" == "" ]] && get_aws_acct_num
+
+   #
+   # Create Temp file
+   #
+
+   TMPFILE=`/bin/mktemp`
+
+   [[ "$?" != "0" ]] && error 3 "FAILED: Unable to create the temp file!!" exit
+
+   #
+   # Assume the appropriate aws cli role
+   #
+
+   echo "Assuming role for account $AWS_ACCOUNT_ID..."
+
+   $AWSCLI sts assume-role --role-arn "arn:aws:iam::$AWS_ACCOUNT_ID:role/cfg-packer-shared" --role-session-name "Packer" --duration-seconds 14400 > $TMPFILE
+
+   [[ "$?" != "0" ]] && error 4 "FAILED: Unable to assume the requested role!!" exit
+
+   #
+   # Export the KEYS/TOKENS to be used by Packer
+   #
+
+   export AWS_ACCESS_KEY_ID=$($JQ -r '.Credentials.AccessKeyId' $TMPFILE)
+   [[ "$?" != "0" ]] && error 5 "FAILED: Unable to set AWS Access Key ID!!" exit
+
+   export AWS_SECRET_ACCESS_KEY=$($JQ -r '.Credentials.SecretAccessKey' $TMPFILE)
+   [[ "$?" != "0" ]] && error 6 "FAILED: Unable to set AWS Secret Access Key!!" exit
+
+   export AWS_SESSION_TOKEN=$($JQ -r '.Credentials.SessionToken' $TMPFILE)
+   [[ "$?" != "0" ]] && error 7 "FAILED: Unable to set AWS Session Token!!" exit
+
+   #
+   # Remove Temp file
+   #
+
+   remove_tempfile
+
+   #
+   # Build the AMI with Packer
+   #
+
+   # Uncomment these two lines for debug information
+   # export PACKER_LOG_PATH="/var/log/packer.log"
+   # export PACKER_LOG=1
+
+
+   # $PACKER build -var-file=var_files/$AWS_ACCOUNT.json -debug -on-error=abort cfg_$OS_TYPE.json
+   $PACKER build -color=false -var-file=var_files/$AWS_ACCOUNT.json -var-file=tags.auto.pkrvars.json cfg_$OS_TYPE.json
+   # this needs to be here to detect packer build failures in jenkins
+   [[ "$?" != "0" ]] && error 8 "PACKER build process has FAILED!!" exit
+
+   AMI_ID=$(cat manifest.json | jq '.builds[0].artifact_id' | tr -d '"' | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
+
+   echo "Creating Code-Hash Tag on AMI $AMI_ID"
+   $AWSCLI ec2 create-tags --resources $AMI_ID --tags Key=Code-Hash,Value=$(eval cat ${WORKSPACE}/codeHash.txt)
+
+fi
+exit 0

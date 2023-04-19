@@ -1,0 +1,10 @@
+{
+    "region": "us-east-1",
+    "vpc_id": "vpc-0705193b93d74bfe2",
+    "ssh_username": "ec2-user",
+    "subnet_id": "subnet-0cbd523d19f5c272c",
+    "KMS_Key": "ac3441a6-7ff0-41e1-b307-9aac80b9e79b",
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "aws_session_token": "{{env `AWS_SESSION_TOKEN`}}"
+}
