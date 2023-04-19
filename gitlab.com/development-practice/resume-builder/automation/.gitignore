@@ -1,0 +1,23 @@
+build
+!.idea
+.idea/*
+!/.idea/icon.svg
+out
+*.ipr
+*.iws
+*.iml
+.gradle
+.project
+.classpath
+chromedriver.log
+.settings
+integration/ScreenshotTest/canTakeScreenshotOfElement/
+classes
+target
+
+# Ignore object repository file
+src/test/resources/env.properties
+
+# Ignore all binary files
+modules/*/bin
+statics/bin
