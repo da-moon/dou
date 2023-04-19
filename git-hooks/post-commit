@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Just to make sure after each commit...
+# ... A "pull --rebase" is made
+#
+#   --- Default:
+OFF='\033[0m'   
+
+#   --- Colors:
+RED='\033[0;31m'
+LRED='\033[1;31m'
+LGREEN='\033[1;32m'
+
+#   --- Text format:
+BOLD='\033[1m'
+BLINK='\033[5m'
+ITALIC='\033[3m'
+
+#   --- Emojis:
+FIRE='\xF0\x9F\x94\xA5'
+STAR='\xE2\xAD\x90'
+CHERRIES='\xF0\x9F\x8D\x92'
+
+echo "\n"
+echo "${BLINK}${LGREEN}${BOLD}  ${STAR}  SUCCESSFUL COMMIT  ${STAR}${OFF}"
+echo "\n"
+echo "${RED}${BOLD}  ${FIRE}  Repository rules  ${FIRE}${OFF}"
+echo "${RED}${BOLD}  ------------------------${OFF}"
+echo "${LRED}${BOLD}   ${CHERRIES}  Remember to ${ITALIC}\"git pull --rebase origin [original-branch]\"${OFF}${LRED}${BOLD} before you push${OFF}"
+echo "${LRED}${BOLD}          => [original-branch] is the branch from where you branched out originally ${ITALIC}(usually MASTER)${OFF}"
+echo "${LRED}${BOLD}          => This will ensure you have latest code and conflicts solved before pushing${OFF}"
+echo "${LRED}${BOLD}          => This make fast-forwarding easier when merging your MR${OFF}"
+echo "${LRED}${BOLD}   ${CHERRIES}  After pushing code, create a MR for it to be merged into master${OFF}"
+echo "${LRED}${BOLD}          => Make it as descriptive as possible and tag people to get it noticed${OFF}"
+echo "${LRED}${BOLD}          => Always assign it to yourself${OFF}"
+echo "${LRED}${BOLD}          => Select the labels according to the content of your MR${OFF}"
+echo "\n"
