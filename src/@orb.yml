@@ -1,0 +1,162 @@
+version: 2.1
+description: A greeting command orb
+
+# What will your orb allow users to accomplish?
+# Descriptions should be short, simple, and informative.
+
+# This information will be displayed in the orb registry and is not mandatory.
+# display:
+#   home_url: "https://www.website.com/docs"
+#   source_url: "https://www.github.com/EXAMPLE_ORG/EXAMPLE_PROJECT"
+
+# If your orb requires other orbs, you can import them like this. Otherwise remove the "orbs" stanza.
+# orbs:
+#  hello: circleci/hello-build@0.0.5
+
+orbs:
+    github-release: h-matsuo/github-release@0.1.1
+    jq: circleci/jq@2.2.0
+
+commands:
+ greet:
+     description: Greet someone with a "hello".
+     parameters:
+         to:
+             type: string
+             default: "${CIRCLE_USERNAME}"
+     steps:
+         - run: echo "Hello, << parameters.to >>"
+jobs:
+  "validate":
+    docker:
+        - image: kaarla/terraform-terratest:latest
+    steps:
+        - checkout
+        - run:
+            name: Export environment variables
+            command: |
+                echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+        - run:
+            name: Install DevOps repo
+            command: |
+                source $BASH_ENV
+                git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@$GITHUB_URL_SCRIPTS ../devops.ci
+        - run:
+            name: GitHub credentials
+            command: |
+                rm -rf ~/.netrc
+                touch ~/.netrc
+                echo "machine github.com" >> ~/.netrc
+                echo "login ${GITHUB_USER}" >> ~/.netrc | tee
+                echo "password ${GITHUB_TOKEN}" >> ~/.netrc |tee
+        - run:
+            name: Terraform Validate
+            command: |
+                echo "##[debug]Get env variables"
+                source $BASH_ENV
+                echo "##[debug]TERRAFORM VALIDATE"
+                chmod -R +x ../devops.ci/scripts/terraform-validate.sh
+                sh ../devops.ci/scripts/terraform-validate.sh
+        - run:
+            name: TFlint
+            command: |
+                export tflint_config="../devops.ci/tflint/.tflint.hcl"
+                echo "##[debug]TFLINT"
+                chmod -R +x ../devops.ci/scripts/terraform-tflint.sh
+                sh ../devops.ci/scripts/terraform-tflint.sh
+
+  "terratest":
+    docker:
+        - image: kaarla/terraform-terratest:latest
+    steps:
+        - checkout
+        - run:
+            name: Export environment variables
+            command: |
+                echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+        - run:
+            name: Install DevOps repo
+            command: |
+                source $BASH_ENV
+                git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@$GITHUB_URL_SCRIPTS ../devops.ci
+        - run:
+            name: GitHub credentials
+            command: |
+                rm -rf ~/.netrc
+                touch ~/.netrc
+                echo "machine github.com" >> ~/.netrc
+                echo "login ${GITHUB_USER}" >> ~/.netrc | tee
+                echo "password ${GITHUB_TOKEN}" >> ~/.netrc |tee
+        - run:
+            name: Download dependencies
+            command: |
+                go mod tidy
+            working_directory: test
+        - run:
+            name: Run Terratest
+            command: |
+                echo "##[debug]Get env variables"
+                source $BASH_ENV
+
+                echo "##[debug]Terratest..."
+                chmod -R +x ../../devops.ci/scripts/terratest.sh
+                sh ../../devops.ci/scripts/terratest.sh
+            working_directory: test
+        - store_test_results:
+           path: test
+  "tagging":
+    docker:
+      - image: dockerdoufer/aws-docker:circleci0.1
+    steps:
+        - checkout
+        - run:
+            name: Export environment variables
+            command: |
+                echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+        - run:
+            name: Install DevOps repo
+            command: |
+                git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@$GITHUB_URL_SCRIPTS ../devops.ci
+        - run:
+            name: Run Bump Tag
+            command: |
+                chmod +x ../devops.ci/version-tag.sh
+                export VERSION=`../devops.ci/version-tag.sh`
+                git tag -a $VERSION -m "version: $VERSION"
+                git push "https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git" --tags
+  "release":
+    description: Create a publish a new release.
+    executor: github-release/default
+    steps:
+        - checkout
+        - run:
+            name: Export environment variables
+            command: |
+                echo "export VERSION=$(git tag | sort -V | tail -1)" >> $BASH_ENV
+                echo "export DESCR='`cat release_description.txt`'" >> $BASH_ENV
+        - github-release/create:
+            tag: $VERSION
+            title: v$VERSION
+            description: $DESCR
+
+  "publishing":
+     docker:
+          - image: dockerdoufer/aws-docker:circleci0.1
+     steps:
+          - checkout
+          - jq/install
+          - run:
+              name: Export environment variables
+              command: |
+                  echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+          - run:
+              name: Install DevOps repo
+              command: |
+                  git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@$GITHUB_URL_SCRIPTS ../devops.ci
+          - run:
+              name: Publishing TFE module
+              command: |
+                  ls -la
+                  pwd
+                  chmod -R +x ../devops.ci/scripts/tfe-private-module.sh
+                  ../devops.ci/scripts/tfe-private-module.sh
