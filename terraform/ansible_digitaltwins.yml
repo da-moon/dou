@@ -1,0 +1,24 @@
+---
+  - name: "Create models and digital twins"
+    hosts: localhost
+    connection: local
+    tasks:
+      - name: load variables from config yaml file
+        include_vars:
+          file: ansible_config.yml
+          name: config_vars
+
+      - name: "Create models from {{ config_vars.directory }} folder"
+        shell: "az dt model create --models {{ config_vars.directory }}/{{ item }} -n {{ fis_digital_twins_name }}"
+        with_items: "{{ config_vars.models }}"
+        ignore_errors: yes
+
+      - name: "Create twin"
+        shell: "az dt twin create -n {{ fis_digital_twins_name }} --dtmi \"{{ item.dtmi }}\" -t {{ item.id }}"
+        with_items: "{{ config_vars.twins }}"
+
+      - name: "Create relationships"
+        shell: "az dt twin relationship create -n {{ fis_digital_twins_name }}  --relationship-id {{ item.rel_type }}_{{ item.id }}  --relationship {{ item.rel_type }} --source {{ item.rel_source }} --target {{ item.id }}"
+        with_items: "{{ config_vars.twins }}"
+        when:
+          - item.rel_source is defined

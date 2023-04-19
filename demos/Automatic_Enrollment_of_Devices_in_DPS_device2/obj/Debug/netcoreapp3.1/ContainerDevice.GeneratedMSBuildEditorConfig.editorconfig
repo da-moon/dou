@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = ContainerDevice
+build_property.ProjectDir = /Users/leonelperea/Documents/repos/digitalonus/azure-iot-sdk-c-docker/Automatic_Enrollment_of_Devices_in_DPS_device2/

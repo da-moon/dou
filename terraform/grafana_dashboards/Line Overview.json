@@ -1,0 +1,2877 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 21,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "Line Level"
+      ],
+      "targetBlank": false,
+      "title": "Line Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "Station"
+      ],
+      "targetBlank": false,
+      "title": "Station Level",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 72,
+      "options": {
+        "content": "# Marcio Mourao\n\nProcess Coach ext 311\n\n# Lucas Heath\n\nTeam Lead ext 572\n\n# Paypoint\n\nStation 190",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.0.8.1",
+      "title": "LINE INFO",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 88,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "count_"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Units Total"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sum_Units_Good"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Units Good"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sum_Units_Bad"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Units Bad"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 21,
+        "x": 3,
+        "y": 0
+      },
+      "id": 86,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "",
+                    "type": "string"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ede35ca6-71fc-415a-bdc5-574ed55cbe2b",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize count() by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "1h",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Units_Good",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "7e425373-e2bb-44aa-9e26-0a87dd33d3db",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize sum(Units_Good) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "B",
+          "resolution": "1h",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Units_Bad",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "e15152f2-4a08-48c9-a01f-168960fb1970",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize sum(Units_Bad) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "C",
+          "resolution": "1h",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "TOTAL PARTS PER HOUR",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 78,
+      "options": {
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.0.8.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 1,
+        "y": 9
+      },
+      "id": 82,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Units_Good",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "avg",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "7e425373-e2bb-44aa-9e26-0a87dd33d3db",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize avg(Units_Good) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "visual",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "1h",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "AVERAGE HOURLY GOOD PARTS",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "text",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 6,
+        "y": 9
+      },
+      "id": 84,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Units_Good",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": ""
+                      },
+                      "property": {
+                        "name": "",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "7e425373-e2bb-44aa-9e26-0a87dd33d3db",
+          "quality": "GOOD",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize sum(Units_Good) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Units_Total",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "",
+                    "type": "string"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "name": "==",
+                        "value": ""
+                      },
+                      "property": {
+                        "name": "",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ede35ca6-71fc-415a-bdc5-574ed55cbe2b",
+          "quality": "GOOD",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize count() by bin(Timestamp, 1m), Units_Total\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "B",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "QUALITY",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Result",
+            "binary": {
+              "left": "sum_Units_Good",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "count_"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 11,
+        "y": 9
+      },
+      "id": 74,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^count_$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Units_Total",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Units_Total",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "count",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ede35ca6-71fc-415a-bdc5-574ed55cbe2b",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize count() by bin(Timestamp, 1m), Units_Total\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "TOTAL UNITS",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "text",
+                  "index": 0,
+                  "text": "BELOW TARGET"
+                },
+                "to": 0.95
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 1.05,
+                "result": {
+                  "color": "text",
+                  "index": 1,
+                  "text": "ABOVE TARGET"
+                },
+                "to": 999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 13,
+        "y": 9
+      },
+      "id": 60,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^Result$/",
+          "values": false
+        },
+        "text": {
+          "titleSize": 0,
+          "valueSize": 0
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "JPH_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ede35ca6-71fc-415a-bdc5-574ed55cbe2b",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| summarize by bin(Timestamp, 1m), JPH_Target\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "Production Is",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Result",
+            "binary": {
+              "left": "JPH_Target",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "60"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 20,
+        "y": 9
+      },
+      "id": 64,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "JPH_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "a780597d-b9e5-4e33-830f-ef2797dd568b",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| summarize by bin(Timestamp, 1m), JPH_Target\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "title": "TARGET UNITS",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "JPH_Target",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "60"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "JPH_Target / 60"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 13,
+        "x": 11,
+        "y": 12
+      },
+      "id": 57,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {
+          "titleSize": 0,
+          "valueSize": 0
+        }
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "Units",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "Units_Total",
+                    "type": "number"
+                  },
+                  "reduce": {
+                    "name": "sum",
+                    "type": "function"
+                  },
+                  "type": "reduce"
+                }
+              ],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ede35ca6-71fc-415a-bdc5-574ed55cbe2b",
+          "query": "Units\n| where $__timeFilter(Timestamp)\n| summarize sum(Units_Total) by bin(Timestamp, 1m)\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": false,
+          "refId": "A",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        },
+        {
+          "aggregates": [
+            "SUM"
+          ],
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "JPH",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "JPH_Target",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "a780597d-b9e5-4e33-830f-ef2797dd568b",
+          "query": "JPH\n| where $__timeFilter(Timestamp)\n| summarize by bin(Timestamp, 1m), JPH_Target / 60\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyAggregate",
+          "rawMode": true,
+          "refId": "B",
+          "resolution": "AUTO",
+          "resultFormat": "table",
+          "timeOrdering": "ASCENDING"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "configFromData",
+          "options": {
+            "applyTo": {
+              "id": "byType",
+              "options": "number"
+            },
+            "configRefId": "B",
+            "mappings": [
+              {
+                "fieldName": "Column1",
+                "handlerKey": "max",
+                "reducerId": "sum"
+              },
+              {
+                "fieldName": "sum_Units_Total",
+                "handlerKey": "min",
+                "reducerId": "sum"
+              }
+            ]
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 87,
+      "options": {
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.0.8.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 1,
+        "y": 16
+      },
+      "id": 88,
+      "options": {
+        "content": "<p>&nbsp;</p>\n\n\n# &nbsp;&nbsp;&nbsp;    **Station State**\n\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.0.8.1",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 5,
+        "y": 16
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "f9156e75-2f7f-4e93-9dc6-2613fa92357d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 110",
+                        "name": "==",
+                        "value": "Station 110"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 110'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 110",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "TEST",
+              "url": ""
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 7,
+        "y": 16
+      },
+      "id": 68,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a5b3677e-7e51-46bf-a1d6-0bdaa92d092d",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 120",
+                        "name": "==",
+                        "value": "Station 120"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "hide": false,
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.5",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 120'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STA 120",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 9,
+        "y": 16
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "faef41e5-a5ea-41ec-8965-97700c63e60b",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 130",
+                        "name": "==",
+                        "value": "Station 130"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 130'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 130",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 11,
+        "y": 16
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a2a2b652-89ab-4c4f-a514-f1b3ca921ffa",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 140",
+                        "name": "==",
+                        "value": "Station 140"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 140'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 140",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 13,
+        "y": 16
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "3d42874b-18c4-48fa-a082-f617d224b2fc",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 150",
+                        "name": "==",
+                        "value": "Station 150"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 150'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 150",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 15,
+        "y": 16
+      },
+      "id": 63,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "6d093ed8-77a0-4c05-873b-d35a41171341",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 160",
+                        "name": "==",
+                        "value": "Station 160"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 160'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 160",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 17,
+        "y": 16
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "75362c3a-0093-4773-a5d0-ccf493c182f4",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 170",
+                        "name": "==",
+                        "value": "Station 170"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 170'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 170",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 19,
+        "y": 16
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "7de31965-43d7-431a-8d63-06c3fb1f0740",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 180",
+                        "name": "==",
+                        "value": "Station 180"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 180'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 180",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-data-explorer-datasource",
+        "uid": "HYppU6unz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1100": {
+                  "color": "super-light-green",
+                  "index": 0,
+                  "text": "IN CYCLE"
+                },
+                "3100": {
+                  "color": "super-light-blue",
+                  "index": 1,
+                  "text": "BLOCKED"
+                },
+                "3200": {
+                  "color": "super-light-yellow",
+                  "index": 3,
+                  "text": "STARVED"
+                },
+                "4100": {
+                  "color": "super-light-red",
+                  "index": 2,
+                  "text": "FAULTED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 21,
+        "y": 16
+      },
+      "id": 41,
+      "links": [],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "assetId": "a10ccdc3-a7a1-4dff-be3d-f9c450731729",
+          "database": "fiskustodatabase",
+          "datasource": {
+            "type": "grafana-iot-adx-datasource",
+            "uid": "HYppU6unz"
+          },
+          "expression": {
+            "from": {
+              "property": {
+                "name": "StateCode",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "interval": {
+                    "name": "1m",
+                    "type": "interval"
+                  },
+                  "property": {
+                    "name": "Timestamp",
+                    "type": "dateTime"
+                  },
+                  "type": "groupBy"
+                },
+                {
+                  "property": {
+                    "name": "Sub_State_Code",
+                    "type": "number"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "reduce": {
+              "expressions": [],
+              "type": "and"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "expressions": [
+                    {
+                      "operator": {
+                        "labelValue": "Station 190",
+                        "name": "==",
+                        "value": "Station 190"
+                      },
+                      "property": {
+                        "name": "Device_Alias",
+                        "type": "string"
+                      },
+                      "type": "operator"
+                    }
+                  ],
+                  "type": "or"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "maxPageAggregations": 1,
+          "pluginVersion": "4.1.6",
+          "propertyId": "ed4d5323-b88d-49a9-b83a-a47f099e52ba",
+          "query": "StateCode\n| where $__timeFilter(Timestamp)\n| where Device_Alias == 'Station 190'\n| summarize by bin(Timestamp, 1m), Sub_State_Code\n| order by Timestamp asc",
+          "querySource": "raw",
+          "queryType": "PropertyValue",
+          "rawMode": false,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "STATION 190",
+      "type": "stat"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [
+    "Line Level"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "America/Detroit",
+  "title": "Line Overview",
+  "uid": "nOENqNqnz",
+  "version": 4,
+  "weekStart": ""
+}

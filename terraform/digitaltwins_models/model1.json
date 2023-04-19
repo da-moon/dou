@@ -1,0 +1,23 @@
+[
+    {
+        "@id": "dtmi:fis:model1;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 1 Plant Model",
+        "contents": [
+            {
+                "@type": "Relationship",
+                "@id": "dtmi:fis:model1:location;1",
+                "name": "location",
+                "target": "dtmi:fis:model2;1"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model1:toledoAssembly;1",
+        "@type": "Interface",
+        "displayName": "Toledo Assembly",
+        "extends": "dtmi:fis:model1;1"
+    }
+]

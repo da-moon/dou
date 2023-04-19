@@ -1,0 +1,99 @@
+[
+    {
+        "@id": "dtmi:fis:model6;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 6 Element Motor Model",
+        "contents": [
+            {
+                "@type": "Telemetry",
+                "name": "Alarm_Recepient_VCU2EQOR",
+                "schema": "string"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "Alarm_Recepient_XNNS7NMA",
+                "schema": "string"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "Current_High",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "Motor_Current_is_High",
+                "schema": "string"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "Speed_High",
+                "schema": "double"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "Temperature_High",
+                "schema": "double"
+            },
+            {
+                "@type": [
+                    "Telemetry",
+                    "Current"
+                ],
+                "name": "current",
+                "schema": "double",
+                "unit": "ampere"
+            },
+            {
+                "@type": [
+                    "Telemetry",
+                    "Frequency"
+                ],
+                "name": "frequency",
+                "schema": "double",
+                "unit": "hertz"
+            },
+            {
+                "@type": [
+                    "Telemetry",
+                    "Luminosity"
+                ],
+                "name": "Horsepower",
+                "schema": "double",
+                "unit": "horsepower"
+            },
+            {
+                "@type": "Telemetry",
+                "name": "Motor_Speed",
+                "schema": "string"
+            },
+            {
+                "@type": [
+                    "Telemetry",
+                    "Temperature"
+                ],
+                "name": "Temperature",
+                "schema": "double",
+                "unit": "degreeFahrenheit"
+            },
+            {
+                "@type": [
+                    "Telemetry",
+                    "Acceleration"
+                ],
+                "name": "vibration",
+                "schema": "double",
+                "unit": "metrePerSecondSquared"
+            },
+            {
+                "@type": [
+                    "Telemetry",
+                    "Voltage"
+                ],
+                "name": "voltage",
+                "schema": "double",
+                "unit": "volt"
+            }
+        ]
+    }
+]

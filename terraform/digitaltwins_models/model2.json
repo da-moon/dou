@@ -1,0 +1,37 @@
+[
+    {
+        "@id": "dtmi:fis:model2;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 2 Area Model",
+        "contents": [
+            {
+                "@type": "Relationship",
+                "@id": "dtmi:fis:model2:location;1",
+                "name": "location",
+                "target": "dtmi:fis:model3;1"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model2:body;1",
+        "@type": "Interface",
+        "displayName": "10000 Body in White",
+        "extends": "dtmi:fis:model2;1"
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model2:paint;1",
+        "@type": "Interface",
+        "displayName": "20000 Paint",
+        "extends": "dtmi:fis:model2;1"
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model2:assembly;1",
+        "@type": "Interface",
+        "displayName": "30000 Assembly",
+        "extends": "dtmi:fis:model2;1"
+    }
+]

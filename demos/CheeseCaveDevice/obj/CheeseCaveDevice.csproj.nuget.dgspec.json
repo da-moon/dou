@@ -1,0 +1,82 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/leonelperea/Documents/repos/digitalonus/FIS/demos/CheeseCaveDevice/CheeseCaveDevice.csproj": {}
+  },
+  "projects": {
+    "/Users/leonelperea/Documents/repos/digitalonus/FIS/demos/CheeseCaveDevice/CheeseCaveDevice.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/leonelperea/Documents/repos/digitalonus/FIS/demos/CheeseCaveDevice/CheeseCaveDevice.csproj",
+        "projectName": "CheeseCaveDevice",
+        "projectPath": "/Users/leonelperea/Documents/repos/digitalonus/FIS/demos/CheeseCaveDevice/CheeseCaveDevice.csproj",
+        "packagesPath": "/Users/leonelperea/.nuget/packages/",
+        "outputPath": "/Users/leonelperea/Documents/repos/digitalonus/FIS/demos/CheeseCaveDevice/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/leonelperea/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.Azure.Devices.Client": {
+              "target": "Package",
+              "version": "[1.*, )"
+            },
+            "Microsoft.Azure.Devices.Provisioning.Transport.Amqp": {
+              "target": "Package",
+              "version": "[1.*, )"
+            },
+            "Microsoft.Azure.Devices.Provisioning.Transport.Http": {
+              "target": "Package",
+              "version": "[1.*, )"
+            },
+            "Microsoft.Azure.Devices.Provisioning.Transport.Mqtt": {
+              "target": "Package",
+              "version": "[1.*, )"
+            },
+            "Microsoft.Azure.Devices.Shared": {
+              "target": "Package",
+              "version": "[1.*, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/Cellar/dotnet/6.0.104_1/libexec/sdk/6.0.104/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

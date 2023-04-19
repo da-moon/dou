@@ -1,0 +1,327 @@
+[
+    {
+        "@id": "dtmi:fis:model5;1",
+        "@type": "Interface",
+        "@context": "dtmi:dtdl:context;2",
+        "displayName": "Level 5 Station Model",
+        "contents": [
+            {
+                "@type": "Property",
+                "name": "timestamp",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Design_Target",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Invalid_Target",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "JPH_Target",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "Machine_ID",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "Device_ID",
+                "schema": "string"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Sub_Desc",
+                "schema": "string"
+            },
+            {
+                "@type": "Property",
+                "name": "Event_Code",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "Event_Desc",
+                "schema": "string"
+            },
+            {
+                "@type": "Property",
+                "name": "Comm_Heartbeat",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Sub_State_Code",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "Sub_State_Desc",
+                "schema": "string"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Code",
+                "schema": "integer"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Desc",
+                "schema": "string"
+            },
+            {
+                "@type": "Property",
+                "name": "Units_Total",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Units_Good",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Units_Bad",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Alarm_Code",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Alarm_Desc",
+                "schema": "string"
+            },
+            {
+                "@type": "Property",
+                "name": "Schedule_Shift_Name",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Schedule_Is_Productive",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Unscaled_Value",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Code_Derived",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Cycling",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Blocked",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Setup",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Non_Prod",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Stopped",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Breakdown",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "Event_Duration",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Event_Code_Previous",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Unplanned_Down",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Tooling_Loss",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "State_Net_Available",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Value",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Invalid",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Slow",
+                "schema": "boolean"
+            },
+            {
+                "@type": "Property",
+                "name": "Cycletime_Overtime_Value",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Event_Code_Timestamp_Previous",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Cycling",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Blocked",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Non_Prod",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Stopped",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Breakdown",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Setup",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Count_Breakdown",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Unplanned_Down",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Availability",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Tooling_Loss",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Scheduled_Production",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Time_Net_Available",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Total_Units_Good",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Total_Units_Bad",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Total_Units_Total",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Count_Cycle_Invalid",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Count_Cycle_Slow",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Total_Slow_Duration",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Total_Target_Units_Per_Minute",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Total_Cycletime_Value",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Bottleneck_Rank",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Shared_Bottleneck",
+                "schema": "double"
+            },
+            {
+                "@type": "Property",
+                "name": "Sole_Bottleneck",
+                "schema": "double"
+            }
+        ]
+    },
+    {
+        "@context": "dtmi:dtdl:context;2",
+        "@id": "dtmi:fis:model5:station10;1",
+        "@type": "Interface",
+        "displayName": "32210 Station 10",
+        "extends": "dtmi:fis:model5;1"
+    }
+]
