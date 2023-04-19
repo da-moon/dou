@@ -1,0 +1,42 @@
+{
+    "variables" : {
+        "token"  : "{{env `DIGITALOCEAN_TOKEN_DIGITAL`}}",
+        "provs"  : "provisioners"
+    },
+    "builders" : [
+    {
+        "type" : "digitalocean",
+        "api_token": "{{user `token`}}",
+        "ssh_username" : "root",
+        "image" : "ubuntu-18-04-x64",
+        "region" : "nyc1",
+        "size" : "512mb",
+        "snapshot_name" : "jenkins-image"
+    }],
+    "provisioners" : [
+    {
+        "type" : "shell",
+        "script" : "{{user `provs`}/base.sh"
+    },
+    {
+        "type" : "shell",
+        "script" : "{{user `provs`}/jenkins.sh"
+    }, 
+    {
+        "type" : "shell",
+        "script" :  "{{user `provs`}/terraform.sh"   
+    },
+    {
+        "type" : "shell",
+        "script" :  "{{user `provs`}/vault.sh"
+    },
+    {
+        "type" : "shell",
+        "script" : "{{user `provs`}/docker.sh"
+    },
+    { 
+        "type" : "shell",
+        "inline" : ["usermod -a -G docker jenkins"]
+    }]
+    
+}

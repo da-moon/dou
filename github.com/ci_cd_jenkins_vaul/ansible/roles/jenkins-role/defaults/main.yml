@@ -1,0 +1,5 @@
+terraform_version: 0.11.11
+terraform_zip_dir: /tmp
+atlantis_version: v0.4.15
+atlantis_zip_dir: /tmp
+install_dir: /usr/local/bin

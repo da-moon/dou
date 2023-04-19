@@ -1,0 +1,19 @@
+---
+  - name: Update repositories cache 
+    apt: 
+        update_cache: yes
+    
+  - name: get device name
+    shell: "ls /dev/disk/by-id/"
+    register: ls_output
+
+  - debug:
+      var: ls_output.stdout
+      
+  - name: Mount volume command
+    command: "mount -o discard,defaults,noatime /dev/disk/by-id/{{ ls_output.stdout }} /var/lib/jenkins"
+
+  - name: Restart service jenkins
+    service:
+      name: jenkins
+      state: restarted
