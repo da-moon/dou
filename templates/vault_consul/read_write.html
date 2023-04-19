@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Read/Write{% endblock %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+ <div id="page-container" style="position:relative; min:100vh;">
+   <div id="content-wrap" style="padding-bottom:180px">
+  <div class="container">
+    <form method="POST" class="form my-5" novalidate style="overflow:hidden;">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-4 offset-4">
+            <h2>Set Vault secret</h2>
+            {% bootstrap_form vform %}
+              <div class="col-2 offset-3">
+                <input type="submit" value="Send" class="btn btn-primary">
+              </div>
+            </div>
+        </div>
+    </form>
+    <form method="POST" class="form my-5" novalidate style="overflow:hidden;">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-4 offset-4">
+                <h2>Get Vault secret</h2>
+                {% bootstrap_form cform %}
+              <div class="col-2 offset-3">
+                <input type="submit" value="Send" class="btn btn-primary">
+              </div>
+            </div>
+        </div>
+    </form>
+  </div>
+  <div class="container">
+   
+    <form method="POST" class="form my-6" novalidate style="overflow:hidden;">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-4 offset-4">
+             <h2>Set Consul key/value</h2>
+            {% bootstrap_form vform %}
+              <div class="col-2 offset-3">
+                <input type="submit" value="Send" class="btn btn-primary">
+              </div>
+            </div>
+        </div>
+    </form>
+    
+    <form method="POST" class="form my-5" novalidate style="overflow:hidden;">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-4 offset-4">
+            <h2>Get Vault value</h2>
+            {% bootstrap_form cform %}
+              <div class="col-2 offset-3">
+                <input type="submit" value="Send" class="btn btn-primary">
+              </div>
+            </div>
+        </div>
+    </form>
+  </div>
+       </div>
+<footer class="footer bg-black small text-center text-white-50" style="position: absolute; bottom: 0; width: 100%; height: 180px;">Copyright © Digital on Us 2020</footer>
+</div>
+{% endblock %}

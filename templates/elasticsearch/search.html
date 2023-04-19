@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% block title %} <title>Elastisearch module</title> {% endblock %}
+<div id="page-container" style="position:relative; min:100vh;">
+  <div id="content-wrap" style="padding-bottom:180px">
+    <h2 class="text-center p-3">Welcome to elasticsearch</h2>
+
+    <form method='get' class="text-center mb-4">
+      <input id='q' name='q' type='text' placeholder='search...'>
+    </form>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-6 offset-lg-3 " style="overflow-y: auto; height: 400px;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" style="position: sticky; top: 0; background-color:#FFF">First Name</th>
+                <th scope="col" class="text-center" style="position: sticky; top: 0; background-color:#FFF">Last Name
+                </th>
+                <th scope="col" class="text-center" style="position: sticky; top: 0; background-color:#FFF">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for person in people %}
+              <tr>
+                <td>{{ person.first_name }}</td>
+                <td class="text-center">{{ person.last_name }}</td>
+                <td class="text-center">{{ person.gender }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<footer class="footer bg-black small text-center text-white-50"
+  style="position: absolute; bottom: 0; width: 100%; height: 180px;">Copyright © Digital on Us 2020</footer>
+{% endblock %}

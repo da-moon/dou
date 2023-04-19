@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block body_content %}
+
+  <div class="w-100 p-4 p-md-4 text-white rounded bg-dark">
+    <div class="col-md-17 px-0">
+      <div class="container">
+        <a href="{% url 'main:status' %}">Back</a>
+        <h1 align="right" class="display-15">
+          {% if not edit %}
+           New person
+          {% else %}
+            Edit person
+          {% endif%}
+        </h1>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+{% block title %} <title>New person</title> {% endblock %}
+  <div class="container">
+    <form method="POST" enctype="multipart/form-data" class="form my-5" novalidate style="overflow:hidden;">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-4 offset-3">
+            {% bootstrap_form post_form %}
+              <div class="col-2 offset-3">
+                <input type="submit" value="Send" class="btn btn-primary">
+              </div>
+            </div>
+        </div>
+    </form>
+  </div>
+{% endblock %}
