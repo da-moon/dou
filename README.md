@@ -1,0 +1,1 @@
+Module for AWS S3 triggered lambda with layer
