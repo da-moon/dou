@@ -1,0 +1,1 @@
+Module for AWS ecs windows cluster with logging
