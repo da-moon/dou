@@ -1,0 +1,1 @@
+Fixed bug to allow you to pass in a base_ami from build.config

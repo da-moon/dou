@@ -1,0 +1,9 @@
+---
+#- src: yatesr.timezone
+
+- src: ssh://git@gitlab.com/DigitalOnUs/clients/citizensbank/java8.git
+  scm: git
+  version: main
+  name: java8
+
+- src: zaxos.tomcat-ansible-role

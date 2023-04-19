@@ -1,0 +1,5 @@
+---
+
+- src: git@github.com:DigitalOnUs/IIDK-common.git
+  scm: git
+  version: main

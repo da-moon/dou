@@ -1,0 +1,11 @@
+---
+- hosts: iidk-consul-aws
+  become: true
+  user: ubuntu
+  vars:
+    service: consul
+    datadog_process_checks:
+      - { name: consul, search_string: ['consul'] }
+  roles:
+    - { role: IIDK-common }
+    - { role: consul, cli: false }

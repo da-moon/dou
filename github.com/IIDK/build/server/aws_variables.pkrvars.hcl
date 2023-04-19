@@ -1,0 +1,5 @@
+vpc = "vpc-018cf98de9e098204"
+subnet = "subnet-0c3187a8a2f476fe4"
+ssh_username = "ubuntu"
+version = "iidk_2_0"
+kms_key_id = "de3ac4bc-268d-4d6d-ada7-19b68d491015"

@@ -1,0 +1,22 @@
+---
+- hosts: tag_Name_tmobbs_vagrant_centos_ec2
+  become: true
+  user: centos
+  roles:
+    - iidk
+    #- yatesr.timezone
+    - java8
+    - zaxos.tomcat-ansible-role
+
+  vars:
+    tomcat_version: 8.5.23
+    tomcat_install_java: False
+    tomcat_permissions_production: True
+    
+    tomcat_users:
+      - username: "tomcat"
+        password: "t3mpp@ssw0rd"
+        roles: "tomcat,admin,manager,manager-gui"
+      - username: "exampleuser"
+        password: "us3rp@ssw0rd"
+        roles: "tomcat"        

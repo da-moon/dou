@@ -1,0 +1,16 @@
+---
+
+- name: Create a directory if it does not exist
+  file:
+    path: ~/iidk
+    state: directory
+    mode: '0755'
+
+- name: install python
+  apt:
+    name: python
+    state: latest
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
