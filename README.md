@@ -1,0 +1,1 @@
+Module for AWS ECS autoscaled alb service distinct instance
