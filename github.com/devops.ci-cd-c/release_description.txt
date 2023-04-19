@@ -1,0 +1,1 @@
+Updating docker_build.sh to remove bug in image building failures.
