@@ -1,0 +1,31 @@
+version: 2.1
+workflows:
+  api:
+    jobs:
+        - "deploy":
+            context: CaaS
+            filters:
+                branches:
+                    only:
+                      - develop
+
+jobs:
+  "deploy":
+    docker:
+        - image: circleci/golang:latest
+    steps:
+      - checkout
+      - run:
+          name: Export Dwarf environment variables
+          command: |
+            echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+            echo $CI_VERSION
+      - run:
+          name: Install devops.ci-cd-ct repo
+          command: |
+            git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@${GITHUB_URL_DEVOPS} ../devops.ci
+      - run:
+          name: Run tests 
+          command: |
+            chmod -R +x ../devops.ci
+            ../devops.ci/deploy_type/deploy_terraform_aws_infrastructure.sh
