@@ -1,0 +1,26 @@
+#####   TERRAFORM IGNORES #####
+.DS_Store
+
+# Compiled files
+*.tfstate
+*.tfstate.backup
+
+# Module directory
+.terraform/
+*.tfvars
+terraform.tfstate*
+terraform.rc
+
+#####  ANSIBLE IGNORES #####
+*.pem
+*.retry
+*.pyc
+
+####  VS CODE IGNORES ####
+.vscode/
+.vscode/settings.json
+
+### Local testing ###
+main_test copy.go
+
+integration_test_copy/
