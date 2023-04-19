@@ -1,0 +1,1 @@
+Module for AWS ECS auto draining ecs cluster
