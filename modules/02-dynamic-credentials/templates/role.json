@@ -1,0 +1,8 @@
+{
+  "creation_ldif"     : "${creation_ldif}",
+  "deletion_ldif"     : "${deletion_ldif}",
+  "rollback_ldif"     : "${rollback_ldif}",
+  "username_template" : "${username_template}",
+  "default_ttl"       : "${default_ttl}",
+  "max_ttl"           : "${max_ttl}"
+}

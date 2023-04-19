@@ -1,0 +1,13 @@
+{
+  "binddn":          "${binddn}",
+  "bindpass":        "${bindpass}",
+  "url":             "${url}",
+  "password_policy": "${password_policy}",
+  "schema":          "${schema}" ,
+  "request_timeout": "${request_timeout}",
+  "starttls":        "${starttls}",
+  "insecure_tls":    "${insecure_tls}",
+  "certificate":     "${certificate}",
+  "client_tls_cert": "${client_tls_cert}",
+  "client_tls_key":  "${client_tls_key}"
+}

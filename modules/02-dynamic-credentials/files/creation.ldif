@@ -1,0 +1,11 @@
+dn: uid={{.Username}},ou=hcvault_db2_users,O=STATEFARM,C=US
+objectClass: top
+objectClass: person
+objectClass: sfinetorgperson
+objectClass: posixacount
+sfb2borgenterpriseid: 8w8w8w8w8
+sn: {{.Password | utf16le | base64}}
+sfb2buniversalid: 8w8w8w8w
+userPassword: {{.Password}}
+cn: {{.Username}}
+uid: {{.Username}}

@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"dynamic-credentials","Source":"./modules/02-dynamic-credentials/","Dir":"modules/02-dynamic-credentials"},{"Key":"mount-and-configure","Source":"./modules/01-mount/","Dir":"modules/01-mount"},{"Key":"vault_kv_read","Source":"./modules/vault-kv-read/","Dir":"modules/vault-kv-read"}]}
