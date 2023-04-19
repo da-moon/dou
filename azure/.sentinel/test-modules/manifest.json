@@ -1,0 +1,160 @@
+{
+	"records": [
+		{
+			"key": "test/enforce-mandatory-tags/pass/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-vm-publisher/fail/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-vm-size/fail/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/enforce-mandatory-tags/pass/azure-functions",
+			"source": "../../azure-functions/azure-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/azure/azure-functions/azure-functions.sentinel"
+		},
+		{
+			"key": "test/enforce-mandatory-tags/fail/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-vm-image-id/pass/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-outbound-destination-address-prefixes/pass-single-prefix/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-inbound-source-address-prefixes/pass-single-prefix/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-publishers-of-current-vms/pass/tfstate-functions",
+			"source": "../../../common-functions/tfstate-functions/tfstate-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfstate-functions/tfstate-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-inbound-source-address-prefixes/pass-multiple-prefixes/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-app-service-to-https/fail/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-publishers-of-current-vms/fail/tfstate-functions",
+			"source": "../../../common-functions/tfstate-functions/tfstate-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfstate-functions/tfstate-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-outbound-destination-address-prefixes/pass-multiple-prefixes/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-vm-size/pass/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-outbound-destination-address-prefixes/fail-single-prefix/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-outbound-destination-address-prefixes/fail-multiple-prefixes/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-aks-clusters/pass/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/enforce-mandatory-tags/fail/azure-functions",
+			"source": "../../azure-functions/azure-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/azure/azure-functions/azure-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-inbound-source-address-prefixes/fail-multiple-prefixes/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-aks-clusters/fail-node-count/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-inbound-source-address-prefixes/fail-single-prefix/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-app-service-to-https/pass/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-aks-clusters/fail-max-count/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-aks-clusters/fail-vm-size/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-vm-image-id/fail/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/restrict-vm-publisher/pass/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/Users/marcourrea/Downloads/terraform-guides-master/governance/third-generation/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		}
+	]
+}
