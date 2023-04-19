@@ -1,0 +1,23 @@
+stateDiagram-v2
+%% docker run --rm -it -u "$(id -u):$(id -g)" -v "$PWD:/workspace" minlag/mermaid-cli mmdc --scale 4 -c  /workspace/config.json --cssFile /workspace/icons.css -i /workspace/diagram.mmd -o /workspace/diagram.png
+  direction LR
+  packaging : Packaging
+  provision : Provision
+  deploy : Deploy and Configure
+  test : Integration And API tests
+  state packaging {
+    packaging_test : Test
+    [*] --> packaging_test
+  }
+  state provision {
+    provision_test : Test
+    [*] --> provision_test
+  }
+  state deploy {
+    deploy_test : Test
+    [*] --> deploy_test
+  }
+  [*] --> packaging
+  packaging --> provision
+  provision --> deploy
+  deploy --> test

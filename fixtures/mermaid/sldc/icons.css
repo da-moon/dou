@@ -1,0 +1,25 @@
+.iphone-icon {
+  width: 64px;
+  height: 64px;
+  background: url(https://github.com/mingrammer/diagrams/raw/master/resources/aws/ar/sumerian.png) no-repeat center center;
+}
+
+.server-icon {
+  width: 64px;
+  height: 64px;
+  background: url(https://github.com/mingrammer/diagrams/raw/master/resources/aws/ar/ar-vr.png) no-repeat center center;
+}
+.icon {
+  background-repeat: no-repeat;
+  background-position: 50% 50%; /* centers the icon image in the span element background */
+  background-size: auto 100%; /* makes the full icon appear in the background*/
+  width: 50px;
+  height: 50px;
+  display: block; /* displays icon above text */
+  margin: 0 auto; /* centers the icon horizontally */
+}
+
+/* the URL needs to be relative to Mermaid JS library file, which is inside of node_modules */
+.example {
+  background-image: url(https://github.com/mingrammer/diagrams/raw/master/resources/aws/ar/ar-vr.png) no-repeat center center;
+}

@@ -1,0 +1,31 @@
+{
+  "azure-bastion": {
+    "url": "https://azure.microsoft.com/svghandler/azure-bastion/?width=600&height=315",
+    "icon": "./icons/azure-bastion.png"
+  },
+  "packer": {
+    "url": "https://github.com/mingrammer/diagrams/raw/f4036a7ebe44ab83711639c13817922ce77ceeeb/resources/onprem/iac/packer.png",
+    "icon": "./icons/packer.png"
+  },
+  "config": {
+    "url": "https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/settings-512.png",
+    "icon": "./icons/config.png"
+  },
+  "azure": {
+    "url": "https://cdn-icons-png.flaticon.com/512/873/873107.png",
+    "icon": "./icons/azure.png"
+  },
+  "gruntwork": {
+    "url": "https://avatars.githubusercontent.com/u/17118990?s=280&v=4",
+    "icon": "./icons/gruntwork.png"
+  },
+  "k6": {
+    "url": "https://image.pngaaa.com/270/5049270-middle.png",
+    "icon": "./icons/k6.png"
+  },
+  "package": {
+    "url": "https://www.pngitem.com/pimgs/m/208-2083447_storage-png-page-package-icon-png-white-transparent.png",
+    "icon": "./icons/package.png"
+  }
+
+}

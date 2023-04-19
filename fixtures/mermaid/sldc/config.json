@@ -1,0 +1,7 @@
+{
+  "theme": "base",
+  "securityLevel": "loose",
+  "flowchart": {
+    "htmlLabels": true
+  }
+}

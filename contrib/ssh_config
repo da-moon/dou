@@ -1,0 +1,41 @@
+Host *
+  ServerAliveInterval 240
+  # XAuthLocation /usr/bin/xauth
+  # ForwardX11 yes
+  # ForwardX11Trusted yes
+Host havi
+  HostName 51.158.76.102
+  User arch
+  RequestTTY yes
+  IdentityFile ~/.ssh/id_rsa
+  IdentitiesOnly yes
+  StrictHostKeyChecking no
+  ForwardX11 yes
+  ForwardX11Trusted yes
+  # LocalForward 6666 localhost:6666
+  # LocalForward 2489 localhost:2489
+  LocalForward 8200 localhost:8200
+   LocalForward 8500 localhost:8500
+   LocalForward 8385 localhost:8384
+   # LocalForward 8065 localhost:8065
+   LocalForward 8080 localhost:8080
+   LocalForward 8090 localhost:8090
+   LocalForward 8091 localhost:8091
+  MACs hmac-sha2-512
+  UserKnownHostsFile=/dev/null
+  SetEnv COLORTERM=truecolor
+Host git.sr.ht
+  IdentityFile ~/.ssh/id_rsa_sourcehut
+  User git
+  IdentitiesOnly yes
+  StrictHostKeyChecking no
+  MACs hmac-sha2-512
+  UserKnownHostsFile=/dev/null
+Host mpr
+  HostName mpr.hunterwittenborn.com
+  IdentityFile ~/.ssh/id_rsa
+  User mpr
+  IdentitiesOnly yes
+  StrictHostKeyChecking no
+  MACs hmac-sha2-512
+  UserKnownHostsFile=/dev/null
