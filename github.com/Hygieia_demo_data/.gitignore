@@ -1,0 +1,2 @@
+mongodb/*.js
+jenkins/create_pipeline/*
