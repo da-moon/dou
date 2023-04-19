@@ -1,0 +1,39 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "logstash",
+    "creationTimestamp": null,
+    "labels": {
+      "service": "logstash"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "12201",
+        "protocol": "UDP",
+        "port": 12201,
+        "targetPort": 12201
+      },
+      {
+        "name": "25826",
+        "protocol": "UDP",
+        "port": 25826,
+        "targetPort": 25826
+      },
+      {
+        "name": "5000",
+        "protocol": "TCP",
+        "port": 5000,
+        "targetPort": 5000
+      }
+    ],
+    "selector": {
+      "service": "logstash"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

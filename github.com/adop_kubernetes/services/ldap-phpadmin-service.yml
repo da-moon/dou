@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ldap-phpadmin
+  creationTimestamp:
+  labels:
+    service: ldap-phpadmin
+  namespace: devops
+spec:
+  ports:
+  - name: '80'
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    service: ldap-phpadmin

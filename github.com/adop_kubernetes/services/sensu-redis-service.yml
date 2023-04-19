@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sensu-redis
+  creationTimestamp: 
+  labels:
+    service: sensu-redis
+  namespace: devops
+spec:
+  ports:
+  - name: '6379'
+    protocol: TCP
+    port: 6379
+    targetPort: 6379
+  selector:
+    service: sensu-redis
