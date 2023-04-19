@@ -1,0 +1,10 @@
+repos:
+  - repo: ssh://git@internal-bitbucket-p-app-clb-621196423.us-east-1.elb.amazonaws.com/cldreg/pre-commit-terraform.git
+    rev: v1.45.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+  - repo:  ssh://git@internal-bitbucket-p-app-clb-621196423.us-east-1.elb.amazonaws.com/cldreg/pre-commit-hooks.git
+    rev: v3.3.0
+    hooks:
+      - id: check-merge-conflict
