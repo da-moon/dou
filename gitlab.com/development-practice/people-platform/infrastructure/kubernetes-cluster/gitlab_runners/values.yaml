@@ -1,0 +1,33 @@
+image:
+  registry: registry.gitlab.com
+  image: gitlab-org/gitlab-runner
+
+
+gitlabUrl: https://gitlab.com/
+
+concurrent: 3
+checkInterval: 30
+
+rbac:
+  create: true
+  clusterWideAccess: true
+
+
+runners:
+  secret: gitlab-runner-secret
+  image: ubuntu:18.04
+  privileged: true
+  namespace: gitlab-runners
+
+
+  builds:
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+
+  services:
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+
+  helpers:
+    cpuRequests: 100m
+    memoryRequests: 128Mi

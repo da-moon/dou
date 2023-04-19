@@ -1,0 +1,21 @@
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+  rules: 
+    - host: iam.techmcne.com
+      paths:
+       - path: /
+         pathType: Prefix
+args:
+  - -Dkeycloak.profile.feature.docker=enabled
+
+tls:
+  - hosts:
+    - iam.techmcne.com
+    secretName: iam-techmcne-com-tls
+
+postgresql:
+  enabled: true
+  postgresqlPassword: #ask-administration for the password
