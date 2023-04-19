@@ -1,0 +1,13 @@
+---
+- hosts: tag_Name_tmobbs_vagrant_ec2 #iidk-hello-world
+  become: true
+  user: ubuntu
+
+#- hosts: 54.151.6.66 #iidk-hello-world
+  #become: true
+  #user: Administrator
+  #connection: winrm
+  #gather_facts: false
+
+  roles:
+    - iidk
