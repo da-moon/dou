@@ -1,0 +1,19 @@
+dockerRegistry:
+  accounts:
+    - name: dockerhub-nemesis
+      requiredGroupMembership: [ ]
+      providerVersion: V1
+      permissions: { }
+      address: https://index.docker.io  # (Required). The registry address you want to pull and deploy images from; e.g. https://index.docker.io
+      email: nemesis.cruz@armory.io    # Your docker registry email (often this only needs to be well-formed, rather than be a real address)
+      cacheIntervalSeconds: 600          # (Default: 30). How many seconds elapse between polling your docker registry. Certain registries are sensitive to over-polling, and larger intervals (e.g. 10 minutes = 600 seconds) are desirable if you’re seeing rate limiting.
+      clientTimeoutMillis: 60000        # (Default: 60000). Timeout time in milliseconds for this repository.
+      cacheThreads: 1                   # (Default: 1). How many threads to cache all provided repos on. Really only useful if you have a ton of repos.
+      paginateSize: 100                 # (Default: 100). Paginate size for the docker repository _catalog endpoint.
+      sortTagsByDate: false             # (Default: false). Sort tags by creation date.
+      trackDigests: false               # (Default: false). Track digest changes. This is not recommended as it consumes a high QPM, and most registries are flaky.
+      insecureRegistry: false           # (Default: false). Treat the docker registry as insecure (don’t validate the ssl cert).
+      repositories:
+        - nemesisarmory/nemesis-repo
+      username: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:dockerhub.nemesis.username                     # Your docker registry username.
+      password: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:dockerhub.nemesis.password                     # (Secret). Your docker registry password.
