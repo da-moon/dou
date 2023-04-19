@@ -1,0 +1,25 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gerrit
+  creationTimestamp: 
+  labels:
+    service: gerrit
+  namespace: devops
+spec:
+  ports:
+  - name: '8080'
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  - name: '29418'
+    protocol: TCP
+    port: 29418
+    targetPort: 29418
+  - name: '3306'
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    service: gerrit

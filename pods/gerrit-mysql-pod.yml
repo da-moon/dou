@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "gerrit-mysql"
+  labels:
+    service: gerrit-mysql
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "gerrit-mysql-data"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /gerrit_mysql_data/_data
+  containers:
+  - name: gerrit-mysql
+    image: mysql:5.6.25
+    env:
+    - name: "MYSQL_ROOT_PASSWORD"
+      value: "e51818c0a77310573"
+    - name: "MYSQL_USER"
+      value: "gerrit"
+    - name: "MYSQL_PASSWORD"
+      value: "gerrit"
+    - name: "MYSQL_DATABASE"
+      value: "gerrit"
+    ports:
+    - name: gerrit-myadmin
+      containerPort: 3306
+    volumeMounts:
+    - name: "gerrit-mysql-data"
+      mountPath: "/var/lib/mysql"
+

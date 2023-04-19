@@ -1,0 +1,18 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sonar-mysql
+  creationTimestamp: 
+  labels:
+    service: sonar-mysql
+  namespace: devops
+spec:
+  ports:
+  - name: '3306'
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    service: sonar-mysql
+

@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "sensu-api"
+  labels:
+    service: "sensu-api"
+    name: "devops"
+  namespace: "devops"
+spec:
+ volumes:
+  - name: "sensu-api-conf"
+    nfs:
+     path: /sensu_api_conf/_data
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+
+  - name: "sensu-client-conf"
+    nfs:
+     path: /sensu_client_conf/_data
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     
+  - name: "sensu-server-conf"
+    nfs:
+     path: /sensu_server_conf/_data
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+
+ containers:
+  - name: sensu-api
+    image: franciscoaditazz/sensu-api:0.1.0
+#    image: accenture/adop-sensu:0.2.0
+    ports:
+    - containerPort: 4567
+      protocol: TCP
+    env:
+    - name: "TRANSPORT_NAME"
+      value: "rabbitmq"
+    - name: "RABBITMQ_HOST"
+      value: "sensu-rabbitmq"
+    - name: "REDIS_HOST"
+      value: "sensu-redis"
+    volumeMounts:
+    - name: "sensu-api-conf"
+      mountPath: "/etc/sensu/conf.d"
+
+  - name: sensu-server
+    image: franciscoaditazz/sensu-server:0.1.0
+#    image: accenture/adop-sensu:0.2.0
+    env:
+    - name: "TRANSPORT_NAME"
+      value: "rabbitmq"
+    - name: "RABBITMQ_HOST"
+      value: "sensu-rabbitmq"
+    - name: "REDIS_HOST"
+      value: "sensu-redis"
+    - name: "API_HOST"
+#      value: "sensu-server"
+      value: "sensu-api"
+    volumeMounts:
+    - name: "sensu-server-conf"
+      mountPath: "/etc/sensu/conf.d"
+
+  - name: sensu-client
+    image: franciscoaditazz/sensu-client:0.1.0
+#    image: accenture/adop-sensu:0.2.0
+    env:
+    - name: "TRANSPORT_NAME"
+      value: "rabbitmq"
+    - name: "RABBITMQ_HOST"
+      value: "sensu-rabbitmq"
+    - name: "CLIENT_NAME"
+      value: "core"
+    - name: CLIENT_ADDRESS
+      value: "127.0.0.1"
+    - name: "JENKINS_PREFIX"
+      value: "jenkins"
+    - name: "CLIENT_SUBSCRIPTIONS"
+      value: "proxy,gerrit,jenkins,nexus,sonarqube,sensu,kibana"
+    volumeMounts:
+    - name: "sensu-client-conf"
+      mountPath: "/etc/sensu/conf.d"
+
+
+

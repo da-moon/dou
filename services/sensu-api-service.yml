@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sensu-api
+  creationTimestamp: 
+  labels:
+    service: sensu-api
+  namespace: devops
+spec:
+  ports:
+  - name: '4567'
+    protocol: TCP
+    port: 4567
+    targetPort: 4567
+  selector:
+    service: sensu-api

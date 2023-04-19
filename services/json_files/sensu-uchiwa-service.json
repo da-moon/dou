@@ -1,0 +1,27 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "sensu-uchiwa",
+    "creationTimestamp": null,
+    "labels": {
+      "service": "sensu-uchiwa"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "3000",
+        "protocol": "TCP",
+        "port": 3000,
+        "targetPort": 3000
+      }
+    ],
+    "selector": {
+      "service": "sensu-uchiwa"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

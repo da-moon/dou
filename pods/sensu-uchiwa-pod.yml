@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "sensu-uchiwa"
+  labels:
+    service: "sensu-uchiwa"
+    name: "devops"
+  namespace: "devops"
+spec:
+  containers:
+  - name: sensu-uchiwa
+    image: sstarcher/uchiwa:0.15.0
+    ports:
+    - containerPort: 3000
+      protocol: TCP
+    env:
+    - name: "SENSU_HOSTNAME"
+      value: "sensu-api"
+    - name: "SENSU_DC_NAME"
+      value: "Sensu"
+      

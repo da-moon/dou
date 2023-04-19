@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "selenium-hub"
+  labels:
+    service: "selenium-hub"
+    name: "devops"
+  namespace: "devops"
+spec:
+  containers:
+  - name: selenium-hub
+    image: selenium/hub:2.53.0
+    ports:
+    - containerPort: 4444
+      protocol: TCP 
+        

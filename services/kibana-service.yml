@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana
+  creationTimestamp: 
+  labels:
+    service: kibana
+  namespace: devops
+spec:
+  ports:
+  - name: '5601'
+    protocol: TCP
+    port: 5601
+    targetPort: 5601
+  selector:
+    service: kibana

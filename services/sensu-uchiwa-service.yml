@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sensu-uchiwa
+  creationTimestamp: 
+  labels:
+    service: sensu-uchiwa
+  namespace: devops
+spec:
+  ports:
+  - name: '3000'
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
+  selector:
+    service: sensu-uchiwa

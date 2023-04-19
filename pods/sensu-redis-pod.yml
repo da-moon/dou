@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "sensu-redis"
+  labels:
+    service: "sensu-redis"
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "sensu-redis-data"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /sensu_redis_data/_data
+  containers:
+  - name: sensu-redis
+    image: redis:3.0.7
+    ports:
+    - containerPort: 6379
+      protocol: TCP
+    volumeMounts:
+    - name: "sensu-redis-data"
+      mountPath: "/data"

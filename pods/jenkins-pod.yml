@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "jenkins"
+  labels:
+    service: jenkins
+    name: "devops"
+  namespace: "devops"
+spec:
+  volumes:
+  - name: "jenkins-home"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /jenkins_home/_data
+  - name: "jenkins-slave-home"
+    nfs:
+     server: fs-da935a73.efs.us-west-2.amazonaws.com
+     path: /jenkins_slave_home/_data
+  containers:
+  - name: jenkins
+    image: accenture/adop-jenkins:0.2.0 
+    ports:
+    - name: p8080
+      containerPort: 8080
+    - name: p50000
+      containerPort: 50000  
+    volumeMounts:
+    - name: "jenkins-home"
+      mountPath: "/var/jenkins_home"
+    env:
+    - name: "ADOP_PLATFORM_MANAGEMENT_VERSION"
+      value: "0.1.1"
+    - name: "JENKINS_OPTS"
+      value: "--prefix=/jenkins"
+    - name: "ROOT_URL"
+      value: "http://35.167.188.87/jenkins/"
+    - name: "LDAP_SERVER"
+      value: "ldap:389"
+    - name: "LDAP_ROOTDN"
+      value: "dc=ldap,dc=example,dc=com"
+    - name: "LDAP_USER_SEARCH_BASE"
+      value: "ou=people"
+    - name: "LDAP_USER_SEARCH"
+      value: "uid={0}"
+    - name: "LDAP_GROUP_SEARCH_BASE"
+      value: "ou=groups"
+    - name: "LDAP_GROUP_SEARCH_FILTER"
+      value: ""
+    - name: "LDAP_GROUP_MEMBERSHIP_FILTER"
+      value: ""
+    - name: "LDAP_MANAGER_DN"
+      value: "cn=admin,dc=ldap,dc=example,dc=com"
+    - name: "LDAP_MANAGER_PASSWORD"
+      value: "e5fdb71de4379485"
+    - name: "LDAP_INHIBIT_INFER_ROOTDN"
+      value: "false"
+    - name: "LDAP_DISABLE_MAIL_ADDRESS_RESOLVER"
+      value: "false"
+    - name: "LDAP_DISPLAY_NAME_ATTRIBUTE_NAME"
+      value: "displayName"
+    - name: "LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME"
+      value: "mail"
+    - name: "LDAP_GROUP_NAME_ADMIN"
+      value: "administrators"
+    - name: "INITIAL_ADMIN_USER"
+      value: "digitalonus"
+    - name: "INITIAL_ADMIN_PASSWORD"
+      value: "d1g1tal01"
+    - name: "GERRIT_HOST_NAME"
+      value: "gerrit"
+    - name: "GERRIT_FRONT_END_URL"
+      value: "http://gerrit:8080/gerrit"
+    - name: "GERRIT_JENKINS_USERNAME"
+      value: "jenkins"
+    - name: "GERRIT_JENKINS_PASSWORD"
+      value: "1a53ab1c8c769538"
+    - name: "SONAR_SERVER_URL"
+      value: "http://sonar:9000/sonar/"
+    - name: "SONAR_ACCOUNT_LOGIN"
+      value: "jenkins"
+    - name: "SONAR_ACCOUNT_PASSWORD"
+      value: "1a53ab1c8c769538"
+    - name: "SONAR_DB_URL"
+      value: "jdbc:mysql://sonar-mysql:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
+    - name: "SONAR_DB_LOGIN"
+      value: "sonar"
+    - name: "SONAR_DB_PASSWORD"
+      value: "sonar"
+    - name: "SONAR_PLUGIN_VERSION"
+      value: ""
+    - name: "SONAR_ADDITIONAL_PROPS"
+      value: ""
+    - name: "SONAR_RUNNER_VERSION"
+      value: "2.4"
+    - name: "ANT_VERSION"
+      value: "1.9.4"
+    - name: "MAVEN_VERSION"
+      value: "3.0.5"
+    - name: "NODEJS_VERSION"
+      value: "0.12.2"
+    - name: "NODEJS_GLOBAL_PACKAGES"
+      value: "grunt-cli@~0.1.13 bower@~1.3.12 plato@~1.2.1"
+    - name: "NODEJS_PACKAGES_REFRESH_HOURS"
+      value: "72"
+    - name: "GIT_GLOBAL_CONFIG_NAME"
+      value: "ADOP Jenkins"
+    - name: "GIT_GLOBAL_CONFIG_EMAIL"
+      value: "jenkins@ldap.example.com"
+    - name: "DOCKER_TLS_VERIFY"
+      value: "1"
+    - name: "DOCKER_HOST"
+      value: "tcp://devops-ci.digitalonus.net:2376"
+    - name: "DOCKER_CLIENT_CERT_PATH"
+      value: "//root/.docker/"
+    - name: "DOCKER_NETWORK_NAME"
+      value: "local_network"
+      
+  - name: jenkins-slave
+    image: "accenture/adop-jenkins-slave:0.1.4"
+    volumeMounts:
+    - name: "jenkins-home"
+      mountPath: "/workspace"
+    env:
+    - name: "SLAVE_LABELS"
+      value: "aws ldap java8 docker"
+    - name: "SWARM_PASSWORD"
+      value: "1a53ab1c8c769538"
+    - name: "SLAVE_EXECUTORS"
+      value: "1"
+    - name: "INITIAL_ADMIN_USER"
+      value: "digitalonus"
+    - name: "INITIAL_ADMIN_PASSWORD"
+      value: "d1g1tal01"

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "ldap-ltb"
+  labels:
+    service: ldap-ltb
+    name: "devops"
+  namespace: "devops"
+spec:
+  containers:
+  - name: ldap-ltb
+    image: accenture/adop-ldap-ltb:0.1.0
+    env:
+    - name: "LDAP_LTB_URL"
+      value: "ldap://ldap:389"
+    - name: "LDAP_LTB_DN"
+      value: "cn=admin,dc=ldap,dc=example,dc=com"
+    - name: "LDAP_LTB_PWD"
+      value: "e5fdb71de4379485"
+    - name: "LDAP_LTB_BS"
+      value: "dc=ldap,dc=example,dc=com"
+    ports:
+    - name: p80
+      containerPort: 80

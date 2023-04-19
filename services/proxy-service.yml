@@ -1,0 +1,24 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: proxy
+  creationTimestamp:
+  labels:
+    service: proxy
+  namespace: devops
+spec:
+  ports:
+  - name: '80'
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30001
+  - name: '443'
+    protocol: TCP
+    port: 443
+    targetPort: 443
+    nodePort: 30002
+  selector:
+    service: proxy
+  type: LoadBalancer

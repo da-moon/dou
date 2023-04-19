@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ldap
+  creationTimestamp: 
+  labels:
+    service: ldap
+  namespace: devops
+spec:
+  ports:
+  - name: '389'
+    protocol: TCP
+    port: 389
+    targetPort: 389
+  selector:
+    service: ldap

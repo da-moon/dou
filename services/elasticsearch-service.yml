@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: elasticsearch
+  creationTimestamp: 
+  labels:
+    service: elasticsearch
+  namespace: devops
+spec:
+  ports:
+  - name: '9200'
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
+  selector:
+    service: elasticsearch
