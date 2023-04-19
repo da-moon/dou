@@ -1,0 +1,46 @@
+*
+!*/
+#  ────────────────────────────────────────────────────────────────────
+!/contrib/**
+!/fixtures/**
+!/assets/**
+!/test/**
+!/docs/**
+!/examples/**
+#  ────────────────────────────────────────────────────────────────────
+!/**/.gitkeep
+#  ────────────────────────────────────────────────────────────────────
+!/.cspell/*.txt
+!/.vscode/**
+!/.devcontainer/**
+!/.github/CODEOWNERS
+!/.github/ISSUE_TEMPLATES/*.md
+#  ────────────────────────────────────────────────────────────────────
+!/.editorconfig
+!/.gitignore
+!/.dockerignore
+!/cspell.config.yaml
+!/.markdownlintignore
+!/.stignore
+!/.versionrc
+!/.pre-commit-config.yaml
+!/LICENSE
+!/README.md
+!/commitlint.config.js
+!/Justfile
+!/Makefile
+!/Vagrantfile
+!/docker-bake.hcl
+!/CONTRIBUTING.md
+!/CHANGELOG.md
+#  ────────────────────────────────────────────────────────────────────
+!/*/vpc/*.tf
+!/*/security-groups/*.tf
+!/*/efs/*.tf
+!/*/iam/*.tf
+!/*/fargate/*.tf
+!/*/cluster/*.tf
+!*.hcl
+!*.tf
+.terraform*
+!*.tfvars.example

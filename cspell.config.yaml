@@ -1,0 +1,10 @@
+---
+dictionaryDefinitions:
+  - name: golang
+    path: ./.cspell/golang.txt
+    addWords: true
+  - name: generic
+    path: ./.cspell/generic.txt
+    addWords: true
+dictionaries:
+  - generic
