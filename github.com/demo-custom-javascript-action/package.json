@@ -1,0 +1,24 @@
+{
+  "name": "demo-custom-javascript-action",
+  "version": "1.0.0",
+  "description": "This demo follows the official documentation from Github for [Createing a Javascript action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action), which is for research and development purposes to be translated into a use-case for a current DOU client.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DigitalOnUs/demo-custom-javascript-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DigitalOnUs/demo-custom-javascript-action/issues"
+  },
+  "homepage": "https://github.com/DigitalOnUs/demo-custom-javascript-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.7",
+    "@actions/github": "^4.0.0"
+  }
+}
