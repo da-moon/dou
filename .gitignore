@@ -1,0 +1,45 @@
+*
+!*/
+#  ────────────────────────────────────────────────────────────────────
+!/contrib/**
+!/fixtures/**
+!/assets/**
+!/test/**
+!/docs/**
+!/examples/**
+#  ────────────────────────────────────────────────────────────────────
+!/*.tf
+!/modules
+!/modules/*
+!/modules/*/*.tf
+!/modules/*/.env
+!/modules/*/.gitignore
+!/modules/*/Makefile
+!/modules/*/README.md
+#  ────────────────────────────────────────────────────────────────────
+!/**/.gitkeep
+#  ────────────────────────────────────────────────────────────────────
+!/.cspell/*.txt
+!/.vscode/**
+!/.devcontainer/**
+!/.github/CODEOWNERS
+!/.github/ISSUE_TEMPLATES/*.md
+#  ────────────────────────────────────────────────────────────────────
+!/.editorconfig
+!/.gitignore
+!/.dockerignore
+!/cspell.config.yaml
+!/.markdownlintignore
+!/.stignore
+!/.env
+!/.versionrc
+!/.pre-commit-config.yaml
+!/LICENSE
+!/README.md
+!/commitlint.config.js
+!/Justfile
+!/Makefile
+!/Vagrantfile
+!/docker-bake.hcl
+!/CONTRIBUTING.md
+!/CHANGELOG.md

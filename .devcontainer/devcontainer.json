@@ -1,0 +1,55 @@
+{
+  "dockerFile": "Dockerfile",
+  "workspaceFolder": "/workspace/terraform-aws-snow-lz-ecs",
+  "name": "${containerWorkspaceFolderBasename}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=${containerWorkspaceFolder},type=bind,consistency=cached",
+  "settings": {
+    "files.eol": "\n",
+    "files.exclude": {
+      "**/.vagrant": true,
+      "**/.git": true
+    },
+    "[settings.json]": {
+      "editor.formatOnSave": false
+    },
+    "[devcontainer.json]": {
+      "editor.formatOnSave": false
+    },
+    "terminal.integrated.profiles.linux": {
+      "bash": {
+        "path": "/bin/bash",
+        "args": [
+          "--login"
+        ]
+      }
+    }
+  },
+  "extensions": [
+    "golang.Go",
+    "bungcip.better-toml",
+    "mutantdino.resourcemonitor",
+    "EditorConfig.EditorConfig",
+    "kevinkyang.auto-comment-blocks",
+    "ms-azuretools.vscode-docker",
+    "karyfoundation.comment",
+    "wmaurer.change-case",
+    "skellock.just",
+    "wholroyd.hcl",
+    "hashicorp.terraform",
+    "chrislajoie.vscode-modelines",
+    "gruntfuggly.todo-tree"
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-home,target=/home/vscode,type=volume,consistency=cached",
+    "source=${localEnv:HOME}/.docker,target=/home/vscode/.docker,type=bind",
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "postCreateCommand": "ssh-add -l && go version && terraform version",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "runArgs": [
+    "--init",
+    "--network","host",
+    "--name","${containerWorkspaceFolderBasename}"
+  ]
+}
