@@ -1,0 +1,12 @@
+#-----------------------------------------------------------------------------------------------------------------
+# Example configuration for clouddriver to override the docker image.
+#-----------------------------------------------------------------------------------------------------------------
+apiVersion: spinnaker.armory.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+spec:
+  spinnakerConfig:
+    service-settings:
+      fiat:
+        artifactId: armory/fiat-armory:2022.03.08.18.14.06.master

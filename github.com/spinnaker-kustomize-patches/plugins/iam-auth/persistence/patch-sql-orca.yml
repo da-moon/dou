@@ -1,0 +1,58 @@
+#-----------------------------------------------------------------------------------------------------------------
+# Example configuration for using SQL as a caching store for ocra.
+#
+# Documentation: https://spinnaker.io/setup/productionize/persistence/orca-sql/
+#-----------------------------------------------------------------------------------------------------------------
+apiVersion: spinnaker.armory.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+spec:
+  spinnakerConfig:
+    profiles:
+      orca:
+        sql:
+          enabled: true
+          connectionPool:
+            jdbcUrl: jdbc:mysql:aws://armory-aurora.cluster-cixhbyd62zv2.us-west-2.rds.amazonaws.com:3306/orca?acceptAwsProtocolOnly=true&useAwsIam=true&maxAllowedPacket=25165824
+            user: orca_service
+            connectionTimeout: 5000
+            maxLifetime: 30000
+            # MariaDB-specific:
+            maxPoolSize: 50
+          migration:
+            jdbcUrl: jdbc:mysql:aws://armory-aurora.cluster-cixhbyd62zv2.us-west-2.rds.amazonaws.com:3306/orca?acceptAwsProtocolOnly=true&useAwsIam=true&maxAllowedPacket=25165824
+            user: orca_migrate
+
+        # Ensure we're only using SQL for accessing execution state
+        executionRepository:
+          sql:
+            enabled: true
+          redis:
+            enabled: false
+
+        # Reporting on active execution metrics will be handled by SQL
+        monitor:
+          activeExecutions:
+            redis: false
+
+        # Use SQL for Orca's work queue
+        # Settings from Netflix and may require adjustment for your environment
+        # Only validated with AWS Aurora MySQL 5.7
+        # Please PR if you have success with other databases
+        # keiko:
+        #   queue:
+        #     sql:
+        #       enabled: true
+        #     redis:
+        #       enabled: false
+
+        # queue:
+        #   zombieCheck:
+        #     enabled: true
+        #   pendingExecutionService:
+        #     sql:
+        #       enabled: true
+        #     redis:
+        #       enabled: false
+        

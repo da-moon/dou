@@ -1,0 +1,12 @@
+#-----------------------------------------------------------------------------------------------------------------
+# Example configuration for front50 to override the docker image.
+#-----------------------------------------------------------------------------------------------------------------
+apiVersion: spinnaker.armory.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+spec:
+  spinnakerConfig:
+    service-settings:
+      front50:
+        artifactId: armory/front50-armory:2022.04.27.05.36.06.release-2.27.x
