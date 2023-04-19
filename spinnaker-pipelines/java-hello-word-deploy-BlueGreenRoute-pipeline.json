@@ -1,0 +1,81 @@
+{
+    "appConfig": {},
+    "keepWaitingPipelines": false,
+    "lastModifiedBy": "ichi0915",
+    "limitConcurrent": true,
+    "schema": "1",
+    "spelEvaluator": "v4",
+    "stages": [
+        {
+            "account": "aws-dev",
+            "aliases": [],
+            "cloudProvider": "aws",
+            "deadLetterConfig": {
+                "targetArn": ""
+            },
+            "enableLambdaAtEdge": false,
+            "envVariables": {},
+            "functionName": "autodesk-java",
+            "functionUid": "java",
+            "handler": "io.armory.lambda.example.WelcomeLambda::handleRequest",
+            "layers": [],
+            "memorySize": 128,
+            "name": "AWS Lambda Deployment",
+            "publish": true,
+            "refId": "2",
+            "region": "us-west-2",
+            "requisiteStageRefIds": [],
+            "reservedConcurrentExecutions": 10,
+            "role": "arn:aws:iam::439114917687:role/ps_lambda_execution_role",
+            "runtime": "java11",
+            "s3bucket": "dou-armory-spinnaker-lambdas",
+            "s3key": "hello-world-lambda-1.0-SNAPSHOT.zip",
+            "securityGroupIds": [],
+            "subnetIds": [],
+            "tags": {},
+            "timeout": 3,
+            "tracingConfig": {
+                "mode": "PassThrough"
+            },
+            "type": "Aws.LambdaDeploymentStage"
+        },
+        {
+            "account": "aws-dev",
+            "aliasName": "develop",
+            "deploymentStrategy": "$BLUEGREEN",
+            "destroyOnFail": true,
+            "functionName": "autodesk-java",
+            "healthCheckType": "$LAMBDA",
+            "name": "AWS Lambda Route",
+            "outputArtifact": {
+                "account": "embedded-artifact",
+                "artifact": {
+                    "artifactAccount": "embedded-artifact",
+                    "id": "4a09c062-bec3-4d2a-9af5-eeec6671ebef",
+                    "name": "response",
+                    "reference": "ImhlbGxvIHdvcmxkIg==",
+                    "type": "embedded/base64"
+                }
+            },
+            "payloadArtifact": {
+                "account": "embedded-artifact",
+                "artifact": {
+                    "artifactAccount": "embedded-artifact",
+                    "id": "8e8ddc69-6b6b-4063-9977-4212419e7563",
+                    "name": "payload",
+                    "reference": "ImhvbGEi",
+                    "type": "embedded/base64"
+                }
+            },
+            "provisionedConcurrentExecutions": 1,
+            "refId": "3",
+            "region": "us-west-2",
+            "requisiteStageRefIds": [
+                "2"
+            ],
+            "timeout": 30,
+            "type": "Aws.LambdaTrafficRoutingStage"
+        }
+    ],
+    "triggers": []
+}

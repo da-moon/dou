@@ -1,0 +1,43 @@
+{
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "schema": "1",
+  "spelEvaluator": "v4",
+  "stages": [
+    {
+      "account": "aws-dev",
+      "aliases": [],
+      "cloudProvider": "aws",
+      "deadLetterConfig": {
+        "targetArn": ""
+      },
+      "enableLambdaAtEdge": false,
+      "envVariables": {},
+      "functionName": "lambda-java-lambda",
+      "functionUid": "java-lambda",
+      "handler": "io.armory.lambda.example.WelcomeLambda::handleRequest",
+      "layers": [],
+      "memorySize": 128,
+      "name": "AWS Lambda Deployment",
+      "publish": false,
+      "refId": "1",
+      "region": "us-west-2",
+      "requisiteStageRefIds": [],
+      "reservedConcurrentExecutions": 6,
+      "role": "arn:aws:iam::439114917687:role/ps_lambda_execution_role",
+      "runtime": "java11",
+      "s3bucket": "dou-armory-spinnaker-lambdas",
+      "s3key": "hello-world-lambda-1.0-SNAPSHOT.zip",
+      "securityGroupIds": [],
+      "subnetIds": [],
+      "tags": {},
+      "timeout": 3,
+      "tracingConfig": {
+        "mode": "PassThrough"
+      },
+      "type": "Aws.LambdaDeploymentStage"
+    }
+  ],
+  "triggers": []
+}
