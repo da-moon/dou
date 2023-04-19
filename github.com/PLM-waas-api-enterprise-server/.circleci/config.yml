@@ -1,0 +1,14 @@
+version: 2.1
+orbs:
+  waas-orb: digitalonus/waas-orb@0.0.23
+
+workflows:
+  build_and_test:
+    jobs:
+      - waas-orb/dependency_scan_python
+      - waas-orb/terratest:
+          context: CaaS
+      - waas-orb/validate:
+          context: CaaS
+      - waas-orb/deploy_ec2:
+          context: CaaS
