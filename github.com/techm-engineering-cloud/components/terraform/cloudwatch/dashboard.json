@@ -1,0 +1,311 @@
+{
+    "widgets": [
+        {
+            "height": 6,
+            "width": 6,
+            "y": 1,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"fsc-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "FSC reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 7,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"licserver-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "color": "#ff7f0e" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1
+                    }
+                },
+                "title": "License server reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 1,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"poolmgr-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#2ca02c" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Server Manager reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 19,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"ms/filerepo-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "File repo (ms) reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 7,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"awg-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#e377c2" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Active Workspace Gateway reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 1,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"web-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#17becf" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Web tier reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 13,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"ms/sd-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Service Dispatcher (ms) reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 13,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"ms/afx-darsi-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Afx Darsi (ms) reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 13,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"ms/tcgql-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Tcgql (ms) reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 19,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"idx-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#aec7e8" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Indexing Engine reachable"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 7,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(\"db-up\") FROM \"Engcloud/Teamcenter\" WHERE Environment = '${env_name}' GROUP BY Hostname", "label": "", "id": "q1", "region": "${region}", "period": 60, "yAxis": "left", "color": "#bcbd22" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 60,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 1,
+                        "label": ""
+                    }
+                },
+                "title": "Database reachable"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 0,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Reachability status of Teamcenter components"
+            }
+        },
+        {
+            "height": 12,
+            "width": 6,
+            "y": 1,
+            "x": 0,
+            "type": "alarm",
+            "properties": {
+                "title": "Alarm status",
+                "alarms": [
+                    "${alarms}"
+                ]
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 13,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Log Index\n* [FSC](https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/$252Fteamcenter$252F${env_name}$252Ffsc)\n\n* [ServerManager](https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/$252Fteamcenter$252F${env_name}$252Fpool_manager)\n\n* [Web](https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/$252Fteamcenter$252F${env_name}$252Fweb)\n"
+            }
+        }
+    ]
+}

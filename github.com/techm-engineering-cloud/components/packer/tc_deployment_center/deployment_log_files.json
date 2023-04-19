@@ -1,0 +1,64 @@
+{
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/repotool/logs/media_scanner_error.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/repotool/media_scanner_error.log",
+						"retention_in_days": -1
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/repotool/logs/quick_deploy_scanner_debug.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/repotool/quick_deploy_scanner_debug.log",
+						"retention_in_days": -1
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/repotool/logs/quick_deploy_scanner_error.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/repotool/quick_deploy_scanner_error.log",
+						"retention_in_days": -1
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/repotool/logs/repotool_startup.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/repotool/repotool_startup.log",
+						"retention_in_days": -1
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/logs/dcserver_startup.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/webserver/dcserver_startup.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/logs/publisher_startup.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/webserver/publisher_startup.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/logs/quick_deploy_server.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/webserver/quick_deploy_server.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/logs/dc_utilities.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/webserver/dc_utilities.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/DeploymentCenter/webserver/logs/dc_server_error.log",
+						"log_group_name": "/teamcenter/deployment_center",
+						"log_stream_name": "{instance_id}/webserver/dc_server_error.log",
+						"retention_in_days": 30
+					}
+				]
+			}
+		}
+	}
+}

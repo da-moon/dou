@@ -1,0 +1,21 @@
+# @<COPYRIGHT>@
+# ==================================================
+# Copyright 2021.
+# Siemens Product Lifecycle Management Software Inc.
+# All Rights Reserved.
+# ==================================================
+# @<COPYRIGHT>@
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: filerepo-pvc
+  namespace: "${NAMESPACE}"
+spec:
+  storageClassName: efs-sc
+  volumeName: filerepo-pv-${NAMESPACE}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi

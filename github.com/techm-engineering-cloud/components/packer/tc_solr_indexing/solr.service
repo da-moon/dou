@@ -1,0 +1,34 @@
+[Unit]
+Description=Solr indexing service
+
+# Unit starts up after machine connects to network
+After=network.target
+
+[Service]
+# Systemd considers the service to be started up immediately with simple type
+Type=simple
+
+User=tc
+Group=tc
+
+# Command to execute when the service is started
+ExecStart=/usr/Siemens/Teamcenter13/teamcenter_root/solr-8.9.0/runSolr.sh
+
+# Outputs log file through syslog
+StandardOutput=syslog
+StandardError=syslog
+
+# Identifier used in server.mgr.conf file for server manager logging
+SyslogIdentifier=Solr
+
+# Service will always restart when the process exits, is killed, or a timeout is reached
+Restart=always
+RestartSec=3
+
+WorkingDirectory=/usr/Siemens
+
+
+[Install]
+# Necessary for keeping this unit enabled by default
+WantedBy=multi-user.target
+

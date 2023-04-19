@@ -1,0 +1,46 @@
+{
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "/usr/Siemens/Teamcenter13/teamcenter_root/logs/tc_script_runner_*.log",
+						"log_group_name": "/teamcenter/ec2/usr/Siemens/Teamcenter13/teamcenter_root/logs/",
+						"log_stream_name": "machine_name/tc_script_runner.log",
+						"retention_in_days": -1
+					},
+                    {
+						"file_path":  "/usr/Siemens/Teamcenter13/teamcenter_root/logs/business_model_updater*.log",
+						"log_group_name": "/teamcenter/ec2/usr/Siemens/Teamcenter13/teamcenter_root/logs/",
+						"log_stream_name": "machine_name/business_model_updater.log",
+						"retention_in_days": -1
+					},
+                    {
+						"file_path":  "/usr/Siemens/Teamcenter13/teamcenter_root/logs/business_model_updater*.syslog",
+						"log_group_name": "/teamcenter/ec2/usr/Siemens/Teamcenter13/teamcenter_root/logs/",
+						"log_stream_name": "machine_name/business_model_updater.syslog",
+						"retention_in_days": -1
+					},
+                    {
+						"file_path":  "/usr/Siemens/Teamcenter13/teamcenter_root/logs/deploy_runner*.log",
+						"log_group_name": "/teamcenter/ec2/usr/Siemens/Teamcenter13/teamcenter_root/logs/",
+						"log_stream_name": "machine_name/deploy_runner.log",
+						"retention_in_days": -1
+					},
+                    {
+						"file_path":  "/usr/Siemens/Teamcenter13/teamcenter_root/logs/preferences_manager*.syslog",
+						"log_group_name": "/teamcenter/ec2/usr/Siemens/Teamcenter13/teamcenter_root/logs/",
+						"log_stream_name": "machine_name/preferences_manager.syslog",
+						"retention_in_days": -1
+					},
+					{
+						"file_path":  "/usr/Siemens/Teamcenter13/teamcenter_root/fsc/logs/FSC/process/FSC_*.log",
+						"log_group_name": "/teamcenter/ec2//usr/Siemens/Teamcenter13/teamcenter_root/fsc/logs/FSC/process/FSC",
+						"log_stream_name": "machine_name/preferences_manager.syslog",
+						"retention_in_days": -1
+					}
+				]
+			}
+		}
+	}
+}

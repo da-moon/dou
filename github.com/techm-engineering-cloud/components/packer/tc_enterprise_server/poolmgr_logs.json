@@ -1,0 +1,34 @@
+{
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "/usr/Siemens/Teamcenter13/teamcenter_root/pool_manager/confs/config1/logs/tecsstart.log",
+						"log_group_name": "/teamcenter/${env_name}/pool_manager",
+						"log_stream_name": "${machine_name}/tecsstart.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/Teamcenter13/teamcenter_root/pool_manager/confs/config1/logs/ServerManager/process/ServerManager.log",
+						"log_group_name": "/teamcenter/${env_name}/pool_manager",
+						"log_stream_name": "${machine_name}/ServerManager.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/Teamcenter13/teamcenter_root/pool_manager/confs/config1/logs/TECS/process/TECS.log",
+						"log_group_name": "/teamcenter/${env_name}/pool_manager",
+						"log_stream_name": "${machine_name}/TECS.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/tmp/tcserver*.syslog",
+						"log_group_name": "/teamcenter/${env_name}/pool_manager",
+						"log_stream_name": "${machine_name}/tcserver.syslog",
+						"retention_in_days": 30
+					}
+				]
+			}
+		}
+	}
+}
