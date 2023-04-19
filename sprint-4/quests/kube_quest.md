@@ -1,0 +1,18 @@
+# Kubernetes Quest 🎱
+- What is Kubernetes?
+- How are Kubernetes and Docker related?
+- What are the main differences between the Docker Swarm and Kubernetes?
+- What are the features of Kubernetes?
+- What is a node in Kubernetes?
+- What does the node status contain?
+- What is a pod in Kubernetes?
+- What is a cluster of containers in Kubernetes? 
+- What are Daemon sets?
+- What is Minikube?
+- What is a Namespace in Kubernetes?
+- What is etcd?
+- What are the different services within Kubernetes?
+- What is ClusterIP?
+- What is NodePort? 
+- What is the LoadBalancer in Kubernetes? 
+- What is the Ingress network, and how does it work?
