@@ -1,0 +1,6 @@
+description: >
+  This command executes terraform apply
+steps:
+  - run:
+      name: Move SPW
+      command: <<include(scripts/configure_spw.sh)>>

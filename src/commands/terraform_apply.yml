@@ -1,0 +1,6 @@
+description: >
+  This command executes terraform apply
+steps:
+  - run:
+      name: Terraform apply
+      command: <<include(scripts/terraform_apply.sh)>>

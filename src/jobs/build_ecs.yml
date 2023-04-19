@@ -1,0 +1,29 @@
+description: Build ECS image
+docker:
+    - image: dockerdoufer/aws-docker:circleci0.1
+steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+          name: Scan python dependencies for vulnerabilities
+          command: |
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
+            pip install --user safety
+            safety check -r requirements.txt
+    - run:
+          name: Export environment variables
+          command: |
+              echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+    - run:
+          name: Install DevOps repo
+          command: |
+              git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@${GITHUB_URL_DEVOPS} ../devops.ci
+    - run:
+          name: Push image in ECR
+          command: |
+              env
+              ls -la
+              ls -la ..
+              pwd
+              chmod -R +x ../devops.ci/build_types
+              ../devops.ci/build_types/docker_build.sh

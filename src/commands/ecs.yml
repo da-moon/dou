@@ -1,0 +1,6 @@
+description: >
+  This command executes terraform apply
+steps:
+  - run:
+      name: Deploy Ecs
+      command: <<include(scripts/ecs.sh)>>

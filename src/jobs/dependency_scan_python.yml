@@ -1,0 +1,11 @@
+description: Review dependency scan
+docker:
+    - image: circleci/python:3.7.4
+steps:
+    - checkout
+    - run:
+          name: Scan python dependencies for vulnerabilities
+          command: |
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
+            pip install --user safety
+            safety check -r requirements.txt

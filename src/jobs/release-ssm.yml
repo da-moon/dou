@@ -1,0 +1,15 @@
+description: Create a publish a new release.
+executor: github-release/default
+docker:
+    - image: dockerdoufer/aws-docker:circleci0.1
+steps:
+    - checkout
+    - run:
+          name: Export environment variables
+          command: |
+            echo "export VERSION=$(git tag | sort -V | tail -1)" >> $BASH_ENV
+            echo "export DESCR='`cat release_description.txt`'" >> $BASH_ENV
+    - github-release/create:
+          tag: $VERSION
+          title: v$VERSION
+          description: $DESCR

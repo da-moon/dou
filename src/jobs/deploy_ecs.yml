@@ -1,0 +1,20 @@
+description: Deploy ECS
+docker:
+    - image: dockerdoufer/aws-docker:circleci0.1
+steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+          name: Export environment variables
+          command: |
+              echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+    - run:
+          name: Install DevOps repo
+          command: |
+              env
+              git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@${GITHUB_URL_DEVOPS} ../devops.ci
+    - run:
+          name: Deploy container to development environment
+          command: |
+              chmod -R +x ../devops.ci
+              ../devops.ci/deploy_type/ecs.sh
