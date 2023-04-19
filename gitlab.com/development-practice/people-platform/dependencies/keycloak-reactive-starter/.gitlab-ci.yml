@@ -1,0 +1,25 @@
+image: gradle:7.5-jdk11
+
+#include:
+#  - template: Code-Quality.gitlab-ci.yml
+
+stages:
+  - build
+  #- test
+  - publish
+
+build_artifact:
+  stage: build
+  script:
+    - ./gradlew clean build
+
+#code_quality:
+#  stage: test
+#  artifacts:
+#    paths: [gl-code-quality-report.json]
+
+publish_artifact:
+  stage: publish
+  script:
+    - ./gradlew clean publish
+  when: manual

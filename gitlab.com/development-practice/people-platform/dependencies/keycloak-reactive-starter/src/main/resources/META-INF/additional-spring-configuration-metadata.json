@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "techmcne.keycloak.client-id",
+      "type": "java.lang.String",
+      "description": "Holds the client Id assigned by Keycloak to the resource server. Keycloak Client Roles will also be pulled as Spring Authorities."
+    }
+  ] }

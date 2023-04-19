@@ -1,0 +1,148 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'jacoco'
+    id 'maven-publish'
+    id 'com.diffplug.spotless' version '6.0.0'
+}
+
+group = 'com.techmcne'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext {
+    junitVersion = '5.8.2'
+    lombokVersion = '1.18.24'
+    mockitoVersion = '4.6.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:2.7.3")
+    }
+}
+
+dependencies {
+    annotationProcessor (
+            "org.projectlombok:lombok:${lombokVersion}",
+            "org.springframework.boot:spring-boot-autoconfigure-processor",
+            "org.springframework.boot:spring-boot-configuration-processor"
+    )
+
+    compileOnly (
+            "org.projectlombok:lombok:${lombokVersion}"
+    )
+
+    implementation(
+            "org.springframework.boot:spring-boot-starter-security",
+            "org.springframework.boot:spring-boot-starter-webflux",
+            "org.springframework.boot:spring-boot-starter-oauth2-resource-server",
+            "org.springframework.boot:spring-boot-autoconfigure"
+    )
+
+    testImplementation(
+            "org.springframework.boot:spring-boot-starter-test",
+            "io.projectreactor:reactor-test",
+            "org.springframework.security:spring-security-test",
+            "org.mockito:mockito-junit-jupiter:${mockitoVersion}",
+    )
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    reports.html.enabled = true
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDirectory = file("$buildDir/jacoco")
+}
+
+
+def testCoverageExclusions = [
+        '**/exception/**',
+        '**/model/**',
+        '**/security/model/**',
+        '**/security/util/**'
+]
+
+jacocoTestReport {
+    dependsOn test
+    executionData.from = files("$buildDir/jacoco/test.exec")
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: testCoverageExclusions)
+        })
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 1
+            }
+        }
+    }
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: testCoverageExclusions)
+        })
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "https://gitlab.com/api/v4/projects/37984194/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name = 'Job-Token'
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}
+
+spotless {
+    java {
+        removeUnusedImports()
+        importOrder()
+        googleJavaFormat()
+    }
+}
