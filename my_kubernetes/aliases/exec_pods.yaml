@@ -1,0 +1,29 @@
+# packs/my-kubernetes/aliases/exec_pod.yaml
+---
+name: 'exec_pod'
+pack: 'my_kubernetes'
+action_ref: 'my_kubernetes.security_chain'
+description: 'Execute a kubernetes exec command on a remote host via SSH.'
+formats:
+  - display: 'execute|exec pod name:<name> options:<options> on <host>'
+    representation:
+      - '.*(exec|execute).*pods?.*name ?(:|is|-|=|as)? ?{{resource_name}} .*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .*{{sub_cmd=exec}} {{arg=bash}}'
+
+      - '.*(exec|execute).*pods?.*name ?(:|is|-|=|as)? ?{{resource_name}} .*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .*{{sub_cmd=exec}} {{arg=bash}}'
+
+result:
+  format: |
+   Status : {{ execution.status }}
+
+   Results:
+   {% if execution.status == 'succeeded' %}
+        {% for host in execution.result %}
+           Host: *{{host}}*
+           ---> stdout:
+               {{execution.result[host].stdout}}
+           ---> stderr:
+               {{execution.result[host].stderr}}
+        {% endfor %}
+   {% else %}
+      {{ execution.result }}
+   {% endif %}

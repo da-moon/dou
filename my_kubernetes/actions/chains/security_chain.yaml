@@ -1,0 +1,46 @@
+---
+    vars:
+        ssh_key_file: "temp_key.pem"
+        vault_aws_key: "secret/aws_key"
+    chain:
+        -
+            name: "read_users_list"
+            ref: "vault.read"
+            parameters:
+                path: "secret/demo"
+            on-success: "auth_user"
+        -
+            name: "auth_user"
+            ref: "my_kubernetes.auth_user"
+            parameters:
+                users_list: "{{read_users_list.result}}"
+            on-success: "read_aws_key"
+        -
+            name: "read_aws_key"
+            ref: "vault.read"
+            parameters:
+                path: "{{vault_aws_key}}"
+            on-success: "gen_ssh_key"
+        -
+            name: "gen_ssh_key"
+            ref: "my_kubernetes.gen_key"
+            parameters:
+                dest_file: "{{ssh_key_file}}"
+                key_pair: "{{read_aws_key.result}}"
+            on-success: "kubernetes"
+        - 
+           name: "kubernetes"
+           ref: "core.remote_sudo"
+           parameters:
+                username: "ubuntu"
+                private_key: "{{ssh_key_file}}"
+                hosts: "{{hosts}}"
+                cmd: "kubectl {{sub_cmd}} {% if resource %} {{resource}} {% endif %} {% if resource_param %} {{resource_param}} {% endif %} {% if resource_name %} {{resource_name}}{% endif %} {%if arg %} {{arg}}  {% endif %} {% if options %} {{options}} {% endif %} {% if extra_arg %} {{extra_arg}} {% endif %}"
+           on-success: "del_key"
+           on-failure: "del_key"
+        -
+            name: "del_key"
+            ref: "core.local_sudo"
+            parameters:
+                cmd: "rm {{ssh_key_file}}"
+           

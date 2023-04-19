@@ -1,0 +1,16 @@
+---
+name: "add_user_chain"
+description: "Simple Action Chain workflow to add new user "
+
+runner_type: "action-chain"
+
+entry_point: "chains/add_user_chain.yaml"
+
+enabled: true
+parameters:
+  new_user:
+    description: 'new user'
+    required: false
+    type: string
+
+

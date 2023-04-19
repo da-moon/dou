@@ -1,0 +1,56 @@
+---
+# Action definition metadata
+name: "security_chain"
+
+description: "Simple Action Chain workflow to verify the user + channel and execute a kubernetes command" 
+
+runner_type: "action-chain"
+
+entry_point: "chains/security_chain.yaml"
+
+enabled: true
+
+parameters:
+  username:
+    description: 'ssh user'
+    required: false
+    type: string
+  private_key:
+    description: 'path'
+    required: false
+    type: string
+  hosts:
+    description: 'ssh hosts'
+    required: false
+    type: string
+  options:
+    description: 'Additional kubernetes options | Optional'
+    required: false
+    type: string
+  resource_name:
+    description: 'Name of the resource'
+    required: false
+    type: string
+  resource:
+    description: 'Resource Type'
+    required: false
+    type: string
+  resource_param:
+    description: 'Resource parameters'
+    required: false
+    type: string
+  sub_cmd:
+    description: 'Kubernetes sub-command'
+    required: false
+    type: string
+  arg:
+    description: 'Additional kubernetes arg | Optional'
+    required: false
+    type: string
+  extra_arg:
+    description: 'Additional kubernetes extra arg | Optional'
+    required: false
+    type: string
+  sudo:
+    default: true
+

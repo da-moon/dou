@@ -1,0 +1,21 @@
+---
+name: "auth_user"
+runner_type: "python-script"
+description: "Print message to standard output."
+enabled: true
+entry_point: "auth_user.py"
+parameters:
+    users_list:
+        type: "object"
+        description: "vault users list"
+        required: false
+    user:
+        type: "string"
+        description: "User of this action."
+        required: false
+        default: "{{action_context.parent.api_user}}"
+    channel:
+        type: "string"
+        description: "Slack channel used for interaction."
+        required: false
+        default: "{{action_context.parent.source_channel}}"

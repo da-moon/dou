@@ -1,0 +1,32 @@
+# packs/my-kubernetes/aliases/get_nodes.yaml
+---
+name: 'get_nodes'
+pack: 'my_kubernetes'
+action_ref: 'my_kubernetes.security_chain'
+description: 'Execute a kubernetes get command on a remote host via SSH.'
+formats:
+  - display: 'list nodes options:<options> on <host>'
+    representation:
+
+      - '.*list.*nodes?.*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .* {{sub_cmd=get}} {{resource=nodes}}'
+
+
+      - '.*list.*nodes?.*(on|for|from) {{hosts}} .*{{sub_cmd=get}} {{resource=nodes}}'
+
+
+result:
+  format: |
+   Status : {{ execution.status }}
+
+   Results:
+   {% if execution.status == 'succeeded' %}
+        {% for host in execution.result %}
+           Host: *{{host}}*
+           ---> stdout:
+               {{execution.result[host].stdout}}
+           ---> stderr:
+               {{execution.result[host].stderr}}
+        {% endfor %}
+   {% else %}
+      {{ execution.result }}
+   {% endif %}
