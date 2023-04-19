@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# vim: filetype=sh softtabstop=2 tabstop=2 shiftwidth=2 fileencoding=utf-8 expandtab
+set -xeuo pipefail
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+if [[ $EUID -eq 0 ]]; then
+  echo "You must run this script as non-root user with sudo permission." 1>&2
+  exit 1
+fi
+if [ ! "$(command -v sudo)" ]; then
+  echo 'Please install "sudo" package' 1>&2
+  exit 1
+fi
+if [ ! "$(command -v jq)" ]; then
+  echo 'Please install "jq" package' 1>&2
+  exit 1
+fi
+if [ ! "$(command -v tar)" ]; then
+  echo 'Please install "bsdtar" package' 1>&2
+  exit 1
+fi
+if [ ! "$(command -v wget)" ]; then
+  echo 'Please install "wget" package' 1>&2
+  exit 1
+fi
+if [ ! "$(command -v go)" ]; then
+  # [ NOTE ] => to enable autofix, build it against 'addFix' branch
+  echo >&2 "*** Go Toolchain detected.building editorconfig-checker binary from source"
+  go install github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-checker@latest
+  if [ -r "$(go env GOPATH)/bin/editorconfig-checker" ]; then
+    echo >&2 "*** Making 'ec' symlink to /usr/local/bin"
+    sudo ln -sf "$(go env GOPATH)/bin/editorconfig-checker" "/usr/local/bin/ec"
+  else
+    echo >&2 "*** there is a problem with editorconfig-checker build as '$(go env GOPATH)/bin/editorconfig-checker' does not exist."
+  fi
+fi
+# This would run in case Go toolchain was not installed or build failed somehow.
+if [ ! "$(command -v ec)" ]; then
+  # ─────────────────────────────────────────────────────────────────────
+  REPO="editorconfig-checker/editorconfig-checker"
+  # ─────────────────────────────────────────────────────────────────────
+  ARCH="$(uname -m)"
+  case "${ARCH}" in
+    x86_64 | amd64)
+      ARCH="amd64"
+      ;;
+    aarch64)
+      ARCH="arm64"
+      ;;
+    *)
+      echo >&2 "[ WARN ] unsopported architecture: $ARCH"
+      exit 0
+      ;;
+  esac
+  OS="$(uname | tr "[:upper:]" "[:lower:]")"
+  curl -sL "https://api.github.com/repos/${REPO}/releases/latest" |
+    jq -r "\
+  .assets[]|select(\
+  .browser_download_url \
+  | (\
+  contains(\"${ARCH}\") \
+  and contains(\"${OS}\") \
+  and contains(\"tar\") \
+  and (contains(\"sha256\") | not) \
+  )).browser_download_url" |
+    xargs -r -I {} wget -O - {} 2>/dev/null |
+    tar -xzOf - "bin/ec-${OS}-${ARCH}" |
+    sudo tee "/usr/local/bin/ec" >/dev/null &&
+     sudo chmod a+x "/usr/local/bin/ec" &&
+     ec -version
+fi

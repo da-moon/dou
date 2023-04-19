@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# vim: filetype=sh softtabstop=2 tabstop=2 shiftwidth=2 fileencoding=utf-8 expandtab
+set -xeuo pipefail
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+if [ ! "$(command -v sudo)" ]; then
+  echo 'Please install "sudo" package' 1>&2
+  exit 1
+fi
+if [[ $EUID -eq 0 ]]; then
+  echo "You must run this script as non-root user with sudo permission." 1>&2
+  exit 1
+fi
+if [ -z "$(command -v code)" ]; then
+  if [ -n "$(command -v apt-get)" ]; then
+    echo "*** Detected Debian based Distro" 1>&2
+    export DEBIAN_FRONTEND=noninteractive
+    # [NOTE] => installing dependencies
+    sudo apt-get update -qq >/dev/null 2>&1
+    sudo apt-get install -yqq apt-utils curl lsb-release wget ca-certificates gnupg2 jq >/dev/null 2>&1
+    # [NOTE] => installing vscode
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - >/dev/null 2>&1
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list >/dev/null
+    sudo apt update -qq >/dev/null 2>&1
+    sudo apt install -yqq code >/dev/null 2>&1
+  fi
+  if [ -n "$(command -v makepkg)" ]; then
+    echo "*** Detected ArchLinux based Distro" 1>&2
+    PKG_NAME="visual-studio-code-bin"
+    sudo pacman -Sy --needed --noconfirm base-devel git
+    makepkg_dir="$(mktemp -d -u "/tmp/vscode-installer.XXXXXXXX")"
+    git clone "https://aur.archlinux.org/${PKG_NAME}.git" "${makepkg_dir}"
+    pushd "${makepkg_dir}"
+    sudo makepkg -sicr --noconfirm
+    popd
+    sudo rm -rf "${makepkg_dir}"
+  fi
+fi
+code --install-extension ms-azuretools.vscode-docker
+code --install-extension ms-vscode-remote.remote-containers
+code --install-extension ms-vscode-remote.remote-ssh
+code --install-extension ms-vscode-remote.remote-ssh-edit
+code --install-extension ms-vscode-remote.remote-wsl
+code --install-extension ms-vscode-remote.vscode-remote-extensionpack

@@ -1,0 +1,65 @@
+*
+!*/
+#  ────────────────────────────────────────────────────────────────────
+!/sdk/**/*.go
+!/api/**/*.go
+!/cmd/**/*.go
+!/pkg/**/*.go
+!/lib/**/*.go
+!/internal/**/*.go
+!/build/**
+#  ────────────────────────────────────────────────────────────────────
+!/**/.gitkeep
+#  ────────────────────────────────────────────────────────────────────
+!/.cspell/*.txt
+!/.vscode/**
+!/.devcontainer/**
+!/.gitlab/CODEOWNERS
+!/.github/CODEOWNERS
+!/.gitlab/issue_templates/*.md
+!/.github/issue_templates/*.md
+!/.gitlab/workflows/*.yml
+!/.github/workflows/*.yml
+!/.gp/**
+#  ────────────────────────────────────────────────────────────────────
+!/proto/**
+!/contrib/**
+!/fixtures/**
+!/assets/**
+!/test/**
+!/tools/**
+!/docs/**
+!/examples/**
+#  ────────────────────────────────────────────────────────────────────
+!/.deepsource.toml
+!/.editorconfig
+!/.gitignore
+!/.dockerignore
+!/.gitpod.yml
+!/.golangci.yml
+!/.goreleaser.yml
+!/cspell.config.yaml
+!/.gitlab-ci.yml
+!/.markdownlintignore
+!/.revive.toml
+!/.stignore
+!/.versionrc
+!/.pre-commit-config.yaml
+!/.github-labels.json
+!/.go-version
+!/.env
+!/LICENSE
+!/README.md
+!/commitlint.config.js
+!/contrib
+!/go.mod
+!/go.sum
+!/tools.go
+!/magefile.go
+!/Justfile
+!/Makefile
+!/Vagrantfile
+!/docker-bake.hcl
+!/CONTRIBUTING.md
+!/CHANGELOG.md
+!/report.md
