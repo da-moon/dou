@@ -1,0 +1,28 @@
+# packs/my_vault/aliases/add_user.yaml
+---
+name: 'add_user'
+pack: 'vault'
+action_ref: 'vault.add_user_chain'
+description: 'Add a user'
+formats:
+  - display: 'Add user <username>'
+    representation:
+
+      - 'add user {{new_user}} .*'
+
+result:
+  format: |
+   Status : {{ execution.status }}
+
+   Results:
+   {% if execution.status == 'succeeded' %}
+        {% for host in execution.result %}
+           Host: *{{host}}*
+           ---> stdout:
+               {{execution.result[host].stdout}}
+           ---> stderr:
+               {{execution.result[host].stderr}}
+        {% endfor %}
+   {% else %}
+      {{ execution.result }}
+   {% endif %}

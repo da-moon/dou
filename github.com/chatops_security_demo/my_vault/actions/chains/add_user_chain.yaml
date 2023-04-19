@@ -1,0 +1,47 @@
+---
+    vars:
+        vault_admin_path: "secret/admin"
+        vault_aws_key: "secret/aws_key"
+        secret_file: "secret_file"
+        vault_path: "secret/demo"
+
+    chain:
+        -
+            name: "read_admin_list"
+            ref: "vault.read"
+            parameters:
+                path: "{{vault_admin_path}}"
+            on-success: "auth_admin"
+        -
+            name: "auth_admin"
+            ref: "my_chatops.auth_admin"
+            parameters:
+                admin_list: "{{read_admin_list.result}}"
+            on-success: "read_users_list"
+        -
+            name: "read_users_list"
+            ref: "vault.read"
+            parameters:
+                path: "{{vault_path}}"
+            on-success: "add_user"
+        -
+            name: "add_user"
+            ref: "vault.add_user_to_file"
+            parameters:
+                secret_dict: "{{read_users_list.result}}"
+                new_user: "{{new_user}}"
+                secret_file: "{{secret_file}}"
+            on-success: "vault_add"
+        -
+            name: "vault_add"
+            ref: "vault.write_from_file"
+            parameters:
+                secret_file: "{{secret_file}}"
+                path: "{{vault_path}}"
+            on_success: "del_secret_file"
+
+        -
+            name: "del_secret_file"
+            ref: "core.local_sudo"
+            parameters:
+                cmd: "rm {{secret_file}}"

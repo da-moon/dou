@@ -1,0 +1,34 @@
+# packs/my-kubernetes/aliases/create_namespace.yaml
+---
+name: 'create_namespace'
+pack: 'my_kubernetes'
+action_ref: 'my_kubernetes.security_chain'
+description: 'Execute a kubernetes create namespace command on a remote host via SSH.'
+formats:
+  - display: 'create kubernetes namespace name:<name> options:<options> on <host>'
+    representation:
+
+      - '.*create.*kubernetes.*(env|environment|namespace).*name ?(:|is|as|=|-)? ?{{resource_name}} .*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .*{{resource=namespace}} {{sub_cmd=create}}'
+
+      - '.*create.*(env|environment|namespace).*kubernetes.*name ?(:|is|as|=|-)? ?{{resource_name}} .*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .*{{resource=namespace}} {{sub_cmd=create}}'
+
+      - '.*create.*kubernetes.*(env|environment|namespace).*name ?(:|is|as|=|-)? ?{{resource_name}} .*(on|for|from) {{hosts}} .*{{resource=namespace}} {{sub_cmd=create}}'
+
+      - '.*create.*(env|environment|namespace).*kubernetes.*name ?(:|is|as|=|-)? ?{{resource_name}} .*(on|for|from) {{hosts}} .*{{resource=namespace}} {{sub_cmd=create}}'
+
+result:
+  format: |
+   Status : {{ execution.status }}
+
+   Results:
+   {% if execution.status == 'succeeded' %}
+        {% for host in execution.result %}
+           Host: *{{host}}*
+           ---> stdout:
+               {{execution.result[host].stdout}}
+           ---> stderr:
+               {{execution.result[host].stderr}}
+        {% endfor %}
+   {% else %}
+      {{ execution.result }}
+   {% endif %}

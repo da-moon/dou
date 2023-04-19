@@ -1,0 +1,31 @@
+# packs/my-kubernetes/aliases/deploy_pod.yaml
+---
+name: 'deploy_pod'
+pack: 'my_kubernetes'
+action_ref: 'my_kubernetes.security_chain'
+description: 'Execute a kubernetes create command on a remote host via SSH.'
+formats:
+  - display: 'create|deploy container|pod name: <file_name.yaml> options:<options> on <host>'
+    representation:
+
+      - '.*(create|deploy).*(conainer|pod)?.*name ?(:|is|as|=|-)? ?{{resource_name}} .*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .* {{sub_cmd=create}} {{resource_param=-f}} {{extra_arg=--record}} {{cwd=/kubernetes/deployments/}}'
+
+
+      - '.*(create|deploy).*(conainer|pod)?.*name ?(:|is|as|=|-)? ?{{resource_name}} .*(on|for|from) {{hosts}} .* {{sub_cmd=create}}  {{resource_param=-f}} {{extra_arg=--record}} {{cwd=/kubernetes/deployments/}}'
+
+result:
+  format: |
+   Status : {{ execution.status }}
+
+   Results:
+   {% if execution.status == 'succeeded' %}
+        {% for host in execution.result %}
+           Host: *{{host}}*
+           ---> stdout:
+               {{execution.result[host].stdout}}
+           ---> stderr:
+               {{execution.result[host].stderr}}
+        {% endfor %}
+   {% else %}
+      {{ execution.result }}
+   {% endif %}

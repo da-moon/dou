@@ -1,0 +1,15 @@
+---
+name: "gen_key"
+runner_type: "python-script"
+description: "generate aws key for predefined cluster"
+enabled: true
+entry_point: "gen_key.py"
+parameters:
+    key_pair:
+        type: "object"
+        description: "key:aws_key read from vault"
+        required: false
+    dest_file:
+        type: "string"
+        description: "pem file for aws"
+        required: false

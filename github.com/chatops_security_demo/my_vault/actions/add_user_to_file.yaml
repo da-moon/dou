@@ -1,0 +1,19 @@
+---
+name: "add_user_to_file"
+runner_type: "python-script"
+description: "Pasrt of adding user to authenticated group."
+enabled: true
+entry_point: "add_user_to_file.py"
+parameters:
+    secret_dict:
+        type: "object"
+        description: "vault dictionary with users and channels list"
+        required: false
+    new_user:
+        type: "string"
+        description: "User to add"
+        required: false
+    secret_file:
+        type: "string"
+        description: "secret file"
+        required: false

@@ -1,0 +1,17 @@
+---
+name: write_from_file
+runner_type: run-python
+description: "Write a key/value from file to Vault"
+enabled: true
+entry_point: "write_from_file.py"
+parameters:
+    path:
+        type: string
+        description: "Path to the Vault secrets"
+        required: true
+        position: 0
+    secret_file:
+        type: string
+        description: 'file'
+        required: true
+        position: 1

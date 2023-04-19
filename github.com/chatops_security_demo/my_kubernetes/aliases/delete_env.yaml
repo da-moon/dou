@@ -1,0 +1,31 @@
+# packs/my-kubernetes/aliases/delete_env.yaml
+---
+name: 'delete_env'
+pack: 'my_kubernetes'
+action_ref: 'my_kubernetes.security_chain'
+description: 'Execute a kubernetes delete environment command on a remote host via SSH.'
+formats:
+  - display: 'delete|remove env|namespace options:<options> on <host>'
+    representation:
+
+      - '.*(delete|remove).*(namespace|env|environment)?.*name ?(:|is|as|=|-)? ?{{resource_name}} .*options ?(is|as|are|=|-|:)? ?"?{{options}}"? .*(on|for|from) {{hosts}} .* {{sub_cmd=delete}} {{resource=namespace}}'
+
+
+      - '.*(delete|remove).*(namespace|env|environment)?.*name ?(:|is|as|=|-)? ?{{resource_name}} .*(on|for|from) {{hosts}} .* {{sub_cmd=delete}} {{resource=namespace}}'
+
+result:
+  format: |
+   Status : {{ execution.status }}
+
+   Results:
+   {% if execution.status == 'succeeded' %}
+        {% for host in execution.result %}
+           Host: *{{host}}*
+           ---> stdout:
+               {{execution.result[host].stdout}}
+           ---> stderr:
+               {{execution.result[host].stderr}}
+        {% endfor %}
+   {% else %}
+      {{ execution.result }}
+   {% endif %}

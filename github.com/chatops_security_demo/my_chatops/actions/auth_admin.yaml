@@ -1,0 +1,16 @@
+---
+name: "auth_admin"
+runner_type: "python-script"
+description: "Verify if admin."
+enabled: true
+entry_point: "auth_admin.py"
+parameters:
+    admin_list:
+        type: "object"
+        description: "vault admin list"
+        required: false
+    admin:
+        type: "string"
+        description: "User of this action."
+        required: false
+        default: "{{action_context.parent.api_user}}"
