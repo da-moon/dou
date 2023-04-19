@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2154
+# ignoring because TF is templating these variables
+set -v
+
+# Docker Dependecies
+echo '> Installing Docker Dependecies'
+apt install -y ca-certificates curl gnupg lsb-release python
+
+echo '> Installing Docker and Docker-Compose'
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+echo '> Setting up Permissions'
+groupadd docker
+usermod -aG docker ubuntu
+chmod +x /usr/local/bin/docker-compose
+
+echo '> Creating Docker-Compose File'
+tee /home/ubuntu/docker-compose.yaml >/dev/null <<EOL
+---
+
+version: "3.3"
+services:
+  tfcb1:
+    image: hashicorp/tfc-agent:latest
+    container_name: tfc-agent-1
+    restart: unless-stopped
+    networks:
+      - default
+    environment:
+      TFC_AGENT_NAME: ${tfc_agent_name}
+      TFC_AGENT_TOKEN: ${tfc_agent_token}
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_REMOVE_VOLUMES: "true"
+      WATCHTOWER_INCLUDE_STOPPED: "true"
+      WATCHTOWER_NO_STARTUP_MESSAGE: "false"
+      WATCHTOWER_SCHEDULE: "0 30 1 * * *" # Everyday at 1:30
+      WATCHTOWER_NOTIFICATIONS_LEVEL: info
+      DOCKER_API_VERSION: "1.39"
+EOL
+
+echo '> Starting TFC Agent'
+cd /home/ubuntu/ || exit
+docker-compose up -d

@@ -1,0 +1,57 @@
+*
+!*/
+#  ────────────────────────────────────────────────────────────────────
+!/contrib/**
+!/fixtures/**
+!/assets/**
+!/test/**
+!/docs/**
+!/examples/**
+#  ────────────────────────────────────────────────────────────────────
+!/*.tf
+!/modules
+!/modules/*
+!/modules/**/*.tf
+!/modules/**/.env
+!/modules/**/.gitignore
+!/modules/**/Makefile
+!/modules/**/README.md
+#  ────────────────────────────────────────────────────────────────────
+!/**/.gitkeep
+#  ────────────────────────────────────────────────────────────────────
+!/.cspell/*.txt
+!/.vscode/**
+!/.devcontainer/**
+!/.github/CODEOWNERS
+!/.github/ISSUE_TEMPLATES/*.md
+#  ────────────────────────────────────────────────────────────────────
+!/.editorconfig
+!/.gitignore
+!/.dockerignore
+!/cspell.config.yaml
+!/.markdownlintignore
+!/.stignore
+!/.versionrc
+!/.pre-commit-config.yaml
+!/LICENSE
+!/README.md
+!/commitlint.config.js
+!/Justfile
+!/Makefile
+!/Vagrantfile
+!/docker-bake.hcl
+!/CONTRIBUTING.md
+!/CHANGELOG.md
+
+#  ────────────────────────────────────────────────────────────────────
+!/terraform-hcp-vault-init/**
+!/terraform-hcp-aws-lz-snow/**
+!/terraform-tfe-lz-vault-stemcell/**
+!/terraform-hcp-admin-ns/**
+!/terraform-hcp-vault-nsaas/**
+!/terraform-hcp-vault-snow-ns/**
+!/modules/terraform-vault-hcp-vault-ns/**
+!/modules/terraform-tfe-onboarding-module/**
+!/.tool-versions
+.terraform.lock.hcl
+**/.terraform/*

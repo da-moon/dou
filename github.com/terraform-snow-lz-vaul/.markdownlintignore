@@ -1,0 +1,10 @@
+CHANGELOG.md
+.github/ISSUE_TEMPLATE/
+terraform-hcp-vault-init/README.md
+terraform-hcp-aws-lz-snow/README.md
+terraform-tfe-lz-vault-stemcell/README.md
+terraform-hcp-admin-ns/README.md
+terraform-hcp-vault-snow-ns/README.md
+terraform-hcp-vault-nsaas/README.md
+modules/terraform-vault-hcp-vault-ns/README.md
+modules/terraform-tfe-onboarding-module/README.md
