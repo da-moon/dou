@@ -1,0 +1,30 @@
+{ 
+    "templates": [
+        {
+            "templateId": "templateA",
+            "attributes": {
+                "type": ["String", "X86_64"],
+                "ncpus": ["Numeric", "4"],
+                "ncores": ["Numeric", "1"],
+                "nram": ["Numeric", "512"],
+                "awshost": ["Boolean", "1"],
+                "zone": ["String", "_REGION_"],
+                "pricing": ["String", "spot"]
+            },
+            "imageId": "_AMI_",
+            "subnetId": "_SUBNET_",
+            "vmType": "t2.micro, c5.2xlarge, c5.4xlarge, m5.large",
+            "maxNumber": "1",
+            "keyName": "_KEYPAIR_",
+            "securityGroupIds": ["_SG_"],
+
+            "instanceProfile" : "_PROFILE_",
+            "instanceTags": "group=LSF;project=Amazon;Name=lsf_spot_host",
+            "userData": "/usr/share/lsf/10.1/resource_connector/aws/scripts/user_data.sh",
+            "fleetRole": "arn:aws:iam::237889007525:role/aws-ec2-spot-fleet-tagging-role",
+            "spotPrice": "0.6",
+            "allocationStrategy":"diversified"
+        }
+    ]
+}
+

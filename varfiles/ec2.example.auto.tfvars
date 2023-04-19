@@ -1,0 +1,10 @@
+region         = "ca-central-1"
+ami            = "ami-0277fbe7afa8a33a6"
+key_name       = "eda_aws_key"
+public_key     = "replace_with_your_public_key"
+priv_key       = "~/.ssh/id_rsa"
+source_path    = "/Users/admin/workspace/aws-lsf-basic-infra/scripts/ec2_user_data_file" # Use only generic file path with no extension, the module it will append _${rol}.sh
+environment    = "DEV"
+os             = "rhel 8"
+backend_bucket = "lsf-s3-sample"
+vm_name        = "ap"
