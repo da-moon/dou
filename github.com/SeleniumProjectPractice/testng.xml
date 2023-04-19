@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true"
+          name="/Users/victorcarrillo/Victor-Automation/SeleniumProjectPractice/src/test/java/Tests/FirstTests.java">
+        <classes>
+            <class name="Tests.FirstTests">
+                <methods>
+                    <include name="validateHomePageActive"/>
+                    <include name="addToCartItem"/>
+                    <include name="validLogin"/>
+                    <include name="shopWorkFlow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
