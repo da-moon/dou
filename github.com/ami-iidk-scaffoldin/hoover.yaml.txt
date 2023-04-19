@@ -1,0 +1,140 @@
+version: 1.4
+appname: ami-devsecops-cloud-poc
+app: ami-devsecops-cloud-poc
+sysId: SYSID-06435
+slack: hoover-backend
+
+# Incident Management
+incidentAssignmentGroup: DevOps Tools
+
+# Change Management
+autoCreate: Yes
+standardChangeTemplateId: e60b17bd1b77e410767bec27624bcb4a
+businessService: AWS - Hoover-PROD
+businessServiceQA: AWS - Hoover-QA
+cmdbci: AWS - Hoover-PROD
+businessLine: SN_Enterprise_Services_Chg_Owner_Approval
+changeAssignmentGroup: DevOps Tools
+changeApproverGroup: DevOpsTools_Change_Approval
+changeOwner: D102982
+assignee: D108821
+
+# Stack
+# Choose: java, java-11 node, node-14, python, msbuld, dotnet, cots, asp, go
+stack: java
+
+#S3 Details
+devBucket: cfg-entsvc-dev-bucket
+devAppFolder: ami-devsecops-cloud-poc
+devAppProject: ami-devsecops-cloud-poc
+
+# Vulnerability
+execFODScan: Yes
+fodAppName: Hoover
+fodServiceName: ami-devsecops-cloud-poc
+fodEnv: PreProd
+fodStack: Java
+
+# Vulnerability - Contrast
+enableContrast: No
+contrastGroup: get-from-app-spec
+contrastAppTags: get-from-app-spec
+contrastServerTags: get-from-app-spec
+contastLogLevel: ERROR #choose: ERROR, WARN, INFO, DEBUG, TRACE
+
+# Functional & Performance Testing
+execTests: No
+development:
+  target_endpoint:  https://your.dev.url.internal.companyA.com
+  executionIssueKey: abcdef12345
+sit:
+  target_endpoint:  https://your.sit.url.internal.companyA.com
+  executionIssueKey: abcdef12345
+qa:
+  target_endpoint:  https://your.qa.url.internal.companyA.com
+  executionIssueKey: abcdef12345
+production:
+  target_endpoint:  https://your.prod.url.internal.companyA.com
+  executionIssueKey: abcdef12345
+jar:
+  name: get-from-tcoe-version.jar
+  version: get-from-tcoe-version
+  suite: testng.xml
+driver:
+  browser: Chrome
+  version: some-browser-version
+  platform: WINDOWS/linux
+credentialsId: some jenkins credential id
+
+# Deployment
+# What to Deploy - Choose: everything, ci-only, main-only, main-skip-p2
+deploy: some-approach
+
+# Where to Deploy - Choose: entsvc, edo, consumer, commercial, openshift, onprem, private-cloud
+landingZone: some-location
+
+# Deployment Style - Choose: in-place, blue-green, lambda
+deployStyle: in-place
+
+# Branch Lock
+# Used for AWS Deployments of COTS applications
+awsDevBranchLock: default
+awsSitBranchLock: default
+awsQABranchLock: default
+
+# AWS EC2 Deployment Targets
+# Each Environment - Choose: tag or asg
+awsDev: tag-or-asg
+awsDevId: name-tag-or-asg-name
+deploySlugDev: default
+devLoadBalancerName: load-balancer-name
+devTargetGroupName: target-group-name
+
+useSit: No
+awsSit: tag-or-asg
+awsSitId: name-tag-or-asg-name
+deploySlugSit: default
+sitLoadBalancerName: load-balancer-name
+sitTargetGroupName: target-group-name
+
+awsQa: tag-or-asg
+awsQaId: name-tag-or-asg-name
+deploySlugQa: default
+qaLoadBalancerName: load-balancer-name
+qaTargetGroupName: target-group-name
+
+useTraining: No
+awsTraining: tag-or-asg
+awsTrainingId: name-tag-or-asg-name
+trainingLoadBalancerName: load-balancer-name
+trainingTargetGroupName: target-group-name
+
+usePreprd: No
+awsPreprd: tag-or-asg
+awsPreprdId: name-tag-or-asg-name
+preprdLoadBalancerName: load-balancer-name
+preprdTargetGroupName: target-group-name
+
+awsPrd: tag-or-asg
+awsPrdId: name-tag-or-asg-name
+prdLoadBalancerName: load-balancer-name
+prdTargetGroupName: target-group-name
+
+# OpenShift Deployment Targets
+osAppName: some-app-key
+ciOcpDeployment: false
+
+# lambda
+lambdaCloudToken : lambdacloudtoken
+lambdaCloudJobName : hoover-infra-dev-cfg-entsvc
+terraformAction : apply
+lambdaCloudJobBranch : dev
+terraformApplication : hoover-infra
+terraformDevWorkSpace : dev-cfg-entsvc-dev
+terraformQaWorkSpace : qa-cfg-entsvc-p-1
+terraformProdWorkSpace : prod-cfg-entsvc-prod
+
+# Anisble Deployment Targets (On-prem Only)
+ansiblePlaybook: playbook-name.yml
+ansibleInventory: hosts
+ansibleDeployUser: deployment-user
