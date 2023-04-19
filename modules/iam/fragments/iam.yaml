@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Module definition'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterManagedPolicyArns:
+    Type: 'List<String>'
+    Description: 'Name of ManagedPolicyArns'
+  ParameterRoleName:
+    Type: String
+    Description: 'Name for your role'
+  ParameterPolicyName:
+    Description: 'Policy name'
+    Type: String
+  ParameterAction:
+    Description: 'Action to apply in policy'
+    Type: String
+  ParameterResource:
+    Description: 'Resource to apply in policy'
+    Type: String
+  ParameterEffect:
+    Description: 'Effect to apply in policy'
+    Type: String
+  ParameterServiceType:
+    Description: 'Effect to apply in policy'
+    Type: String
+  ParameterStringequals:
+    Description: 'Effect to apply in policy'
+    Type: String
+Conditions:
+  ApplyStringEquals:
+    Fn::Equals:
+      - Ref: ParameterStringequals
+      - 'true' 
+  Appstream:
+    Fn::Equals:
+      - Ref: ParameterServiceType
+      - 'appstream' 
+Resources:
+  ResourceNxRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: 
+        Ref: ParameterRoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Federated: arn:aws:iam::520983883852:saml-provider/nx-adfs-us-east-1
+          Action:
+          - sts:AssumeRoleWithSAML
+          Condition:
+            StringEquals:
+              SAML:aud: https://signin.aws.amazon.com/saml
+      ManagedPolicyArns:
+        Ref: ParameterManagedPolicyArns
+      Tags:
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+  ResourceNxPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      Roles:
+        - !Ref ResourceNxRole
+      PolicyName:
+        Ref: ParameterPolicyName
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals: 
+              !If
+                - ApplyStringEquals
+                -
+                  !If
+                  - Appstream
+                  -
+                    "saml:sub_type": "persistent"
+                    "appstream:userId": "${saml:sub}"
+                  - "workspaces:userId": "${saml:sub}"
+                - !Ref AWS::NoValue
+          Action: 
+            Ref: ParameterAction
+          Resource: 
+            Ref: ParameterResource
+          Effect: 
+            Ref: ParameterEffect
+Outputs:
+  Arn:
+    Value: !GetAtt ResourceNxRole.Arn

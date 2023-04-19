@@ -1,0 +1,118 @@
+{
+    "typeName": "TechM::NX::VPC::MODULE",
+    "description": "Schema for Module Fragment of type TechM::NX::VPC::MODULE",
+    "properties": {
+        "Parameters": {
+            "type": "object",
+            "properties": {
+                "ParameterVersion": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string"
+                        },
+                        "Description": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Type",
+                        "Description"
+                    ],
+                    "description": "Version"
+                },
+                "ParameterVPCName": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string"
+                        },
+                        "Description": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Type",
+                        "Description"
+                    ],
+                    "description": "VPC name"
+                },
+                "ParameterIGWName": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string"
+                        },
+                        "Description": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Type",
+                        "Description"
+                    ],
+                    "description": "IGW name"
+                },
+                "ParameterVPCCidrBlock": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string"
+                        },
+                        "Description": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Type",
+                        "Description"
+                    ],
+                    "description": "Enter the VPC CIDR. Must be in the range [0-255]. Default: 10.0.0.0/16 "
+                }
+            }
+        },
+        "Resources": {
+            "properties": {
+                "VPC": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string",
+                            "const": "AWS::EC2::VPC"
+                        },
+                        "Properties": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "ResourceIGW": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string",
+                            "const": "AWS::EC2::InternetGateway"
+                        },
+                        "Properties": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "ResourceIGWAttachment": {
+                    "type": "object",
+                    "properties": {
+                        "Type": {
+                            "type": "string",
+                            "const": "AWS::EC2::VPCGatewayAttachment"
+                        },
+                        "Properties": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "type": "object",
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": true
+}

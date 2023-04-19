@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'VPC'
+Parameters:
+  ParameterDirectoryName:
+    Description: 'AD Name'
+    Type: String
+  ParameterDirectoryServiceType:
+    Type: String
+    AllowedValues:
+    - Microsoft AD,Standard
+    - Microsoft AD,Enterprise
+  ParameterNetBiosName:
+    Description: 'Short name for the AD'
+    Type: String
+  ParameterVPCId:
+    Description: 'VPC Id'
+    Type: String
+  ParameterSubnetId1:
+    Description: 'First subnet id for the AD'
+    Type: String
+  ParameterSubnetId2:
+    Description: 'Second subnet id for the AD'
+    Type: String
+  ParameterAdministratorPassword:
+    NoEcho: 'true'
+    Description: 'Administrator Password'
+    Type: String
+Resources:
+  ResourceManagedAD:
+    Type: AWS::DirectoryService::MicrosoftAD
+    Properties:
+      Edition:
+        Fn::Select:
+        - '1'
+        - Fn::Split:
+          - ","
+          - Ref: ParameterDirectoryServiceType
+      Name:
+        Ref: ParameterDirectoryName
+      Password:
+        Ref: ParameterAdministratorPassword
+      ShortName:
+        Ref: ParameterNetBiosName
+      VpcSettings:
+        VpcId:
+          Ref: ParameterVPCId
+        SubnetIds:
+        - Ref: ParameterSubnetId1
+        - Ref: ParameterSubnetId2
+Outputs:
+  PrimaryDNS:
+    Description: DNS IPs of the MS Directory
+    Value: !Select [ '0', !GetAtt ResourceManagedAD.DnsIpAddresses ]
+  SecondaryDNS:
+    Description: DNS IPs of the MSDirectory
+    Value: !Select [ '1', !GetAtt ResourceManagedAD.DnsIpAddresses ]

@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Route table module definition'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterVpcId:
+    Type: String
+    Description: 'The ID of the VPC'
+  ParameterRTName:
+    Type: String
+    Description: 'Route Table name'
+  ParameterCIDR:
+    Type: String
+    Description: 'CIDR destination'
+  ParameterTarget:
+    Type: String
+    Description: 'Target for the route'
+  ParameterTargetGW:
+    Type: String
+    Description: 'Target for the route'
+  ParameterIsNAT:
+    Type: String
+    Description: 'Route to nat?'
+  ParameterSubnetId:
+    Type: String
+    Description: 'Subnet to assciate the route table'
+Conditions:
+  NAT:
+    !Equals [!Ref ParameterIsNAT, 'true'] 
+  IGW:
+    !Not [Condition: NAT]
+Resources:
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: ParameterVpcId
+      Tags:
+      - Key: Name
+        Value: 
+          Ref: ParameterRTName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+  RouteVPCPeering:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: 
+        Ref: RouteTable
+      DestinationCidrBlock: 
+        Ref: ParameterCIDR
+      VpcPeeringConnectionId: 
+        Ref: ParameterTarget
+  RouteNATGW:
+    Condition: NAT
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: 
+        Ref: RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: 
+        Ref: ParameterTargetGW
+  RouteIGW:
+    Condition: IGW
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: 
+        Ref: RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: 
+        Ref: ParameterTargetGW
+  SubnetAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: 
+        Ref: RouteTable
+      SubnetId: 
+        Ref: ParameterSubnetId

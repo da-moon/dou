@@ -1,0 +1,2524 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EC2 module Definition'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterDirectoryName:
+    Description: 'AD Name'
+    Type: String
+  ParameterDirectoryServiceType:
+    Type: String
+    AllowedValues:
+    - Microsoft AD,Standard
+    - Microsoft AD,Enterprise
+  ParameterNetBiosName:
+    Description: 'Short name for the AD'
+    Type: String
+  ParameterVPCId:
+    Description: 'VPC Id'
+    Type: String
+  ParameterSubnetId1:
+    Description: 'First subnet id for the AD'
+    Type: String
+  ParameterSubnetId2:
+    Description: 'Second subnet id for the AD'
+    Type: String
+  ParameterAdministratorPassword:
+    NoEcho: 'true'
+    Description: 'Administrator Password'
+    Type: String
+Resources:
+  RootCA:
+    Type: AWS::EC2::Instance
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            c:\cfn\cfn-hup.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[main]\n"
+                  - stack=
+                  - Ref: AWS::StackId
+                  - "\n"
+                  - region=
+                  - Ref: AWS::Region
+                  - "\n"
+            c:\cfn\hooks.d\cfn-auto-reloader.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[cfn-auto-reloader-hook]\n"
+                  - 'triggers=post.update
+                    '
+                  - 'path=Resources.Resource30RootCA.Metadata.AWS::CloudFormation::Init
+                    '
+                  - 'action=cfn-init.exe -v -s '
+                  - Ref: AWS::StackId
+                  - " -r Resource30RootCA"
+                  - " --region "
+                  - Ref: AWS::Region
+                  - "\n"
+            C:\cfn\RunCommand.bat:
+              content: |-
+                %~1
+                IF %ERRORLEVEL% GTR 10 ( exit /b 1 ) else ( exit /b 0 )
+            c:\cfn\99-Signaling.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - $CFNRegion = "
+                  - Ref: AWS::Region
+                  - "\""
+                  - "\n"
+                  - $CFNEndpoint = "cloudformation." + $CFNRegion + ".amazonaws.com"
+                  - "\n"
+                  - $CFNStack =  "
+                  - Ref: AWS::StackName
+                  - "\""
+                  - "\n"
+                  - $CFNResource =  "Resource30RootCA"
+                  - "\n"
+                  - $CFNConnectionStatus = "False"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SEND SIGNALING"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "$CFNConnectionStatus =(Test-NetConnection -ComputerName $CFNendpoint
+                    -Port 443).TcpTestSucceeded"
+                  - "\n"
+                  - If  ( $CFNConnectionStatus -Match "True" ){
+                  - "\n"
+                  - Write-Output "CHECKING INSTANCE HEALTH"
+                  - "\n"
+                  - "$Failures = 0"
+                  - "\n"
+                  - $CAStatus = (Get-Service | Where Name -EQ "CertSvc").Status
+                  - "\n"
+                  - If  ( $CAStatus -NotMatch "Running" ){
+                  - "\n"
+                  - "$Failures++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "\n"
+                  - If ($Failures -eq 0) {
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 0 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Success signaling sent to stack $CFNStack"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Else {
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 1 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Failure signaling sent to stack $CFNStack"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Write-Output "Trying to connect to CloudFormation Endpoint."
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If  ( $LoopCounterA -eq 20 ){
+                  - "\n"
+                  - Write-Output "Unable to connect to CloudFormation Endpoint."
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\Windows\CAPolicy.inf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[Version]"
+                  - "\n"
+                  - Signature="$Windows NT$"
+                  - "\n"
+                  - "\n"
+                  - "[Certsrv_Server]"
+                  - "\n"
+                  - RenewalKeyLength=4096
+                  - "\n"
+                  - RenewalValidityPeriod=Years
+                  - "\n"
+                  - RenewalValidityPeriodUnits=10
+                  - "\n"
+                  - CRLPeriod=Years
+                  - "\n"
+                  - CRLPeriodUnits=10
+                  - "\n"
+                  - AlternateSignatureAlgorithm=0
+                  - "\n"
+                  - "\n"
+                  - "[BasicConstraintsExtension]"
+                  - "\n"
+                  - PathLength=1
+                  - "\n"
+                  - Critical=Yes
+                  - "\n"
+                  - "\n"
+                  - "[AuthorityInformationAccess]"
+                  - "\n"
+                  - Empty = true
+                  - "\n"
+                  - "\n"
+                  - "[CRLDistributionPoint]"
+                  - "\n"
+                  - Empty = true
+                  - "\n"
+            C:\cfn\01-PrepareRootCA.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - $InstallCWAgent = "
+                  - Ref: Parameter01hInstallCWAgent
+                  - "\""
+                  - "\n"
+                  - If ($InstallCWAgent -ne "NO") {
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL CW CLIENT"
+                  - "\n"
+                  - "\n"
+                  - $cwuri = "https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi"
+                  - "\n"
+                  - $cwfile = "C:\cfn\amazon-cloudwatch-agent.msi"
+                  - "\n"
+                  - $arguments = "/i $cwfile /qn /L*V C:\cfn\amazon-cloudwatch-agent.log"
+                  - "\n"
+                  - Invoke-WebRequest -Uri $cwuri -OutFile $cwfile -DisableKeepAlive
+                    -UseBasicparsing
+                  - "\n"
+                  - Start-Process msiexec.exe -ArgumentList $arguments -Wait
+                  - "\n"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Event Viewer and Advanced Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentAdvanced
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Event Viewer and Basic Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentBasic
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Only Event Viewer") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentOnlyEvents
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Only Basic Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentOnlyMetrics
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - ."C:\Program Files\Amazon\AmazonCloudWatchAgent\amazon-cloudwatch-agent-ctl.ps1"
+                    -a fetch-config -m ec2 -c file:C:\cfn\CloudWatchConfig.json -s
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "ENABLE PSREMOTING"
+                  - "\n"
+                  - Enable-PSRemoting -SkipNetworkProfileCheck -Force
+                  - "\n"
+                  - Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP-PUBLIC" -RemoteAddress
+                    Any
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SET LOCAL PASSWORD AND RENAME INSTANCE. ROOT CA
+                    IS NOT MEMBER OF THE DOMAIN."
+                  - "\n"
+                  - $administratorPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password"
+                  - "\n"
+                  - Net User Administrator $administratorPWD
+                  - "\n"
+                  - $newname = "
+                  - Ref: Parameter09aRootCAName
+                  - "\".ToLower()"
+                  - "\n"
+                  - Rename-Computer -NewName $newname -PassThru
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+            C:\cfn\02-InstallCAFeature.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - $domainname = "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - $RootCADistinguishedName = "DC=" + $domainname -Replace "\.",
+                    ",DC="
+                  - "\n"
+                  - $RootCAType = "StandaloneRootCA"
+                  - "\n"
+                  - $RootCACommonName = "
+                  - Ref: Parameter09aRootCAName
+                  - "\""
+                  - "\n"
+                  - $RootCAKeyLength = "
+                  - Ref: Parameter09cRootCAKeyLength
+                  - "\""
+                  - "\n"
+                  - $RootCAValidityPeriod = "Years"
+                  - "\n"
+                  - $RootCAValidityPeriodUnits = "10"
+                  - "\n"
+                  - $RootCAHashAlgorithm = "
+                  - Ref: Parameter09dRootCAHash
+                  - "\""
+                  - "\n"
+                  - $RootCACryptoProvider = "RSA#Microsoft Software Key Storage Provider"
+                  - "\n"
+                  - $ValidityCertificatesIssuedbyRootCA = "6"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL ROOT CA"
+                  - "\n"
+                  - Install-WindowsFeature ADCS-Cert-Authority
+                  - "\n"
+                  - Install-WindowsFeature RSAT-ADCS-Mgmt
+                  - "\n"
+                  - Install-AdcsCertificationAuthority -CAType $RootCAType -CACommonName
+                    $RootCACommonName -CADistinguishedNameSuffix $RootCADistinguishedName
+                    -CryptoProviderName $RootCACryptoProvider -HashAlgorithmName $RootCAHashAlgorithm
+                    -KeyLength $RootCAKeyLength -ValidityPeriod $RootCAValidityPeriod
+                    -ValidityPeriodUnits $RootCAValidityPeriodUnits -Force
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CONFIGURE ROOT CA REGISTRY KEYS"
+                  - "\n"
+                  - Set-ItemProperty 'HKLM:\\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration\
+                  - Ref: Parameter09aRootCAName
+                  - "\\PolicyModules\\CertificateAuthority_MicrosoftDefault.Policy'
+                    -Name 'RequestDisposition' -Value 1"
+                  - "\n"
+                  - Set-ItemProperty 'HKLM:\\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration\
+                  - Ref: Parameter09aRootCAName
+                  - "\\' -Name 'ValidityPeriodUnits' -Value $ValidityCertificatesIssuedbyRootCA"
+                  - "\n"
+                  - Write-Output "CONFIGURE CDP AND AIA"
+                  - "\n"
+                  - Add-CACRLDistributionPoint -Uri "http://
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - /<CAName><DeltaCRLAllowed>.crl"  -AddToCertificateCdp -AddToFreshestCrl
+                    -Force
+                  - "\n"
+                  - Remove-CAAuthorityInformationAccess -uri "http://<ServerDNSName>/CertEnroll/<ServerDNSName>_<CAName><CertificateName>.crt"
+                    -Force
+                  - "\n"
+                  - Remove-CAAuthorityInformationAccess -uri "ldap:///CN=<CATruncatedName>,CN=AIA,CN=Public
+                    Key Services,CN=Services,<ConfigurationContainer><CAObjectClass>"
+                    -Force
+                  - "\n"
+                  - Remove-CAAuthorityInformationAccess -uri "file://<ServerDNSName>/CertEnroll/<ServerDNSName>_<CAName><CertificateName>.crt"
+                    -Force
+                  - "\n"
+                  - Add-CAAuthorityInformationAccess -AddToCertificateAia -uri "http://
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - /<ServerDNSName>_<CAName>.crt" -Force
+                  - "\n"
+                  - Remove-CACrlDistributionPoint -Uri "ldap:///CN=<CATruncatedName><CRLNameSuffix>,CN=<ServerShortName>,CN=CDP,CN=Public
+                    Key Services,CN=Services,<ConfigurationContainer><CDPObjectClass>"
+                    -Force
+                  - "\n"
+                  - Remove-CACrlDistributionPoint -Uri "file://<ServerDNSName>/CertEnroll/<CAName><CRLNameSuffix><DeltaCRLAllowed>.crl"
+                    -Force
+                  - "\n"
+                  - Remove-CACrlDistributionPoint -Uri "http://<ServerDNSName>/CertEnroll/<CAName><CRLNameSuffix><DeltaCRLAllowed>.crl"
+                    -Force
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "\n"
+          commands:
+            01-PrepareRootCA:
+              command: Powershell.exe -Command C:\cfn\01-PrepareRootCA.ps1
+            02-InstallCAFeature:
+              command: Powershell.exe -Command C:\cfn\02-InstallCAFeature.ps1
+            99-Signaling:
+              command: Powershell.exe -Command c:\cfn\99-Signaling.ps1
+          services:
+            windows:
+              cfn-hup:
+                enabled: 'true'
+                ensureRunning: 'true'
+                files:
+                - c:\cfn\cfn-hup.conf
+                - c:\cfn\hooks.d\cfn-auto-reloader.conf
+    Properties:
+      ImageId:
+        Ref: Parameter04aInstanceAMI
+      InstanceType:
+        Ref: Parameter04bInstanceType
+      IamInstanceProfile:
+        Ref: InstanceProfileForMemberServers
+      SubnetId:
+        Ref: Resource04PrivateSubnet01
+      SecurityGroupIds:
+      - Ref: Resource23bSecurityGroupPrivateNetwork
+      KeyName:
+        Ref: Parameter03aKeyPair
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - Ref: AWS::StackName
+            - "."
+            - Ref: Parameter09aRootCAName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - "<script>\n"
+            - 'cfn-init.exe -v -s '
+            - Ref: AWS::StackId
+            - " -r Resource30RootCA "
+            - " --region "
+            - Ref: AWS::Region
+            - "\n"
+            - "</script>"
+  SubCA:
+    Type: AWS::EC2::Instance
+    DependsOn: Resource26DHCPAssociationForVPC
+    Condition: CreateCA
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT30M
+        Count: '1'
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            c:\cfn\cfn-hup.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[main]\n"
+                  - stack=
+                  - Ref: AWS::StackId
+                  - "\n"
+                  - region=
+                  - Ref: AWS::Region
+                  - "\n"
+            c:\cfn\hooks.d\cfn-auto-reloader.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[cfn-auto-reloader-hook]\n"
+                  - 'triggers=post.update
+                    '
+                  - 'path=Resources.Resource31SubCA.Metadata.AWS::CloudFormation::Init
+                    '
+                  - 'action=cfn-init.exe -v -s '
+                  - Ref: AWS::StackId
+                  - " -r Resource31SubCA"
+                  - " --region "
+                  - Ref: AWS::Region
+                  - "\n"
+            C:\cfn\RunCommand.bat:
+              content: |-
+                %~1
+                IF %ERRORLEVEL% GTR 10 ( exit /b 1 ) else ( exit /b 0 )
+            c:\cfn\99-Signaling.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - $CFNRegion = "
+                  - Ref: AWS::Region
+                  - "\""
+                  - "\n"
+                  - $CFNEndpoint = "cloudformation." + $CFNRegion + ".amazonaws.com"
+                  - "\n"
+                  - $CFNStack =  "
+                  - Ref: AWS::StackName
+                  - "\""
+                  - "\n"
+                  - $CFNResource =  "Resource31SubCA"
+                  - "\n"
+                  - $CFNConnectionStatus = "False"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SEND SIGNALING"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "$CFNConnectionStatus =(Test-NetConnection -ComputerName $CFNendpoint
+                    -Port 443).TcpTestSucceeded"
+                  - "\n"
+                  - If  ( $CFNConnectionStatus -Match "True" ){
+                  - "\n"
+                  - Write-Output "CHECKING INSTANCE HEALTH"
+                  - "\n"
+                  - "$Failures = 0"
+                  - "\n"
+                  - $SubCAStatus = (Get-Service | Where Name -EQ "CertSvc").Status
+                  - "\n"
+                  - If  ( $SubCAStatus -NotMatch "Running" ){
+                  - "\n"
+                  - "$Failures++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - $IISStatus = (Get-Service | Where Name -EQ "W3SVC").Status
+                  - "\n"
+                  - If  ( $IISStatus -NotMatch "Running" ){
+                  - "\n"
+                  - "$Failures++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "\n"
+                  - If ($Failures -eq 0) {
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 0 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Success signaling sent to stack $CFNStack"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Else {
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 1 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Failure signaling sent to stack $CFNStack"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Write-Output "Trying to connect to CloudFormation Endpoint."
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If  ( $LoopCounterA -eq 20 ){
+                  - "\n"
+                  - Write-Output "Unable to connect to CloudFormation Endpoint."
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\Windows\CAPolicy.inf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[Version]"
+                  - "\n"
+                  - Signature="$Windows NT$"
+                  - "\n"
+                  - "\n"
+                  - "[Certsrv_Server]"
+                  - "\n"
+                  - RenewalKeyLength=2048
+                  - "\n"
+                  - CRLPeriod=Months
+                  - "\n"
+                  - CRLPeriodUnits=01
+                  - "\n"
+                  - CRLDeltaPeriod=Weeks
+                  - "\n"
+                  - CRLDeltaPeriodUnits=1
+                  - "\n"
+                  - LoadDefaultTemplates=True
+                  - "\n"
+                  - "\n"
+            C:\cfn\web.config:
+              content:
+                Fn::Join:
+                - ''
+                - - <?xml version="1.0" encoding="UTF-8"?>
+                  - "\n"
+                  - "\t<configuration>"
+                  - "\n"
+                  - "\t\t<system.webServer>"
+                  - "\n"
+                  - "\t\t\t<directoryBrowse enabled=\"true\" />"
+                  - "\n"
+                  - "\t\t\t<security>"
+                  - "\n"
+                  - "\t\t\t\t<requestFiltering allowDoubleEscaping=\"true\" />"
+                  - "\n"
+                  - "\t\t\t</security>"
+                  - "\n"
+                  - "\t\t</system.webServer>"
+                  - "\n"
+                  - "\t</configuration>"
+                  - "\n"
+            C:\cfn\01-PrepareSubordinateCA.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - $InstallCWAgent = "
+                  - Ref: Parameter01hInstallCWAgent
+                  - "\""
+                  - "\n"
+                  - If ($InstallCWAgent -ne "NO") {
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL CW CLIENT"
+                  - "\n"
+                  - "\n"
+                  - $cwuri = "https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi"
+                  - "\n"
+                  - $cwfile = "C:\cfn\amazon-cloudwatch-agent.msi"
+                  - "\n"
+                  - $arguments = "/i $cwfile /qn /L*V C:\cfn\amazon-cloudwatch-agent.log"
+                  - "\n"
+                  - Invoke-WebRequest -Uri $cwuri -OutFile $cwfile -DisableKeepAlive
+                    -UseBasicparsing
+                  - "\n"
+                  - Start-Process msiexec.exe -ArgumentList $arguments -Wait
+                  - "\n"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Event Viewer and Advanced Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentAdvanced
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Event Viewer and Basic Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentBasic
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Only Event Viewer") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentOnlyEvents
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Only Basic Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentOnlyMetrics
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - ."C:\Program Files\Amazon\AmazonCloudWatchAgent\amazon-cloudwatch-agent-ctl.ps1"
+                    -a fetch-config -m ec2 -c file:C:\cfn\CloudWatchConfig.json -s
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Write-Output "INSTALL WINDOWS FEATURES"
+                  - "\n"
+                  - Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+                  - "\n"
+                  - Install-WindowsFeature ADCS-Cert-Authority
+                  - "\n"
+                  - Install-Windowsfeature RSAT-AD-PowerShell
+                  - "\n"
+                  - Install-WindowsFeature RSAT-ADCS-Mgmt
+                  - "\n"
+                  - Install-WindowsFeature RSAT-ADDS-Tools
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SET GLOBAL SUFFIX"
+                  - "\n"
+                  - Set-DnsClientGlobalSetting -SuffixSearchList "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - "\n"
+                  - Write-Output "RENAME COMPUTER"
+                  - "\n"
+                  - $newname = "
+                  - Ref: Parameter10aSubordinateCAName
+                  - "\".ToLower()"
+                  - "\n"
+                  - Rename-Computer -NewName $newname -PassThru
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "\n"
+            C:\cfn\02-AddToDomain.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $DCConnection = "False"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "\n"
+                  - "$DCConnection = (Test-NetConnection -ComputerName $DomainControllers[0]
+                    -Port 53).TcpTestSucceeded"
+                  - "\n"
+                  - If ($DCConnection -Match "True"){
+                  - "\n"
+                  - Write-Output "ADD TO DOMAIN"
+                  - "\n"
+                  - $username = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - $administratorPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password | ConvertTo-SecureString
+                    -asPlainText -Force"
+                  - "\n"
+                  - "$credential = New-Object System.Management.Automation.PSCredential($username,$administratorPWD)"
+                  - "\n"
+                  - $domainname = "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - Add-Computer -DomainName $domainname -Restart -Credential $credential
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\03-InstallSubordinateCA.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - Write-Output "AUTHENTICATE"
+                  - "\n"
+                  - $username = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - $administratorPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password | ConvertTo-SecureString
+                    -asPlainText -Force"
+                  - "\n"
+                  - "$credential = New-Object System.Management.Automation.PSCredential($username,$administratorPWD)"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL SUBORDINATE CA"
+                  - "\n"
+                  - $domainname = "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - $SubCADistinguishedName = "DC=" + $domainname -Replace "\.", ",DC="
+                  - "\n"
+                  - $SubCAType = "EnterpriseSubordinateCA"
+                  - "\n"
+                  - $SubCACommonName = "
+                  - Ref: Parameter10aSubordinateCAName
+                  - "\""
+                  - "\n"
+                  - $SubCAKeyLength = "
+                  - Ref: Parameter10cSubordinateCAKeyLength
+                  - "\""
+                  - "\n"
+                  - $SubCAHashAlgorithm = "
+                  - Ref: Parameter10dSubordinateCAHash
+                  - "\""
+                  - "\n"
+                  - $SubCACryptoProvider = "RSA#Microsoft Software Key Storage Provider"
+                  - "\n"
+                  - "\n"
+                  - Install-AdcsCertificationAuthority -CAType $SubCAType -CACommonName
+                    $SubCACommonName -CADistinguishedNameSuffix $SubCADistinguishedName
+                    -CryptoProviderName $SubCACryptoProvider -HashAlgorithmName $SubCAHashAlgorithm
+                    -KeyLength $SubCAKeyLength -Credential $credential -Force
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE CDP AND AIA ENDPOINT BASED ON IIS"
+                  - "\n"
+                  - Copy-Item C:\cfn\web.config C:\Windows\System32\CertSrv\CertEnroll\web.config
+                  - "\n"
+                  - New-WebSite -Name SubordinateCA -Port 80 -HostHeader "
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\" -PhysicalPath C:\\Windows\\System32\\CertSrv\\CertEnroll"
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+            C:\cfn\04-ConfigSubCAPhase1.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - Write-Output "AUTHENTICATE"
+                  - "\n"
+                  - $username = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - $administratorPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password | ConvertTo-SecureString
+                    -asPlainText -Force"
+                  - "\n"
+                  - "$credential = New-Object System.Management.Automation.PSCredential($username,$administratorPWD)"
+                  - "\n"
+                  - $userRootCA = "Administrator"
+                  - "\n"
+                  - "$credentialRootCA = New-Object System.Management.Automation.PSCredential($userRootCA,$administratorPWD)"
+                  - "\n"
+                  - $RootCA = "
+                  - Fn::GetAtt:
+                    - Resource30RootCA
+                    - PrivateIp
+                  - "\""
+                  - "\n"
+                  - "\n"
+                  - Write-Output "ENABLE THE SUBORDINATE CA TO INVOKE COMMAND IN THE
+                    ROOT CA"
+                  - "\n"
+                  - Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force
+                  - "\n"
+                  - "\n"
+                  - "$LoopCounterA = 0"
+                  - "\n"
+                  - $RootCAStatus = "False"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - $RootCAStatus = (Invoke-Command -ComputerName $RootCA { (Get-Service
+                    | Where Name -EQ "CertSvc").Status } -Credential $credentialRootCA).Value
+                  - "\n"
+                  - If  ( $RootCAStatus -Match "Running" ){
+                  - "\n"
+                  - "\n"
+                  - Write-Output "MAP NETWORK DRIVE TO ROOT CA"
+                  - "\n"
+                  - New-PSDrive -Name "Y" -PSProvider FileSystem -Root "\\$RootCA\c$"
+                    -Credential $credentialRootCA
+                  - "\n"
+                  - "\n"
+                  - Write-Output "IMPORT THE ROOT CA CERTIFICATE AND REVOCATION LIST"
+                  - "\n"
+                  - Copy-Item "Y:\Windows\System32\CertSrv\CertEnroll\*" "C:\Windows\System32\CertSrv\CertEnroll\"
+                  - "\n"
+                  - certutil -addstore -f root c:\Windows\System32\CertSrv\CertEnroll\
+                  - Ref: Parameter09aRootCAName
+                  - _
+                  - Ref: Parameter09aRootCAName
+                  - ".crt"
+                  - "\n"
+                  - certutil -addstore -f root c:\Windows\System32\CertSrv\CertEnroll\
+                  - Ref: Parameter09aRootCAName
+                  - ".crl"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "COPY THE CERTIFICATE REQUEST FROM SUBORDINATE CA
+                    TO THE ROOT CA"
+                  - "\n"
+                  - Copy-Item C:\
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - _
+                  - Ref: Parameter10aSubordinateCAName
+                  - ".req Y:\\cfn"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SUBMIT CERTIFICATE REQUEST TO THE ROOT CA"
+                  - "\n"
+                  - 'Invoke-Command -Computername $RootCA -ScriptBlock {certreq -config '
+                  - Ref: Parameter09aRootCAName
+                  - "\\"
+                  - Ref: Parameter09aRootCAName
+                  - " -submit C:\\cfn\\"
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - _
+                  - Ref: Parameter10aSubordinateCAName
+                  - ".req"
+                  - " C:\\cfn\\SubordinateCertificateIssued.cer} -Credential $credentialRootCA"
+                  - "\n"
+                  - Copy-Item Y:\cfn\SubordinateCertificateIssued.cer C:\cfn\SubordinateCertificateIssued.cer
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SET THE ROOT CA BACK TO MANUAL APPROVAL OF CERTIFICATE
+                    REQUESTS."
+                  - "\n"
+                  - Invoke-Command -Computername $RootCA -ScriptBlock {Set-ItemProperty
+                    'HKLM:\\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration\
+                  - Ref: Parameter09aRootCAName
+                  - "\\PolicyModules\\CertificateAuthority_MicrosoftDefault.Policy'
+                    -Name 'RequestDisposition' -Value 257; Restart-Service CertSvc}
+                    -Credential $credential"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CONFIGURE CDP AND AIA"
+                  - "\n"
+                  - Add-CAAuthorityInformationAccess -AddToCertificateAia -uri "http://<ServerDNSName>/<ServerDNSName>_<CAName>.crt"
+                    -Force
+                  - "\n"
+                  - Remove-CAAuthorityInformationAccess -uri "http://<ServerDNSName>/CertEnroll/<ServerDNSName>_<CAName><CertificateName>.crt"
+                    -Force
+                  - "\n"
+                  - Remove-CAAuthorityInformationAccess -uri "ldap:///CN=<CATruncatedName>,CN=AIA,CN=Public
+                    Key Services,CN=Services,<ConfigurationContainer><CAObjectClass>"
+                    -Force
+                  - "\n"
+                  - Remove-CAAuthorityInformationAccess -uri "file://<ServerDNSName>/CertEnroll/<ServerDNSName>_<CAName><CertificateName>.crt"
+                    -Force
+                  - "\n"
+                  - "\n"
+                  - Add-CACRLDistributionPoint -Uri "http://<ServerDNSName>/<CAName><DeltaCRLAllowed>.crl"
+                    -AddToCertificateCdp -AddToFreshestCrl -Force
+                  - "\n"
+                  - Remove-CACrlDistributionPoint -Uri "ldap:///CN=<CATruncatedName><CRLNameSuffix>,CN=<ServerShortName>,CN=CDP,CN=Public
+                    Key Services,CN=Services,<ConfigurationContainer><CDPObjectClass>"
+                    -Force
+                  - "\n"
+                  - Remove-CACrlDistributionPoint -Uri "file://<ServerDNSName>/CertEnroll/<CAName><CRLNameSuffix><DeltaCRLAllowed>.crl"
+                    -Force
+                  - "\n"
+                  - Remove-CACrlDistributionPoint -Uri "http://<ServerDNSName>/CertEnroll/<CAName><CRLNameSuffix><DeltaCRLAllowed>.crl"
+                    -Force
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE SCHEDULED TASK ConfigSubCAPhase2"
+                  - "\n"
+                  - $taskSchedulerPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password"
+                  - "\n"
+                  - $taskSchedulerUSR = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - $taskname = "ConfigSubCAPhase2"
+                  - "\n"
+                  - $taskaction = New-ScheduledTaskAction -Execute 'Powershell.exe'
+                    -Argument '-NoProfile -WindowStyle Hidden -command "& {C:\cfn\04-ConfigSubCAPhase2.ps1}"'
+                  - "\n"
+                  - "$tasktrigger =  New-ScheduledTaskTrigger -AtStartup"
+                  - "\n"
+                  - "$taskcondition = New-ScheduledTaskSettingsSet -RunOnlyIfNetworkAvailable"
+                  - "\n"
+                  - Register-ScheduledTask -Action $taskaction -Trigger $tasktrigger
+                    -TaskName $taskName -Settings $taskcondition -User $taskSchedulerUSR
+                    -Password $taskSchedulerPWD -RunLevel Highest
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Else {
+                  - "\n"
+                  - Write-Output "Certificate Authority service is not running. Trying
+                    again in 30 seconds"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If  ( $LoopCounterA -eq 20 ){
+                  - "\n"
+                  - $CFNRegion = "
+                  - Ref: AWS::Region
+                  - "\""
+                  - "\n"
+                  - $CFNEndpoint = "cloudformation." + $CFNRegion + ".amazonaws.com"
+                  - "\n"
+                  - $CFNStack =  "
+                  - Ref: AWS::StackName
+                  - "\""
+                  - "\n"
+                  - $CFNResource =  "Resource24DomainController01"
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 1 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Failure signaling sent to stack $CFNStack - Unable
+                    to connect to Root CA"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\04-ConfigSubCAPhase2.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $DCConnectionStatus = "False"
+                  - "\n"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "$DCConnectionStatus = (Test-NetConnection -ComputerName $DomainControllers[0]
+                    -Port 53).TcpTestSucceeded"
+                  - "\n"
+                  - If ( $DCConnectionStatus -eq "True"){
+                  - "\n"
+                  - Write-Output "CAPTURE DOMAIN DN"
+                  - "\n"
+                  - "$domainDN = (get-addomain).distinguishedname"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "PUBLISH THE ROOT CA CERTIFICATE IN THE DIRECTORY
+                    AND INSTALL THE SUBORDINATE CA CERTIFICATE. THIS WILL BE EXECUTED
+                    BY SCHEDULED TASK ONCE"
+                  - "\n"
+                  - certutil -dspublish -f c:\Windows\System32\CertSrv\CertEnroll\
+                  - Ref: Parameter09aRootCAName
+                  - _
+                  - Ref: Parameter09aRootCAName
+                  - ".crt RootCA >> C:\\cfn\\CertUtil.txt"
+                  - "\n"
+                  - certutil -installCert C:\cfn\SubordinateCertificateIssued.cer
+                    >> C:\cfn\CertUtil.txt
+                  - "\n"
+                  - "\n"
+                  - Write-Output "DUMP DEFAULT TEMPLATES"
+                  - "\n"
+                  - ldifde -m -f C:\cfn\ExportComputerTemplate.ldf -d "CN=Machine,CN=Certificate
+                    Templates,CN=Public Key Services,CN=Services,CN=Configuration,$domainDN"
+                    -p subtree
+                  - "\n"
+                  - ldifde -m -f C:\cfn\ExportUserTemplate.ldf -d "CN=User,CN=Certificate
+                    Templates,CN=Public Key Services,CN=Services,CN=Configuration,$domainDN"
+                    -p subtree
+                  - "\n"
+                  - ldifde -m -f C:\cfn\ExportWebServerTemplate.ldf -d "CN=WebServer,CN=Certificate
+                    Templates,CN=Public Key Services,CN=Services,CN=Configuration,$domainDN"
+                    -p subtree
+                  - "\n"
+                  - "$TrustedComputer = Get-Content C:\\cfn\\ExportComputerTemplate.ldf
+                    -Raw"
+                  - "\n"
+                  - $TrustedComputer = $TrustedComputer -Replace "Machine","TrustedMachine"
+                  - "\n"
+                  - $TrustedComputer = $TrustedComputer -Replace "Computer","TrustedComputer"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "ImportTrustedComputerTemplate.ldf"
+                    -ItemType "File" -Value $TrustedComputer -Force
+                  - "\n"
+                  - ldifde -i -f C:\cfn\ImportTrustedComputerTemplate.ldf
+                  - "\n"
+                  - "$TrustedUser = Get-Content C:\\cfn\\ExportUserTemplate.ldf -Raw"
+                  - "\n"
+                  - $TrustedUser = $TrustedUser -Replace "CN=User","CN=TrustedUser"
+                  - "\n"
+                  - '$TrustedUser = $TrustedUser -Replace ": User",": TrustedUser"'
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "ImportTrustedUserTemplate.ldf"
+                    -ItemType "File" -Value $TrustedUser -Force
+                  - "\n"
+                  - ldifde -i -f C:\cfn\ImportTrustedUserTemplate.ldf
+                  - "\n"
+                  - "$TrustedWebServer = Get-Content C:\\cfn\\ExportWebServerTemplate.ldf
+                    -Raw"
+                  - "\n"
+                  - $TrustedWebServer = $TrustedWebServer -Replace "CN=WebServer","CN=TrustedWebServer"
+                  - "\n"
+                  - '$TrustedWebServer = $TrustedWebServer -Replace ": WebServer",":
+                    TrustedWebServer"'
+                  - "\n"
+                  - '$TrustedWebServer = $TrustedWebServer -Replace ": Web Server",":
+                    TrustedWebServer"'
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "ImportTrustedWebServerTemplate.ldf"
+                    -ItemType "File" -Value $TrustedWebServer -Force
+                  - "\n"
+                  - ldifde -i -f C:\cfn\ImportTrustedWebServerTemplate.ldf
+                  - "\n"
+                  - Write-Output "SET PERMISSIONS ON TEMPLATES FOR COMPUTERS USERS
+                    AND WEBSERVERS"
+                  - "\n"
+                  - dsacls "CN=TrustedMachine,CN=Certificate Templates,CN=Public Key
+                    Services,CN=Services,CN=Configuration,$domainDN" /G "NT AUTHORITY\Authenticated
+                    Users:CA;Enroll" >> C:\cfn\dcacls.log
+                  - "\n"
+                  - dsacls "CN=TrustedUser,CN=Certificate Templates,CN=Public Key
+                    Services,CN=Services,CN=Configuration,$domainDN" /G "NT AUTHORITY\Authenticated
+                    Users:CA;Enroll" >> C:\cfn\dcacls.log
+                  - "\n"
+                  - dsacls "CN=TrustedWebServer,CN=Certificate Templates,CN=Public
+                    Key Services,CN=Services,CN=Configuration,$domainDN" /G "NT AUTHORITY\Authenticated
+                    Users:CA;Enroll" >> C:\cfn\dcacls.log
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "04-ConfigSubCAPhase2.log" -ItemType
+                    "File" -Value "Script 04-ConfigSubCAPhase2.ps1 executed via Task
+                    Scheduler." -Force
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Clear-DNSClientCache
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If  ( $LoopCounterA -eq 20 ){
+                  - "\n"
+                  - Write-Output "Unable to connect to Domain Controller DNS Service."
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\05-CheckTaskSchedulerLog.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - $CheckTaskLog = "False"
+                  - "\n"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - $CheckTaskLog = (Test-Path "C:\cfn\04-ConfigSubCAPhase2.log")
+                  - "\n"
+                  - If ( $CheckTaskLog -eq "True"){
+                  - "\n"
+                  - Unregister-ScheduledTask -TaskName "ConfigSubCAPhase2" -Confirm:$False
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If ($LoopCounterA -eq 20 ) {
+                  - "\n"
+                  - Write-Output "Waiting for 04-ConfigSubCAPhase2.log"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\06-SendCommand.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$LoopCounterB = 0"
+                  - "\n"
+                  - $SubCAStatus = "Stopped"
+                  - "\n"
+                  - "$TrustedTemplates = 0"
+                  - "\n"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - $SubCAStatus = (Get-Service | Where Name -EQ "CertSvc").Status
+                  - "\n"
+                  - If ( $SubCAStatus -eq "Running"){
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - $TrustedTemplates = (Get-CATemplate | Where Name -Match "Trusted*").Count
+                  - "\n"
+                  - If  ( $TrustedTemplates -lt 3 ){
+                  - "\n"
+                  - Write-Output "SEND SSM COMMAND"
+                  - "\n"
+                  - "$InstanceID = (ConvertFrom-JSON (Invoke-WebRequest -Uri http://169.254.169.254/latest/dynamic/instance-identity/document
+                    -UseBasicparsing).Content).InstanceID"
+                  - "\n"
+                  - $CommandString = 'Send-SSMCommand -DocumentName "AWS-RunPowerShellScript"
+                    -Parameter @{commands = "C:\\cfn\\07-AddCATemplates.ps1"} -Target
+                    @{Key="instanceids";Values=@("X-XXXXXXXXXX")}'
+                  - "\n"
+                  - $CommandString = $CommandString -replace "X-XXXXXXXXXX",$InstanceID
+                  - "\n"
+                  - Invoke-Expression $CommandString
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Else {
+                  - "\n"
+                  - "$LoopCounterA = 20"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "$LoopCounterB++"
+                  - "\n"
+                  - Start-Sleep 120
+                  - "\n"
+                  - "} While ($LoopCounterB -lt 10)"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If ($LoopCounterB -eq 10){
+                  - "\n"
+                  - Write-Output "Unable to add CA Templates".
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($LoopCounterA -le 20 ) {
+                  - "\n"
+                  - Write-Output "Certificate Authority Service not running"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($LoopCounterA -gt 20 ) {
+                  - "\n"
+                  - Write-Output "Certificate Authority Templates added."
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\07-AddCATemplates.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - Add-CATemplate -Name "TrustedMachine" -Force >> C:\cfn\TrustedMachine.Template.log
+                  - "\n"
+                  - Add-CATemplate -Name "TrustedUser" -Force >> C:\cfn\TrustedUser.Template.log
+                  - "\n"
+                  - Add-CATemplate -Name "TrustedWebServer" -Force >> C:\cfn\TrustedWebServer.Template.log
+                  - "\n"
+          commands:
+            01-PrepareSubordinateCA:
+              command: Powershell.exe -Command C:\cfn\01-PrepareSubordinateCA.ps1
+            02-AddToDomain:
+              command: Powershell.exe -Command C:\cfn\02-AddToDomain.ps1
+            03-InstallSubordinateCA:
+              command: Powershell.exe -Command C:\cfn\03-InstallSubordinateCA.ps1
+            04-ConfigSubCAPhase1:
+              command: Powershell.exe -Command C:\cfn\04-ConfigSubCAPhase1.ps1
+            05-CheckTaskSchedulerLog:
+              command: Powershell.exe -Command C:\cfn\05-CheckTaskSchedulerLog.ps1
+            06-SendCommand:
+              command: Powershell.exe -Command C:\cfn\06-SendCommand.ps1
+            99-Signaling:
+              command: Powershell.exe -Command c:\cfn\99-Signaling.ps1
+          services:
+            windows:
+              cfn-hup:
+                enabled: 'true'
+                ensureRunning: 'true'
+                files:
+                - c:\cfn\cfn-hup.conf
+                - c:\cfn\hooks.d\cfn-auto-reloader.conf
+    Properties:
+      ImageId:
+        Ref: Parameter04aInstanceAMI
+      InstanceType:
+        Ref: Parameter04bInstanceType
+      IamInstanceProfile:
+        Ref: InstanceProfileForMemberServers
+      SubnetId:
+        Ref: Resource04PrivateSubnet01
+      SecurityGroupIds:
+      - Ref: Resource23bSecurityGroupPrivateNetwork
+      KeyName:
+        Ref: Parameter03aKeyPair
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - Ref: AWS::StackName
+            - "."
+            - Ref: Parameter10aSubordinateCAName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - "<script>\n"
+            - 'cfn-init.exe -v -s '
+            - Ref: AWS::StackId
+            - " -r Resource31SubCA "
+            - " --region "
+            - Ref: AWS::Region
+            - "\n"
+            - "</script>"
+  ADFS:
+    Type: AWS::EC2::Instance
+    DependsOn: Resource31SubCA
+    Condition: CreateADFS
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT30M
+        Count: '1'
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          files:
+            c:\cfn\cfn-hup.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[main]\n"
+                  - stack=
+                  - Ref: AWS::StackId
+                  - "\n"
+                  - region=
+                  - Ref: AWS::Region
+                  - "\n"
+            c:\cfn\hooks.d\cfn-auto-reloader.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - "[cfn-auto-reloader-hook]\n"
+                  - 'triggers=post.update
+                    '
+                  - 'path=Resources.Resource32ADFS.Metadata.AWS::CloudFormation::Init
+                    '
+                  - 'action=cfn-init.exe -v -s '
+                  - Ref: AWS::StackId
+                  - " -r Resource32ADFS"
+                  - " --region "
+                  - Ref: AWS::Region
+                  - "\n"
+            C:\cfn\RunCommand.bat:
+              content: |-
+                %~1
+                IF %ERRORLEVEL% GTR 10 ( exit /b 1 ) else ( exit /b 0 )
+            c:\cfn\99-Signaling.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - $CFNRegion = "
+                  - Ref: AWS::Region
+                  - "\""
+                  - "\n"
+                  - $CFNEndpoint = "cloudformation." + $CFNRegion + ".amazonaws.com"
+                  - "\n"
+                  - $CFNStack =  "
+                  - Ref: AWS::StackName
+                  - "\""
+                  - "\n"
+                  - $CFNResource =  "Resource32ADFS"
+                  - "\n"
+                  - $CFNConnectionStatus = "False"
+                  - "\n"
+                  - $ADFSStackAccount = "
+                  - Ref: Parameter08bNetBiosName
+                  - "\\"
+                  - Ref: Parameter12dADFSServiceAccount
+                  - $"
+                  - "\n"
+                  - $URL = "
+                  - Fn::Join:
+                    - ''
+                    - - https://
+                      - Ref: Parameter12bFederationServiceName
+                      - "."
+                      - Ref: Parameter08aDNSDomainName
+                      - "/adfs/ls/idpinitiatedsignon.aspx"
+                  - "\""
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SEND SIGNALING"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "$CFNConnectionStatus =(Test-NetConnection -ComputerName $CFNendpoint
+                    -Port 443).TcpTestSucceeded"
+                  - "\n"
+                  - If  ( $CFNConnectionStatus -Match "True" ){
+                  - "\n"
+                  - Write-Output "CHECKING INSTANCE HEALTH"
+                  - "\n"
+                  - "$Failures = 0"
+                  - "\n"
+                  - $ADFSSvcStatus = (Get-Service | Where Name -EQ "adfssrv").Status
+                  - "\n"
+                  - If  ( $ADFSSvcStatus -NotMatch "Running" ){
+                  - "\n"
+                  - "$Failures++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - $ADFSSvcAccount = (Get-WmiObject Win32_Service | Where-Object
+                    Name -EQ "adfssrv").StartName
+                  - "\n"
+                  - If  ( $ADFSSvcAccount -NE $ADFSStackAccount ){
+                  - "\n"
+                  - "$Failures++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "$ADFSConnectionStatus = (Invoke-WebRequest -URI $URL -UseBasicParsing).StatusCode"
+                  - "\n"
+                  - If ($ADFSConnectionStatus -NE "200"){
+                  - "\n"
+                  - "$Failures++"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "\n"
+                  - If ($Failures -eq 0) {
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 0 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Success signaling sent to stack $CFNStack"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Else {
+                  - "\n"
+                  - "$CFNSendSignaling = (cfn-signal.exe -e 1 --stack $CFNStack --resource
+                    $CFNResource --region $CFNRegion)"
+                  - "\n"
+                  - Write-Output "Failure signaling sent to stack $CFNStack"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Write-Output "Trying to connect to CloudFormation Endpoint."
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If  ( $LoopCounterA -eq 20 ){
+                  - "\n"
+                  - Write-Output "Unable to connect to CloudFormation Endpoint."
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\01-PrepareADFS.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - $InstallCWAgent = "
+                  - Ref: Parameter01hInstallCWAgent
+                  - "\""
+                  - "\n"
+                  - If ($InstallCWAgent -ne "NO") {
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL CW CLIENT"
+                  - "\n"
+                  - "\n"
+                  - $cwuri = "https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi"
+                  - "\n"
+                  - $cwfile = "C:\cfn\amazon-cloudwatch-agent.msi"
+                  - "\n"
+                  - $arguments = "/i $cwfile /qn /L*V C:\cfn\amazon-cloudwatch-agent.log"
+                  - "\n"
+                  - Invoke-WebRequest -Uri $cwuri -OutFile $cwfile -DisableKeepAlive
+                    -UseBasicparsing
+                  - "\n"
+                  - Start-Process msiexec.exe -ArgumentList $arguments -Wait
+                  - "\n"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Event Viewer and Advanced Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentAdvanced
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Event Viewer and Basic Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentBasic
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Only Event Viewer") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentOnlyEvents
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - If ($InstallCWAgent -eq "Only Basic Metrics") {
+                  - "\n"
+                  - $CWInstallParameters = (Get-SSMParameter -Name "
+                  - Ref: CWAgentOnlyMetrics
+                  - "\").Value"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CloudWatchConfig.json" -ItemType
+                    "File" -Value $CWInstallParameters -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - ."C:\Program Files\Amazon\AmazonCloudWatchAgent\amazon-cloudwatch-agent-ctl.ps1"
+                    -a fetch-config -m ec2 -c file:C:\cfn\CloudWatchConfig.json -s
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Write-Output "INSTALL WINDOWS FEATURE"
+                  - "\n"
+                  - Install-WindowsFeature adfs-federation -IncludeManagementTools
+                  - "\n"
+                  - Install-WindowsFeature RSAT-AD-PowerShell
+                  - "\n"
+                  - Install-WindowsFeature RSAT-DNS-Server
+                  - "\n"
+                  - Install-WindowsFeature RSAT-ADDS-Tools
+                  - "\n"
+                  - Write-Output "SET WSMAN"
+                  - "\n"
+                  - Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force
+                  - "\n"
+                  - "\n"
+                  - Write-Output "SET GLOBAL SUFFIX"
+                  - "\n"
+                  - Set-DnsClientGlobalSetting -SuffixSearchList "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - "\n"
+                  - Write-Output "RENAME COMPUTER"
+                  - "\n"
+                  - $newname = "
+                  - Ref: Parameter12aADFSName
+                  - "\".ToLower()"
+                  - "\n"
+                  - Rename-Computer -NewName $newname -PassThru
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "\n"
+            C:\cfn\02-AddToDomain.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $DCConnection = "False"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "\n"
+                  - "$DCConnection = (Test-NetConnection -ComputerName $DomainControllers[0]
+                    -Port 53).TcpTestSucceeded"
+                  - "\n"
+                  - If ($DCConnection -Match "True"){
+                  - "\n"
+                  - Write-Output "ADD TO DOMAIN"
+                  - "\n"
+                  - $username = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - $administratorPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password | ConvertTo-SecureString
+                    -asPlainText -Force"
+                  - "\n"
+                  - "$credential = New-Object System.Management.Automation.PSCredential($username,$administratorPWD)"
+                  - "\n"
+                  - $domainname = "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - Add-Computer -DomainName $domainname -Restart -Credential $credential
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\03a-CreateTask02.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - Start-Transcript -Path C:\cfn\03a-CreateTask02.Transcript.log
+                    -Append
+                  - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $DCConnection = "False"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "\n"
+                  - "$DCConnection = (Test-NetConnection -ComputerName $DomainControllers[0]
+                    -Port 53).TcpTestSucceeded"
+                  - "\n"
+                  - If ($DCConnection -Match "True"){
+                  - "\n"
+                  - Write-Output "CREDENTIALS"
+                  - "\n"
+                  - $taskSchedulerPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password"
+                  - "\n"
+                  - $taskSchedulerUSR = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - Write-Output "TASK 02 CUSTOMIZE AD"
+                  - "\n"
+                  - $taskname = "03b-CustomizeAD02"
+                  - "\n"
+                  - $taskaction = New-ScheduledTaskAction -Execute 'Powershell.exe'
+                    -Argument '-NoProfile -WindowStyle Hidden -command "& {C:\cfn\03b-CustomizeAD02.ps1}"'
+                  - "\n"
+                  - "$tasktrigger =  New-ScheduledTaskTrigger -AtStartup"
+                  - "\n"
+                  - "$taskcondition = New-ScheduledTaskSettingsSet -RunOnlyIfNetworkAvailable"
+                  - "\n"
+                  - Register-ScheduledTask -Action $taskaction -Trigger $tasktrigger
+                    -TaskName $taskName -Settings $taskcondition -User $taskSchedulerUSR
+                    -Password $taskSchedulerPWD -RunLevel Highest
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\03b-CustomizeAD02.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - Start-Transcript -Path C:\cfn\03b-CustomizeAD02.Transcript.log
+                    -Append
+                  - "\n"
+                  - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $DCConnection = "False"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "\n"
+                  - "$DCConnection = (Test-NetConnection -ComputerName $DomainControllers[0]
+                    -Port 53).TcpTestSucceeded"
+                  - "\n"
+                  - If ($DCConnection -Match "True"){
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE ADFS DNS RECORD"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $ADFSName = "
+                  - Ref: Parameter12bFederationServiceName
+                  - "\".ToLower()"
+                  - "\n"
+                  - "$ADFSAddr = (Get-NetAdapter | Get-NetIPAddress -AddressFamily
+                    IPV4).IpAddress"
+                  - "\n"
+                  - $ADFSZoneName = "
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - Add-DnsServerResourceRecordA -ComputerName $DomainControllers[0]
+                    -Name $ADFSName -ZoneName $ADFSZoneName -AllowUpdateAny -IPv4Address
+                    $ADFSAddr -TimeToLive 01:00:00  -ErrorAction:Ignore
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE ADFS MANAGED SERVICE ACCOUNT"
+                  - "\n"
+                  - $ADFSName = "
+                  - Ref: Parameter12bFederationServiceName
+                  - "\".ToLower()"
+                  - "\n"
+                  - $MsaAccount = "
+                  - Ref: Parameter12dADFSServiceAccount
+                  - "\""
+                  - "\n"
+                  - $MsaDNS = "
+                  - Ref: Parameter12dADFSServiceAccount
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - $MsaPrincipalName = "http/
+                  - Ref: Parameter12dADFSServiceAccount
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - '$MsaSPNHost = "host/" + '
+                  - "$ADFSName"
+                  - ' + ".'
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - $MsaSPNUsr = "
+                  - Ref: Parameter08bNetBiosName
+                  - "\\"
+                  - Ref: Parameter12dADFSServiceAccount
+                  - $"
+                  - "\n"
+                  - New-ADServiceAccount $MsaAccount -DNSHostName $MsaDNS -ServicePrincipalNames
+                    $MsaPrincipalName
+                  - "\n"
+                  - Setspn -s $MsaSPNHost $MsaSPNUsr
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE ADFS CONTAINER"
+                  - "\n"
+                  - "$DN = (Get-ADDomain).DistinguishedName"
+                  - "\n"
+                  - "$ADFSGuid = ([guid]::NewGuid()).Guid"
+                  - "\n"
+                  - $DomainNetBIOS = "
+                  - Ref: Parameter08bNetBiosName
+                  - "\""
+                  - "\n"
+                  - New-ADObject -Name "ADFS" -Type Container -Path "OU=$DomainNetBIOS,$DN"
+                  - "\n"
+                  - New-ADObject -Name "$ADFSGuid" -Type Container -Path "CN=ADFS,OU=$DomainNetBIOS,$DN"
+                  - "\n"
+                  - Write-Output "CREATE adminConfig LOG"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "adminConfig.log" -ItemType "File"
+                    -Value $ADFSGuid -Force
+                  - "\n"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\03c-CheckTaskLog02.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - $CheckTaskLog = "False"
+                  - "\n"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - $CheckTaskLog = (Test-Path "C:\cfn\adminConfig.log")
+                  - "\n"
+                  - If ( $CheckTaskLog -eq "True"){
+                  - "\n"
+                  - Unregister-ScheduledTask -TaskName "03b-CustomizeAD02" -Confirm:$False
+                  - "\n"
+                  - Restart-Computer -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - If ($LoopCounterA -eq 20 ) {
+                  - "\n"
+                  - Write-Output "Waiting for adminConfig.log"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+            C:\cfn\04-InstallADFS.ps1:
+              content:
+                Fn::Join:
+                - ''
+                - - "$LoopCounterA = 0"
+                  - "\n"
+                  - "$DomainControllers = (Get-NetAdapter | Get-DNSClientServerAddress).ServerAddresses"
+                  - "\n"
+                  - $DCConnection = "False"
+                  - "\n"
+                  - $ADFSName = "
+                  - Ref: Parameter12bFederationServiceName
+                  - "\".ToLower()"
+                  - "\n"
+                  - $ADFSServiceName = $ADFSName + ".
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - $ADFSSigning = $ADFSName + "-Signing"
+                  - "\n"
+                  - $ADFSDecrypting = $ADFSName + "-Decrypting"
+                  - "\n"
+                  - "$ADFSComputerName = $env:computername.ToLower()"
+                  - "\n"
+                  - '$URL = "https://" + '
+                  - "$ADFSName"
+                  - ' + ".'
+                  - Ref: Parameter08aDNSDomainName
+                  - /federationmetadata/2007-06/federationmetadata.xml"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE CERTIFICATE REQUEST - ADFS SERVICE"
+                  - "\n"
+                  - $CertificateRequest = @"
+                  - "\n"
+                  - "[Version]"
+                  - "\n"
+                  - Signature="`$Windows NT$"
+                  - "\n"
+                  - "\n"
+                  - "[Newrequest]"
+                  - "\n"
+                  - Subject = CN=$ADFSName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\n"
+                  - Exportable = true
+                  - "\n"
+                  - MachineKeySet = true
+                  - "\n"
+                  - "\n"
+                  - "[Extensions]"
+                  - "\n"
+                  - 2.5.29.17 = "{text}"
+                  - "\n"
+                  - _continue_ = "dns=$ADFSComputerName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - '&"'
+                  - "\n"
+                  - _continue_ = "dns=enterpriseregistration.
+                  - Ref: Parameter08aDNSDomainName
+                  - '&"'
+                  - "\n"
+                  - _continue_ = "dns=certauth.$ADFSName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - '&"'
+                  - "\n"
+                  - _continue_ = "dns=$ADFSName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - '&"'
+                  - "\n"
+                  - "\n"
+                  - "[RequestAttributes]"
+                  - "\n"
+                  - CertificateTemplate = TrustedWebServer
+                  - "\n"
+                  - "\"@"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CertificateRequestTemplate.inf"
+                    -ItemType "File" -Value $CertificateRequest -Force
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE CERTIFICATE REQUEST - ADFS SIGNING"
+                  - "\n"
+                  - $CertificateRequestSigning = @"
+                  - "\n"
+                  - "[Version]"
+                  - "\n"
+                  - Signature="`$Windows NT$"
+                  - "\n"
+                  - "\n"
+                  - "[Newrequest]"
+                  - "\n"
+                  - Subject = CN=$ADFSSigning
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\n"
+                  - Exportable = true
+                  - "\n"
+                  - MachineKeySet = true
+                  - "\n"
+                  - "\n"
+                  - "[Extensions]"
+                  - "\n"
+                  - 2.5.29.17 = "{text}"
+                  - "\n"
+                  - _continue_ = "dns=CN=$ADFSSigning
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - '&"'
+                  - "\n"
+                  - "\n"
+                  - "[RequestAttributes]"
+                  - "\n"
+                  - CertificateTemplate = TrustedWebServer
+                  - "\n"
+                  - "\"@"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CertificateRequestTemplateSigning.inf"
+                    -ItemType "File" -Value $CertificateRequestSigning -Force
+                  - "\n"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE CERTIFICATE REQUEST - ADFS ENCRYPTION"
+                  - "\n"
+                  - $CertificateRequestDecrypting = @"
+                  - "\n"
+                  - "[Version]"
+                  - "\n"
+                  - Signature="`$Windows NT$"
+                  - "\n"
+                  - "\n"
+                  - "[Newrequest]"
+                  - "\n"
+                  - Subject = CN=$ADFSDecrypting
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\n"
+                  - Exportable = true
+                  - "\n"
+                  - MachineKeySet = true
+                  - "\n"
+                  - "\n"
+                  - "[Extensions]"
+                  - "\n"
+                  - 2.5.29.17 = "{text}"
+                  - "\n"
+                  - _continue_ = "dns=CN=$ADFSDecrypting
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - '&"'
+                  - "\n"
+                  - "\n"
+                  - "[RequestAttributes]"
+                  - "\n"
+                  - CertificateTemplate = TrustedWebServer
+                  - "\n"
+                  - "\"@"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "CertificateRequestTemplateDecrypting.inf"
+                    -ItemType "File" -Value $CertificateRequestDecrypting -Force
+                  - "\n"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "\n"
+                  - "$DCConnection = (Test-NetConnection -ComputerName $DomainControllers[0]
+                    -Port 53).TcpTestSucceeded"
+                  - "\n"
+                  - If ($DCConnection -Match "True"){
+                  - "\n"
+                  - Write-Output "AUTHENTICATE"
+                  - "\n"
+                  - $username = "
+                  - Ref: Parameter08bNetBiosName
+                  - \Admin"
+                  - "\n"
+                  - $administratorPWD = ((Get-SECSecretValue -SecretId "
+                  - Ref: PasswordDomainAdministrator
+                  - "\").SecretString | ConvertFrom-Json).Password | ConvertTo-SecureString
+                    -asPlainText -Force"
+                  - "\n"
+                  - "$credential = New-Object System.Management.Automation.PSCredential($username,$administratorPWD)"
+                  - "\n"
+                  - "$os = (Get-CimInstance Win32_OperatingSystem).Caption"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL ADFS CERTIFICATES"
+                  - "\n"
+                  - $SubordinateCA = "
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\\"
+                  - Ref: Parameter10aSubordinateCAName
+                  - "\""
+                  - "\n"
+                  - $SubCADNS = "
+                  - Ref: Parameter10aSubordinateCAName
+                  - "."
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - "$LoopCounterD = 0"
+                  - "\n"
+                  - $CAConnection = "False"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "$CAConnection = (Test-NetConnection -ComputerName $SubCADNS -Port
+                    135).TcpTestSucceeded"
+                  - "\n"
+                  - If ($CAConnection -Match "True"){
+                  - "\n"
+                  - gpupdate /force
+                  - "\n"
+                  - "\n"
+                  - certreq -new C:\cfn\CertificateRequestTemplate.inf C:\cfn\CertificateRequest.req
+                  - "\n"
+                  - "$CertificateSubmit = (certreq -config $SubordinateCA -submit
+                    C:\\cfn\\CertificateRequest.req C:\\cfn\\CertificateIssued.cer)"
+                  - "\n"
+                  - certreq -accept C:\cfn\CertificateIssued.cer >> C:\cfn\CertificateInstalled.log
+                  - "\n"
+                  - "\n"
+                  - certreq -new C:\cfn\CertificateRequestTemplateSigning.inf C:\cfn\CertificateRequestSigning.req
+                  - "\n"
+                  - "$CertificateSubmit = (certreq -config $SubordinateCA -submit
+                    C:\\cfn\\CertificateRequestSigning.req C:\\cfn\\CertificateIssuedSigning.cer)"
+                  - "\n"
+                  - certreq -accept C:\cfn\CertificateIssuedSigning.cer >> C:\cfn\CertificateInstalledSigning.log
+                  - "\n"
+                  - "\n"
+                  - certreq -new C:\cfn\CertificateRequestTemplateDecrypting.inf C:\cfn\CertificateRequestDecrypting.req
+                  - "\n"
+                  - "$CertificateSubmit = (certreq -config $SubordinateCA -submit
+                    C:\\cfn\\CertificateRequestDecrypting.req C:\\cfn\\CertificateIssuedDecrypting.cer)"
+                  - "\n"
+                  - certreq -accept C:\cfn\CertificateIssuedDecrypting.cer >> C:\cfn\CertificateInstalledDecrypting.log
+                  - "\n"
+                  - "\n"
+                  - "$ADFSServiceCert = (Get-ChildItem -path cert:\\LocalMachine\\My
+                    | Where-Object Subject -Match $ADFSServiceName).Thumbprint"
+                  - "\n"
+                  - $ADFSDecryptingCert = (Get-ChildItem -path cert:\LocalMachine\My
+                    | Where-Object Subject -Match "-Decrypting").Thumbprint
+                  - "\n"
+                  - $ADFSSigningCert = (Get-ChildItem -path cert:\LocalMachine\My
+                    | Where-Object Subject -Match "-Signing").Thumbprint
+                  - "\n"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Resolve-DNSName -Name $SubCADNS
+                  - "\n"
+                  - "$LoopCounterD++"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "} While ($LoopCounterD -lt 20)"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "INSTALL ADFS"
+                  - "\n"
+                  - "$LoopCounterC = 0"
+                  - "\n"
+                  - $ADFSAccountStatus = "False"
+                  - "\n"
+                  - $MsaAccount = "
+                  - Ref: Parameter12dADFSServiceAccount
+                  - "\""
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - "$ADFSAccountStatus = (Get-ADServiceAccount -Identity $MsaAccount
+                    -Credential $credential).Enabled"
+                  - "\n"
+                  - If ($ADFSAccountStatus -Match "True"){
+                  - "\n"
+                  - "$ADFSThumbprint = (Get-ChildItem -Path Cert:\\LocalMachine\\My).Thumbprint"
+                  - "\n"
+                  - "$ADFSServiceName = "
+                  - "$ADFSName"
+                  - ' + ".'
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - $ADFSDisplayName = ("
+                  - Ref: Parameter08bNetBiosName
+                  - ' ADFS").ToUpper()'
+                  - "\n"
+                  - $ADFSServiceAccount = "
+                  - Ref: Parameter08bNetBiosName
+                  - "\\"
+                  - Ref: Parameter12dADFSServiceAccount
+                  - $"
+                  - "\n"
+                  - "$DN = (Get-ADDomain).DistinguishedName"
+                  - "\n"
+                  - $DomainNetBIOS = "
+                  - Ref: Parameter08bNetBiosName
+                  - "\""
+                  - "\n"
+                  - "$ADFSGuid = Get-Content C:\\cfn\\adminConfig.log"
+                  - "\n"
+                  - $adminConfig = @{"DKMContainerDn"="CN=$ADFSGuid,CN=ADFS,OU=$DomainNETBIOS,$DN"}
+                  - "\n"
+                  - Install-ADFSFarm -CertificateThumbprint $ADFSServiceCert -FederationServiceName
+                    $ADFSServiceName -GroupServiceAccountIdentifier $ADFSServiceAccount
+                    -FederationServiceDisplayName $ADFSDisplayName -Credential $credential
+                    -OverwriteConfiguration -AdminConfiguration $AdminConfig -SigningCertificateThumbprint
+                    $ADFSSigningCert -DecryptionCertificateThumbprint $ADFSDecryptingCert
+                  - "\n"
+                  - Write-Output "INITIATE SIGNON PAGE AND ENABLE RELAY STATE"
+                  - "\n"
+                  - If ($os -NotMatch "Microsoft Windows Server 2012"){
+                  - "\n"
+                  - Set-AdfsProperties -EnableIdPInitiatedSignonPage $true
+                  - "\n"
+                  - Set-AdfsProperties -EnableRelayStateForIdpInitiatedSignOn $true
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Else {
+                  - "\n"
+                  - $ADFSConfigFile = "C:\Windows\ADFS\Microsoft.IdentityServer.Servicehost.exe.config"
+                  - "\n"
+                  - $RelayStateString = @"
+                  - "\n"
+                  - "<microsoft.identityServer.web>`r"
+                  - "\n"
+                  - '    <useRelayStateForIdpInitiatedSignOn enabled="true" />'
+                  - "\n"
+                  - "\"@"
+                  - "\n"
+                  - "$ADFSConfigFileContent = (Get-Item -Path $ADFSConfigFile | Get-Content
+                    -Raw)"
+                  - "\n"
+                  - $ADFSNEWConfigFileContent = $ADFSConfigFileContent -Replace "<microsoft.identityServer.web>",$RelayStateString
+                  - "\n"
+                  - Rename-Item -Path $ADFSConfigFile -NewName "Microsoft.IdentityServer.Servicehost.exe.config.BKP.CFN"
+                  - "\n"
+                  - New-Item -ItemType "File" -Path $ADFSConfigFile -Value $ADFSNEWConfigFileContent
+                    -Force
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Restart-Service adfssrv
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "$LoopCounterC++"
+                  - "\n"
+                  - "} While ($LoopCounterC -lt 20)"
+                  - "\n"
+                  - "\n"
+                  - "$LoopCounterB = 0"
+                  - "\n"
+                  - Do {
+                  - "\n"
+                  - Clear-DnsClientCache
+                  - "\n"
+                  - Resolve-DNSName -Name "$ADFSName.
+                  - Ref: Parameter08aDNSDomainName
+                  - "\""
+                  - "\n"
+                  - "$ADFSStatus = (Invoke-WebRequest -URI $URL -UseBasicParsing -Credential
+                    $credential).StatusCode"
+                  - "\n"
+                  - If ($ADFSStatus -Match "200"){
+                  - "\n"
+                  - Write-Output "CREATE RELYING PART TRUST"
+                  - "\n"
+                  - $RelyingPartyTrust = "Amazon Web Services"
+                  - "\n"
+                  - Add-ADFSRelyingPartyTrust -Name $RelyingPartyTrust -MetadataURL
+                    "https://signin.aws.amazon.com/static/saml-metadata.xml" -MonitoringEnabled:$true
+                    -AutoUpdateEnabled:$true
+                  - "\n"
+                  - if ($os -NotMatch "Microsoft Windows Server 2012") {Set-AdfsRelyingPartyTrust
+                    -TargetName $RelyingPartyTrust -AccessControlPolicyName "Permit
+                    Everyone"}
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE IAM IDP PROVIDER"
+                  - "\n"
+                  - $SAMLProviderName = "
+                  - Ref: AWS::StackName
+                  - "-ADFS-"
+                  - Ref: AWS::Region
+                  - "\""
+                  - "\n"
+                  - "$SAMLMetaDataDoc = (Invoke-WebRequest -URI $URL -UseBasicParsing
+                    -Credential $credential).Content"
+                  - "\n"
+                  - New-Item -Path "C:\cfn" -Name "federationmetadata.xml.log" -ItemType
+                    "File" -Value $SAMLMetaDataDoc -Force
+                  - "\n"
+                  - "$IDPArn = (New-IAMSAMLProvider -Name $SAMLProviderName -SAMLMetadataDocument
+                    $SAMLMetaDataDoc -Select *).SAMLProviderArn"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CONFIGURE TRUSTED POLICY FOR ADMINISTRATIVE ACCESS
+                    ROLE VIA ADFS"
+                  - "\n"
+                  - $TrustPolicyTemplate = @"
+                  - "\n"
+                  - "{"
+                  - "\n"
+                  - '"Version": "2012-10-17",'
+                  - "\n"
+                  - '"Statement": ['
+                  - "\n"
+                  - "{"
+                  - "\n"
+                  - '"Effect": "Allow",'
+                  - "\n"
+                  - '"Principal": {'
+                  - "\n"
+                  - '"Federated": "REPLACE-IDP-ARN"'
+                  - "\n"
+                  - "},"
+                  - "\n"
+                  - '"Action": "sts:AssumeRoleWithSAML",'
+                  - "\n"
+                  - '"Condition": {'
+                  - "\n"
+                  - '"StringEquals": {'
+                  - "\n"
+                  - '"SAML:aud": "https://signin.aws.amazon.com/saml"'
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "]"
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "\"@"
+                  - "\n"
+                  - "\n"
+                  - $TrustPolicy = $TrustPolicyTemplate -replace "REPLACE-IDP-ARN",$IDPArn
+                  - "\n"
+                  - 'Update-IAMAssumeRolePolicy -RoleName '
+                  - Ref: RoleADFSAdminAccess
+                  - " -PolicyDocument $TrustPolicy"
+                  - "\n"
+                  - 'Update-IAMAssumeRolePolicy -RoleName '
+                  - Ref: RoleADFSAppStream
+                  - " -PolicyDocument $TrustPolicy"
+                  - "\n"
+                  - "\n"
+                  - Write-Output "CREATE ADFS RULES"
+                  - "\n"
+                  - "$IDPArnForRules = $IDPArn -replace '"
+                  - Ref: AWS::AccountId
+                  - "','$1'"
+                  - "\n"
+                  - "$TemporaryRules = @'"
+                  - "\n"
+                  - '@RuleTemplate = "MapClaims"'
+                  - "\n"
+                  - '@RuleName = "Name ID"'
+                  - "\n"
+                  - c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname"]
+                    => issue(Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+                    Issuer = c.Issuer, OriginalIssuer = c.OriginalIssuer, Value =
+                    c.Value, ValueType = c.ValueType, Properties["http://schemas.xmlsoap.org/ws/2005/05/identity/claimproperties/format"]
+                    = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
+                  - "\n"
+                  - "\n"
+                  - '@RuleTemplate = "LdapClaims"'
+                  - "\n"
+                  - '@RuleName = "Session Name"'
+                  - "\n"
+                  - c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname",
+                    Issuer == "AD AUTHORITY"] => issue(store = "Active Directory",
+                    types = ("https://aws.amazon.com/SAML/Attributes/RoleSessionName"),
+                    query = ";userPrincipalName;{0}", param = c.Value);
+                  - "\n"
+                  - "\n"
+                  - '@RuleName = "Get AD Groups"'
+                  - "\n"
+                  - c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname",
+                    Issuer == "AD AUTHORITY"] => add(store = "Active Directory", types
+                    = ("http://temp/variable"), query = ";tokenGroups;{0}", param
+                    = c.Value);
+                  - "\n"
+                  - "\n"
+                  - '@RuleName = "Roles"'
+                  - "\n"
+                  - c:[Type == "http://temp/variable", Value =~ "(?i)^AWS-([^d]{12})"]
+                    => issue(Type = "https://aws.amazon.com/SAML/Attributes/Role",
+                    Value = RegExReplace(c.Value, "AWS-([^d]{12})-", "REPLACE-IDP-ARN-FOR-RULES,arn:aws:iam::$1:role/"));
+                  - "\n"
+                  - "'@"
+                  - "\n"
+                  - "\n"
+                  - $Rules = $TemporaryRules -replace "REPLACE-IDP-ARN-FOR-RULES",$IDPArnForRules
+                  - "\n"
+                  - Set-ADFSRelyingPartyTrust -TargetName $RelyingPartyTrust -IssuanceTransformRules
+                    $Rules
+                  - "\n"
+                  - if ($os -Match "Microsoft Windows Server 2012") {
+                  - "\n"
+                  - "$AuthotizationRulesW12 = @'"
+                  - "\n"
+                  - '@RuleName = "Permit Access to All Users"'
+                  - "\n"
+                  - => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit",
+                    Value = "true");
+                  - "\n"
+                  - "'@"
+                  - "\n"
+                  - Set-AdfsRelyingPartyTrust -TargetName $RelyingPartyTrust -IssuanceAuthorizationRules
+                    $AuthotizationRulesW12
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - Write-Output "ADD ADMINISTRATOR TO AD GROUP MAPPING TO THE IAM
+                    ROLE VIA FEDERATION"
+                  - "\n"
+                  - $ResourcesOU = "OU=
+                  - Ref: Parameter08bNetBiosName
+                  - '," + $DN'
+                  - "\n"
+                  - $GroupsOU = "OU=Groups," + $ResourcesOU
+                  - "\n"
+                  - $ADgroupName = "AWS-
+                  - Ref: AWS::AccountId
+                  - "-"
+                  - Ref: RoleADFSAdminAccess
+                  - "\""
+                  - "\n"
+                  - Set-ADUser -Identity Admin -UserPrincipalName admin@
+                  - Ref: Parameter08aDNSDomainName
+                  - " -Credential $credential"
+                  - "\n"
+                  - New-ADGroup -Name $ADgroupName -SamAccountName $ADgroupName -GroupCategory
+                    Security -GroupScope Global -Path $GroupsOU -Description "Allow
+                    Administrative access to AWS via ADFS" -Credential $credential
+                  - "\n"
+                  - Add-ADGroupMember -Identity $ADGroupName -Members Admin -Credential
+                    $credential
+                  - "\n"
+                  - $ADgroupName = "AWS-
+                  - Ref: AWS::AccountId
+                  - "-"
+                  - Ref: RoleADFSAppStream
+                  - "\""
+                  - "\n"
+                  - New-ADGroup -Name $ADgroupName -SamAccountName $ADgroupName -GroupCategory
+                    Security -GroupScope Global -Path $GroupsOU -Description "Allow
+                    users to connnect to AppStream instances via ADFS" -Credential
+                    $credential
+                  - "\n"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "$LoopCounterB++"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "} While ($LoopCounterB -lt 20)"
+                  - "\n"
+                  - Break
+                  - "\n"
+                  - "}"
+                  - "\n"
+                  - "$LoopCounterA++"
+                  - "\n"
+                  - Start-Sleep 30
+                  - "\n"
+                  - "} While ($LoopCounterA -lt 20)"
+                  - "\n"
+          commands:
+            01-PrepareADFS:
+              command: Powershell.exe -Command C:\cfn\01-PrepareADFS.ps1
+            02-AddToDomain:
+              command: Powershell.exe -Command C:\cfn\02-AddToDomain.ps1
+            03a-CreateTask02:
+              command: Powershell.exe -Command C:\cfn\03a-CreateTask02.ps1
+            03c-CheckTaskLog02:
+              command: Powershell.exe -Command C:\cfn\03c-CheckTaskLog02.ps1
+            04-InstallADFS:
+              command: Powershell.exe -Command C:\cfn\04-InstallADFS.ps1
+            99-Signaling:
+              command: Powershell.exe -Command c:\cfn\99-Signaling.ps1
+          services:
+            windows:
+              cfn-hup:
+                enabled: 'true'
+                ensureRunning: 'true'
+                files:
+                - c:\cfn\cfn-hup.conf
+                - c:\cfn\hooks.d\cfn-auto-reloader.conf
+    Properties:
+      ImageId:
+        Ref: Parameter04aInstanceAMI
+      IamInstanceProfile:
+        Ref: InstanceProfileForMemberServers
+      KeyName:
+        Ref: Parameter03aKeyPair
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - Ref: AWS::StackName
+            - "."
+            - Ref: Parameter12aADFSName
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+      InstanceType:
+        Ref: Parameter04bInstanceType
+      NetworkInterfaces:
+      - AssociatePublicIpAddress:
+          Fn::If:
+          - ADFSTypePublic
+          - 'true'
+          - 'false'
+        DeviceIndex: '0'
+        GroupSet:
+          Fn::If:
+          - ADFSTypePublic
+          - - Ref: Resource23bSecurityGroupPrivateNetwork
+            - Ref: Resource23cSecurityInboundHTTP
+          - - Ref: Resource23bSecurityGroupPrivateNetwork
+        SubnetId:
+          Fn::If:
+          - ADFSTypePublic
+          - Ref: Resource02PublicSubnet01
+          - Ref: Resource04PrivateSubnet01
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - "<script>\n"
+            - 'cfn-init.exe -v -s '
+            - Ref: AWS::StackId
+            - " -r Resource32ADFS "
+            - " --region "
+            - Ref: AWS::Region
+            - "\n"
+            - "</script>"
+  

@@ -1,0 +1,147 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Appstream Module'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterDomainName:
+    Description: 'Domain Name'
+    Type: String
+  ParameterOU:
+    Description: 'Organizational Unit'
+    Type: CommaDelimitedList
+  ParameterSAName:
+    Description: 'Service Account Name'
+    Type: String
+  ParameterSAPassword:
+    NoEcho: 'true'
+    Description: 'Service Account Password'
+    Type: String
+  ParameterStackName:
+    Description: 'Stack Name'
+    Type: String
+  ParameterStackPersistentSettings:
+    Description: 'Stack Persistent Settings'
+    Type: String
+  ParameterSettingsGroup:
+    Description: 'Settings Group'
+    Type: String
+  ParameterAppStreamFleet:
+    Description: 'AppStream Fleet Name'
+    Type: String
+  ParameterAppStreamImage:
+    Description: 'AppStream Image'
+    Type: String
+  ParameterAppStreamInstanceType:
+    Description: 'AppStream InstanceType'
+    Type: String
+  ParameterAppStreamFleetType:
+    Description: 'AppStream FleetType'
+    Type: String
+  ParameterAppStreamCapacity:
+    Description: 'AppStream Capacity'
+    Type: String
+  ParameterSecurityGroupAppStream:
+    Description: 'Security Group for AppStream'
+    Type: String
+  ParameterFleetStreamView:
+    Description: 'Fleet Stream View'
+    Type: String
+  ParameterAppSFleetStart:
+    Description: 'AppStream Fleet Start'
+    Type: String
+  ParameterSubnet1:
+    Description: 'Subnet 1 for appstream'
+    Type: String
+  ParameterSubnet2:
+    Description: 'Subnet 2 for appstream'
+    Type: String
+Resources:
+  DirectoryConfig:
+    Type: AWS::AppStream::DirectoryConfig
+    Properties:
+      DirectoryName:
+        Ref: ParameterDomainName
+      OrganizationalUnitDistinguishedNames:
+        Ref: ParameterOU
+      ServiceAccountCredentials:
+        AccountName:
+          Ref: ParameterSAName
+        AccountPassword:
+          Ref: ParameterSAPassword
+  Stack:
+    DependsOn: DirectoryConfig
+    Type: AWS::AppStream::Stack
+    Properties:
+      Name:
+        Ref: ParameterStackName
+      ApplicationSettings:
+        Enabled:
+          Ref: ParameterStackPersistentSettings
+        SettingsGroup:
+          Ref: ParameterSettingsGroup
+      StorageConnectors:
+      - ConnectorType: HOMEFOLDERS
+      UserSettings:
+      - Action: CLIPBOARD_COPY_FROM_LOCAL_DEVICE
+        Permission: ENABLED
+      - Action: CLIPBOARD_COPY_TO_LOCAL_DEVICE
+        Permission: ENABLED
+      - Action: FILE_DOWNLOAD
+        Permission: ENABLED
+      - Action: FILE_UPLOAD
+        Permission: ENABLED
+      - Action: PRINTING_TO_LOCAL_DEVICE
+        Permission: ENABLED
+      Tags:
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+  Fleet:
+    DependsOn: Stack
+    Type: AWS::AppStream::Fleet
+    Properties:
+      Name:
+        Ref: ParameterAppStreamFleet
+      DisplayName:
+        Ref: ParameterAppStreamFleet
+      DomainJoinInfo:
+        DirectoryName:
+          Ref: ParameterDomainName
+        OrganizationalUnitDistinguishedName:
+          Ref: ParameterOU
+      ImageName:
+        Ref: ParameterAppStreamImage
+      InstanceType:
+        Ref: ParameterAppStreamInstanceType
+      FleetType:
+        Ref: ParameterAppStreamFleetType
+      ComputeCapacity:
+        DesiredInstances:
+          Ref: ParameterAppStreamCapacity
+      VpcConfig:
+        SubnetIds:
+          - Ref: ParameterSubnet1
+          - Ref: ParameterSubnet2
+        SecurityGroupIds:
+        - Ref: ParameterSecurityGroupAppStream
+      StreamView:
+        Ref: ParameterFleetStreamView
+      MaxUserDurationInSeconds: '57600'
+      DisconnectTimeoutInSeconds: '900'
+      IdleDisconnectTimeoutInSeconds: '900'
+      EnableDefaultInternetAccess: true
+      Tags:
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+    CreationPolicy:
+      StartFleet:
+        Ref: ParameterAppSFleetStart
+  FleetAssociation:
+    Type: AWS::AppStream::StackFleetAssociation
+    Properties:
+      FleetName:
+        Ref: Fleet
+      StackName:
+        Ref: Stack

@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CodeCommit Repo'
+Parameters:
+  ParameterVersion:
+    Type: Number
+    Description: 'Version'
+  ParameterRepoName:
+    Description: 'Repo name for codecommit'
+    Type: String
+  ParameterRepoDescription:
+    Description: 'Repo name for codecommit'
+    Type: String
+Resources:
+  ResourceCodeCommitRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName: !Ref ParameterRepoName
+      RepositoryDescription: !Ref ParameterRepoDescription
+    Tags:
+      - Key: "Version"
+        Value:
+          Ref: ParameterVersion
+     

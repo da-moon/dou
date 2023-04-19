@@ -1,0 +1,423 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Perform continuous integration branch-level checks on a CodeCommit repository with CodeBuild
+Parameters:
+  ParameterRepoName:
+    Description: 'CodeCommit Repo Name'
+    Type: String
+  ParameterS3Bucket:
+    Description: 'S3 bucket'
+    Type: String
+Resources:
+  CloudFormationTrustRole:
+    Type: AWS::IAM::Role
+    Description: Creating service role in IAM for AWS CloudFormation
+    Properties:
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup
+        - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - cloudformation.amazonaws.com
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - iam:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - ssm:GetParameters
+            - autoscaling:*
+            - ec2:*
+            - elasticloadbalancing:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - ds:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - fsx:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - backup:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - secretsmanager:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - s3:*
+            Effect: Allow
+            Resource: 
+            - !Join
+              - ''
+              - - "arn:aws:s3:::"
+                - !Ref ParameterS3Bucket
+            - !Join
+              - ''
+              - - "arn:aws:s3:::"
+                - !Ref ParameterS3Bucket
+                - "/*"
+        PolicyName: !Join
+          - '-'
+          -  - !Ref 'AWS::StackName'
+             - CloudFormationRolePolicy
+      RoleName: !Join
+        - '-'
+        -  - !Ref 'AWS::StackName'
+           - CloudFormation
+  CodeBuildPolicy:
+    Description: Setting IAM policy for service role for CodeBuild
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - cloudformation:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - ec2:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - iam:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - secretsmanager:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - backup:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - kms:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - ds:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - fsx:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - s3:*
+          Effect: Allow
+          Resource:
+          - "arn:aws:s3:::juan-nx"
+          - "arn:aws:s3:::juan-nx/*"
+    # Hay que darle acceso al repo que crea cloudformation, ese permiso lo necesita el script para hacer el submit de los modules
+        - Action:
+          - s3:*
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - codecommit:GitPull
+          Effect: Allow
+          Resource:
+          - !Join
+            - ':'
+            - - arn
+              - aws
+              - codecommit
+              - 'eu-west-1'
+              - '520983883852'
+              - 'NX-test'
+      PolicyName: !Join
+        - '-'
+        -  - 'nx'
+           - CodeBuildPolicy
+      Roles:
+      - !Ref 'CodeBuildRole'
+  CodeBuildCICD:
+    Type: AWS::CodeBuild::Project
+    DependsOn:
+     - CodeBuildPolicy
+    Properties:
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Description: !Join
+        - ''
+        - - 'CodeBuild Project for '
+          - 'nx'
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:5.0
+        Type: LINUX_CONTAINER
+        ImagePullCredentialsType: CODEBUILD
+        PrivilegedMode: false
+      Name: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - 'bootstrap'
+      ServiceRole: !Ref 'CodeBuildRole'
+      Source:
+        Type: CODECOMMIT
+        Location: !Join
+          - ''
+          - - 'https://git-codecommit.'
+            - 'eu-west-1'
+            - '.amazonaws.com/v1/repos/'
+            - 'NX-test'
+        BuildSpec: 'pipelines/bootstrap/buildspec.yml'
+  CodeBuildUpdateModules:
+    Type: AWS::CodeBuild::Project
+    DependsOn:
+     - CodeBuildPolicy
+    Properties:
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Description: !Join
+        - ''
+        - - 'CodeBuild Project for '
+          - 'update cloudformation modules'
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:5.0
+        Type: LINUX_CONTAINER
+        ImagePullCredentialsType: CODEBUILD
+        PrivilegedMode: false
+      Name: !Join 
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - 'updateModules'
+      ServiceRole: !Ref 'CodeBuildRole'
+      Source:
+        Type: CODECOMMIT
+        Location: !Join
+          - ''
+          - - 'https://git-codecommit.'
+            - 'eu-west-1'
+            - '.amazonaws.com/v1/repos/'
+            - 'NX-test'
+        BuildSpec: 'scripts/update_modules/buildspec.yml'
+  CodeBuildRole:
+    Description: Creating service role in IAM for AWS CodeBuild
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: codebuild.amazonaws.com
+      Path: /
+      RoleName: !Join
+        - '-'
+        - - 'nx'
+          - CodeBuild
+  CodePipelineTrustRole:
+    Description: Creating service role in IAM for AWS CodePipeline
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup
+        - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+          Sid: 1
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketVersioning
+            - s3:PutObject
+            Effect: Allow
+            Resource: "*"
+          - Action:
+            - codecommit:CancelUploadArchive
+            - codecommit:GetBranch
+            - codecommit:GetCommit
+            - codecommit:GetUploadArchiveStatus
+            - codecommit:UploadArchive
+            Effect: Allow
+            Resource:
+            - !Join
+              - ':'
+              - - arn
+                - aws
+                - codecommit
+                - !Ref 'AWS::Region'
+                - !Ref 'AWS::AccountId'
+                - !Ref ParameterRepoName
+          - Action:
+            - cloudformation:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - codebuild:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - iam:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - cloudformation:DescribeStacks
+            - cloudformation:DescribeChangeSet
+            - cloudformation:CreateChangeSet
+            - cloudformation:DeleteChangeSet
+            - cloudformation:ExecuteChangeSet
+            Effect: Allow
+            Resource: "*"
+          - Action:
+            - backup:*
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - iam:PassRole
+            Effect: Allow
+            Resource:
+            - !GetAtt
+              - CloudFormationTrustRole
+              - Arn
+          - Action:
+            - s3:*
+            Effect: Allow
+            Resource:
+            - !Join
+              - ''
+              - - "arn:aws:s3:::"
+                - !Ref ParameterS3Bucket
+            - !Join
+              - ''
+              - - "arn:aws:s3:::"
+                - !Ref ParameterS3Bucket
+                - "/*"
+        PolicyName: !Join
+          - '-'
+          - - !Ref 'AWS::StackName'
+            - CodePipelineRolePolicy
+      RoleName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - CodePipeline
+  ReleasePipeline:
+    DependsOn:
+    - CodePipelineTrustRole
+    - CloudFormationTrustRole
+    Description: Creating a deployment pipeline for your project in AWS CodePipeline
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Location: !Ref ParameterS3Bucket
+        Type: S3
+      Name: !Ref 'AWS::StackName'
+      RoleArn: !GetAtt
+      - CodePipelineTrustRole
+      - Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - ActionTypeId:
+            Category: Source
+            Owner: AWS
+            Provider: CodeCommit
+            Version: 1
+          Configuration:
+            BranchName: main
+            PollForSourceChanges: false
+            RepositoryName: !Ref ParameterRepoName
+          InputArtifacts: [
+            ]
+          Name: ApplicationSource
+          OutputArtifacts:
+          - Name: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - SourceArtifact
+          RunOrder: 1
+      - Name: Appstream
+        Actions:
+        - ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: CloudFormation
+            Version: 1
+          Configuration:
+            ActionMode: CREATE_UPDATE
+            Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+            RoleArn: !GetAtt
+            - CloudFormationTrustRole
+            - Arn
+            StackName: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - appstream
+            TemplatePath: !Join
+            - ''
+            - - !Ref 'AWS::StackName'
+              - -SourceArtifact
+              - ::pipelines/nx-appstream/nx_base_infra.yaml
+          InputArtifacts:
+          - Name: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - SourceArtifact
+          Name: AppstreamDeploy
+          OutputArtifacts: [
+            ]
+          RunOrder: 1
+      - Name: UpdateModules
+        Actions:
+        - ActionTypeId:
+            Category: Approval
+            Owner: AWS
+            Provider: Manual
+            Version: 1
+          InputArtifacts: []
+          Name: Update-modules
+          OutputArtifacts: []
+          RunOrder: 2
+      - Name: Build
+        Actions:
+        - ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: 1
+          Configuration:
+            ProjectName: !Join 
+            - ''
+            - - !Ref 'AWS::StackName'
+              - '-updateModules'
+          InputArtifacts:
+          - Name: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - SourceArtifact
+          Name: Build
+          OutputArtifacts: 
+          - Name: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - result
+          RunOrder: 3
+

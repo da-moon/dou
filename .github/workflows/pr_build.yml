@@ -1,0 +1,35 @@
+name: Push to CodeCommit
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+      - 'fix/**'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::520983883852:role/nx-github-role-juan
+          aws-region: eu-west-1
+
+      - name: Delete CodeCommit repository
+        run: |
+          REPO_NAME='NX-test'
+          aws codecommit delete-repository --repository-name ${REPO_NAME}
+
+      - name: Install
+        run: |
+          AUTO_APPROVE=true ./init.sh
+

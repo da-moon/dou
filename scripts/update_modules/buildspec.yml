@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - pip install cloudformation-cli cloudformation-cli-java-plugin cloudformation-cli-go-plugin cloudformation-cli-python-plugin cloudformation-cli-typescript-plugin
+      - cfn --version
+  build:
+    commands:
+      - cd scripts/update_modules
+      - ./module.sh
