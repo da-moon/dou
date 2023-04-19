@@ -1,0 +1,27 @@
+.skill-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top:0;
+    height: 40px;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.skill-menu--avatar {
+    width: 40px;
+    height: 40px;
+    background: #BF0B20;
+    border-radius: 20px;
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.skill-menu--logo img {
+    height: 40px;
+}
