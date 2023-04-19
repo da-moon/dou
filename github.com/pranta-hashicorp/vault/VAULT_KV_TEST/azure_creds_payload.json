@@ -1,0 +1,10 @@
+{
+  "options": {
+      "cas": 0
+  },
+  "data": {
+      "hostnames": "host1, host2, host3",
+      "password": "fubar",
+      "azure_subscription_id": "23432rwefdss"
+    }
+}

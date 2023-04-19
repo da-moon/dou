@@ -1,0 +1,4 @@
+{
+  "password": "nathan123",
+  "policies": "azurecred_secrets_owner,default"
+}
