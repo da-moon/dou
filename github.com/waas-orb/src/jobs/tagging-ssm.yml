@@ -1,0 +1,19 @@
+docker:
+    - image: dockerdoufer/aws-docker:circleci0.1
+steps:
+    - checkout
+    - run:
+          name: Export environment variables
+          command: |
+            echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+    - run:
+          name: Install DevOps repo
+          command: |
+            git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@{GITHUB_URL_DEVOPS} ../devops.ci
+    - run:
+          name: Run Bump Tag
+          command: |
+            chmod +x ../devops.ci/version-tag.sh
+            export VERSION=`../devops.ci/version-tag.sh`
+            git tag -a $VERSION -m "version: $VERSION"
+            git push "https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git" --tags

@@ -1,0 +1,20 @@
+docker:
+    - image: dockerdoufer/aws-docker:circleci0.1
+steps:
+    - checkout
+    - jq/install
+    - run:
+          name: Export environment variables
+          command: |
+            echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+    - run:
+          name: Install DevOps repo
+          command: |
+            git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@{GITHUB_URL_DEVOPS} ../devops.ci
+    - run:
+          name: Publishing TFE module
+          command: |
+            ls -la
+            pwd
+            chmod -R +x ../devops.ci/scripts/tfe-private-module.sh
+            ../devops.ci/scripts/tfe-private-module.sh
