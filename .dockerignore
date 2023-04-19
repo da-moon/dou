@@ -1,0 +1,17 @@
+*
+**/*_test.go
+!.git
+!cmd
+!internal
+!build
+!pkg
+!api
+!sdk
+!go.mod
+!go.sum
+!Justfile
+!Makefile
+!magefile.go
+!tools.go
+!.goreleaser.yml
+!docker-bake.hcl

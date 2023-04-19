@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# vim: filetype=sh softtabstop=2 tabstop=2 shiftwidth=2 fileencoding=utf-8 expandtab
+set -xeuo pipefail
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+if [ ! "$(command -v sudo 2>/dev/null)" ]; then
+  echo 'Please install "sudo" package' 1>&2
+  exit 1
+fi
+if [[ $EUID -eq 0 ]]; then
+  echo "You must run this script as non-root user with sudo permission." 1>&2
+  exit 1
+fi
+if pacman --version >/dev/null 2>&1; then
+  echo "*** Detected Arch based Linux distribution" 1>&2
+  if ! "$(command -v python3 2>/dev/null)" --version >/dev/null 2>&1; then
+    echo "*** Python3 not found. installing ..." 1>&2
+    sudo pacman -Sy --noconfirm python >/dev/null 2>&1
+  fi
+  echo "*** ensuring graphwiz is installed ..." 1>&2
+  sudo pacman -Sy --noconfirm graphviz >/dev/null 2>&1
+fi
+
+if apt-get --version >/dev/null 2>&1; then
+  export DEBIAN_FRONTEND=noninteractive
+  echo "*** Detected Debian based Linux distribution" 1>&2
+  sudo apt-get update -qq >/dev/null 2>&1
+  if ! "$(command -v python3 2>/dev/null)" --version >/dev/null 2>&1; then
+    echo "*** Python3 not found. installing ..." 1>&2
+    sudo apt-get install -yq python3
+  fi
+  echo "*** ensuring graphwiz is installed ..." 1>&2
+  sudo apt install graphviz -yq >/dev/null 2>&1
+fi
+if [ -n "$(command -v python3 2>/dev/null)" ] &&
+  ! "$(command -v python3 2>/dev/null)" -m pip --version >/dev/null 2>&1; then
+  echo "*** Pip3 not found. installing ..." 1>&2
+  (curl -fsSl "https://bootstrap.pypa.io/get-pip.py" | sudo "$(command -v python3 2>/dev/null)")
+fi

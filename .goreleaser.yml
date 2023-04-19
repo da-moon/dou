@@ -1,0 +1,48 @@
+---
+project_name: kvctl
+dist: bin
+gomod:
+  env:
+    - GOPRIVATE=github.com/DigitalOnUs/kvctl
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+builds:
+  - id: kvctl
+    main: ./cmd/kvctl
+    env:
+      - GOPRIVATE=github.com/DigitalOnUs/kvctl
+      - GO111MODULE=on
+      - CGO_ENABLED=0
+    ldflags:
+      - -s
+      - -w
+      - -extldflags '-static'
+      - -X {{.Env.GOPRIVATE}}/internal/version.Revision={{.FullCommit}}
+      - -X {{.Env.GOPRIVATE}}/internal/version.Branch={{.Branch}}
+      - -X {{.Env.GOPRIVATE}}/internal/version.BuildDate={{.Date }}
+      - -X {{.Env.GOPRIVATE}}/internal/version.BuildUser={{.Env.USER }}
+      - -X {{.Env.GOPRIVATE}}/internal/version.Version={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+snapshot:
+  name_template: '{{ .Tag }}'
+archives:
+  - replacements:
+      linux: linux
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+release:
+  name_template: '{{.ProjectName}} release v{{.Version}}'
