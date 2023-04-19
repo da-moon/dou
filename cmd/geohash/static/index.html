@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Geohash</title>
+        <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+        
+        <style>
+            header {
+                text-align: center;
+            }
+            header img {
+                width: 150px;
+                height: 150px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="favicon.svg">
+            <h1>Geohash</h1>
+        </header>
+        
+        <main id="app">
+            <p>
+                <label for="geohash">Geohash</label>
+                <br>
+                <input id="geohash" type="text">
+                <br>
+                <button>Decode</button>
+            </p>
+            <p>
+                <label for="latitude">Latitude</label>
+                <br>
+                <input id="latitude" type="text">
+                <br>
+                <label for="longitude">Longitude</label>
+                <br>
+                <input id="Longitude" type="text">
+                <br>
+                <button>Encode</button>
+            </p>
+        </main>
+
+        <footer>
+            <p>&copy; 2021 Guillermo Estrada</p>
+        </footer>
+    </body>
+</html>
