@@ -1,0 +1,6 @@
+- name: kubecf-single
+  password: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:kubecf.password
+  user: admin
+  skipSslValidation: true
+  api: api.kubecf.stg.ps-dou.com
+  appsManagerUri: https://kubecf.stg.ps-dou.com
