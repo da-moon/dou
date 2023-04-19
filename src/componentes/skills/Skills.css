@@ -1,0 +1,138 @@
+.skills-container {
+    padding: 0 20px;
+    position: relative;
+}
+
+.skills-button {
+    height: 40px;
+    width: 40px;
+    background: #BF0B20;
+    border-radius: 20px;
+    color: white;
+    border: 0;
+    font-size: 24px;
+    position: absolute;
+    top: -50px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.modal-container {
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    height: 300px;
+    width: 500px;
+    background: white;
+    border: 10px solid #e4e3e3;
+    padding: 20px;
+}
+
+.modal-content h3 { 
+    text-align: center;
+    text-transform: uppercase;
+    color: #393B3A;
+}
+
+.skills-levels-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.skills-levels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+}
+
+.modal-buttons button {
+    margin-left: 10px;
+}
+
+.modal-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #CDCACB;
+}
+
+textarea.modal-input {
+    height: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.skills-levels-container {
+    color: #7a7778;
+}
+
+.skills-levels {
+    font-size: 14px;
+}
+
+.skills-levels div {
+    display: flex;
+    align-items: center;
+}
+
+.skills-levels button {
+    border: 0;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 5px;
+    background-color: #D8DBDA;
+}
+
+.skills-levels button.active {
+    background: #BF0B20;
+}
+
+.button-cancel {
+    border: 0;
+    background: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.button-save {
+    background: #BF0B20;
+    border: 0;
+    color: #fff;
+    padding: 6px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.skills-data {
+    width: 100%;
+}
+
+.skills-data thead td {
+    background-color: #323939;
+    color: white;
+    text-align: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 8px;
+}
+
+.skills-data tbody td {
+    padding: 8px;
+    text-align: center;
+    background: white;
+}

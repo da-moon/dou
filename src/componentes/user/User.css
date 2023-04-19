@@ -1,0 +1,18 @@
+.user-container {
+    padding: 50px 20px 0;
+    color: #3A3A3B;
+    text-transform: uppercase;
+}
+
+.user-container h1 {
+    font-size: 24px;
+}
+
+.user-container p {
+    font-weight: bold;
+}
+
+.user-container span {
+    font-weight: 400;
+    opacity: .6;
+}

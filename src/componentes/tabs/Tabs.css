@@ -1,0 +1,21 @@
+.tabs-container {
+    display: flex;
+    padding: 20px 20px 0;
+}
+
+.tab-item {
+    padding: 8px 15px;
+    background: #CDCACB;
+    border: 0;
+    margin-right: 1px;
+    border-radius: 5px 5px 0 0;
+}
+
+.tab-item:hover {
+    background: #a9a7a8;
+}
+
+.tab-item.active {
+    background: #6F6F6F;
+    color: white;
+}
