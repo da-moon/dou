@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% block title %} <title>Sample Write/Read from database</title> {% endblock %}
+  <div class="jumbotron p-4 p-md-4 text-white rounded bg-dark">
+    <div class="col-md-17 px-0 text-center">
+      <h1 class="display-12">Sample Write/Read from database</h1>
+      <div class="container ">
+         <button class="btn btn-light text-blue"><a href="{% url 'main:helo_world'  %}">Main</a></button>
+         <button class="btn btn-light text-white"><a href="{% url 'els:readwrite' num %}">write</a></button>
+      </div>
+    </div>
+  </div>
+    <div class="row mb-1">
+        <div class="col-12 offset-0 col-lg-4 offset-lg-4 text-center px-5">
+        <div class="card mb-4 shadow-sm h-md-250">
+            <div class="card-body align-items-start text-center">
+            <h3 class="mb-0 text-center">
+                <a class="text-dark">{{ num }}</a>
+            </h3>
+            
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

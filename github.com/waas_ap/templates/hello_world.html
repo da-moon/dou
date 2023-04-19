@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% block title %} <title>Hello, world!</title> {% endblock %}
+
+<body id="page-top">
+    <div id="page-container" style="position:relative; min:100vh;">
+        <div id="content-wrap" style="padding-bottom:180px">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+                <div class="container">
+                    <a class="navbar-brand js-scroll-trigger" href="#page-top">WaaS</a>
+                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        Menu
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                            {% comment %} <li class="nav-item"><a class="nav-link js-scroll-trigger"
+                                    href="#projects">Projects</a></li>
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#signup">Contact</a></li>
+                            {% endcomment %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Masthead-->
+            <header class="masthead">
+                <div class="container d-flex h-100 align-items-center">
+                    <div class="mx-auto text-center">
+                        <h1 class="mx-auto my-0 text-uppercase" style="color:black">Hello World!</h1>
+
+                        <h2 class="text-white-50 mx-auto mt-2 mb-5">Demo of Workload as a Service (WaaS)</h2>
+                        <a class="btn btn-primary js-scroll-trigger" href="#about">Get Started</a>
+                    </div>
+                </div>
+            </header>
+            <!-- About-->
+            <section class="about-section text-center" id="about">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <h2 class="text-white mb-4">Built by DigitalOnUs</h2>
+                            <p class="text-white-50">
+                                This is a demo to show how to connect vault, consul, postgresql,
+                                rabbitmq, logstash and elastic search with this django application.
+                                The final purpose of this demo is to combine everything in a docker-compose file.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Programs-->
+            <section class="contact-section bg-black">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/djangoimg.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Django</h4>
+                                    <hr class="my-4" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/vaultIcon.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Vault</h4>
+                                    <hr class="my-4" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/consulImg.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Consul</h4>
+                                    <hr class="my-4" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 row-md-2 mb-3 mb-md-2">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/logstashImg.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Logstash</h4>
+                                    <hr class="my-4" />
+                                    <div class="small text-black-50"><span></span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 row-md-2 mb-3 mb-md-2">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/ElasticSearch.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Elasticsearch</h4>
+                                    <hr class="my-4" />
+                                    <div class="small text-black-50"><a href="{% url 'els:persons_list' %}">Find
+                                            really fast</a></div>
+                                    <div class="small text-black-50"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 row-md-2 mb-3 mb-md-2">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/rabbitmq.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Rabbitmq</h4>
+                                    <hr class="my-4" />
+                                    <div class="small text-black-50"><a
+                                            href="{% url 'rabbitmq:read_write_rabbit' %}">Send and load a message</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 row-md-2 mb-3 mb-md-2">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/postgresqlImg.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">PostgreSQL</h4>
+                                    <hr class="my-4" />
+                                    {% comment %}
+                                    <div class="small text-black-50">Interact with the database</div>
+                                    <div class="small text-black-50"><a href="{% url 'els:persons_list' %}">Interact
+                                            with the database</a></div>
+                                    {% endcomment %}
+                                    <div class="small text-black-50"><a href="{% url 'els:readwrite' %}">Write from
+                                            external data</a></div>
+                                    <div class="small text-black-50"><a href="{% url 'els:read' %}">Read from external
+                                            data</a></div>
+                                    {% comment %} <div class="small text-black-50"><a
+                                            href="{% url 'els:read' %}">current var: {{name}} value: {{num}}</a></div>
+                                    {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 row-md-2 mb-3 mb-md-2">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/dockerImg.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Docker</h4>
+                                    <hr class="my-4" />
+                                    <div class="small text-black-50"><a href="#!"></a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 row-md-2 mb-3 mb-md-2">
+                            <div class="card py-4 h-100">
+                                <div class="card-body text-center">
+                                    <img src="{% static 'imgs/spinnaker.png' %}" class="{{ classes }}" alt="..."
+                                        {{attrs}} width="150px;">
+                                    <h4 class="text-uppercase m-0">Spinnaker</h4>
+                                    <hr class="my-4" />
+                                    <div class="small text-black-50"><a href="#!"></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social d-flex justify-content-center">
+                        <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                        <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                        <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="footer bg-black small text-center text-white-50"
+            style="position: absolute; bottom: 0; width: 100%; height: 180px;">Copyright © Digital on Us 2020</footer>
+
+    </div>
+</body>
+{% endblock %}

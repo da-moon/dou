@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+  web:
+    build: .
+    restart: always
+    volumes: 
+        - .:/usr/local/waas_api
+    ports:
+        - 8000:8000
+    environment:
+        VAULT_TOKEN: root
+        CONSUL_TOKEN: 'aQGs8vpfZmCPmipJzplioPc0icCAAZchQGCkGiH8JSw='
+        KEYS_DIR: 'django_secrets'
+        VAULT_DEV_LISTEN_ADDRESS: vault
+        CONSUL_DEV_LISTEN_ADDRESS: consul
+    networks:
+        - setup-services_api
+
+networks:
+  setup-services_api:
+    external:
+      name: local-dev-services_default

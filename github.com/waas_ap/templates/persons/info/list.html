@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load persons_tags %}
+
+{% block content %}
+{% block title %} <title>People list</title> {% endblock %}
+  <div class="jumbotron p-4 p-md-4 text-white rounded bg-dark">
+    <div class="col-md-17 px-0 text-center">
+      <h1 class="display-12">People list</h1>
+      <div class="container ">
+         <button class="btn btn-light text-blue"><a href="{% url 'main:helo_world'  %}">Main</a></button>
+         <button class="btn btn-light text-white"><a href="{% url 'els:add_new_person'  %}">Add person</a></button>
+      </div>
+    </div>
+  </div>
+  {% for person in persons %}
+    <div class="row mb-1">
+        <div class="col-12 offset-0 col-lg-4 offset-lg-4 text-center px-5">
+        <div class="card mb-4 shadow-sm h-md-250">
+            <div class="card-body align-items-start text-center">
+            <h3 class="mb-0 text-center">
+                <a class="text-dark">{{ person.first_name }} {{ person.last_name }}</a>
+            </h3>
+            <p class="card-text mb-auto">{{ person.job_description|markdown|truncatewords_html:30 }}</p>
+            <div class="mb-1 text-muted text-center">
+                {% include "persons/info/person_profile_pic.html" with person=person attrs='width="100" height="100"' %}
+            </div>
+            <button class="btn btn-sm btn-primary text-white m-2 text-center" onclick="window.location.href='{{ person.get_edit_post_url }}'">Edit</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  {% endfor %}
+<div class="text-center" style="display: block ruby">{% include "persons/pagination.html" with page=persons %}</div>
+{% endblock %}

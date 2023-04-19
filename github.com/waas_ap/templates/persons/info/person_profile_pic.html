@@ -1,0 +1,7 @@
+{% load static %}
+{% if person.icon %}
+  {% comment %} <img src="{{ person.icon.url }}" class="{{ classes }}" alt="..."> {% endcomment %}
+    <img src="{% static 'imgs/default-user.png' %}" class="{{ classes }}" alt="..." {{attrs}}>
+{% else %}
+  <img src="{% static 'imgs/default-user.png' %}" class="{{ classes }}" alt="..." {{attrs}}>
+{% endif %}
