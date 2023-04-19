@@ -1,0 +1,23 @@
+[
+    {
+      "name": "${name}-container-${environment}",
+      "image": "${app_image}",
+      "cpu": 256,
+      "memory": 512,
+      "networkMode": "awsvpc",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "caas-ecs-logs",
+            "awslogs-region": "us-west-2",
+            "awslogs-stream-prefix": "caas-ecs"
+        }
+    }
+    }
+  ]

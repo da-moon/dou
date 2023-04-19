@@ -1,0 +1,23 @@
+#######
+# RDS #
+#######
+name                = "teamcenterplm-oracle"
+engine_type         = "oracle-ee"
+master_user         = "dbuser"
+master_password     = "dbpassword"
+run_env             = "dev"
+db_subnet_ids       = "na"
+enhanced_monitoring = "false"
+
+#######
+# AWS #
+#######
+AWS_ACCESS_KEY_ID     = ""
+AWS_SECRET_ACCESS_KEY = ""
+consul_tokens         = { encrypt_key = "VtLneVJIrITyVayEgCrmju13Q1VzP8AnAAxpKSyWYII=", acl_master_token = "aQGs8vpfZmCPmipJzplioPc0icCAAZchQGCkGiH8JSw=", acl_agent_token = "Qfz719bMVZeLMwxRV5iITskrePBb86wRMAA0x17KJ18=", acl_default_token = "L91ZHvNpPT5G0wC3KpJNThrwGQlrgnt5KFoX64w37BY=" }
+
+########
+# DEMO #
+########
+domain = "doutfetest.com"
+project_name      = "teamcenter"
