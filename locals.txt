@@ -1,0 +1,199 @@
+#################################################################
+#   HELPER IMPORTS                                              #
+#################################################################
+
+# import sys
+# sys.path.insert(1,'/home/azureuser/')
+# sys.path.insert(1,'/usr/local/airflow/')
+# from airflow.exceptions import AirflowException
+# from airflow import DAG
+# from airflow.operators.bash_operator import BashOperator
+# from datetime import datetime, timedelta
+# from airflow.operators.python_operator import PythonOperator
+# from libraries.operators import AzureDevOpsOperator
+# from libraries import helpers as my_helper
+# from airflow.models import Variable
+    
+# work_item_title = 'Sample task from Airflow DAG task'
+# work_item_tags = ["assurant", "ado", "airflow", "dou"]
+# g = globals()
+# body = []
+# for i in ['title','tags']:
+#     varname = "work_item_{}".format(i)
+#     body.append(add_body(g[varname], i))
+# print(convert_list_to_str(body))
+
+
+#################################################################
+#   LOCAL TESTING                                               #
+#################################################################
+
+WORK_ITEM_TITLE = 'Sample task from Airflow DAG task'
+WORK_ITEM_TAGS = ["assurant", "ado", "airflow", "dou"]
+
+# curl_body = '{title},{tags}'.format(title=my_helper.add_body(WORK_ITEM_TITLE),tags=my_helper.add_body(WORK_ITEM_TAGS))
+# "'+'{val}'.format(val=my_helper.convert_list_to_str_with_semicolon(WORK_ITEM_TAGS))+'"}]'
+# [y for y in [x[\'fields\'][0][] for x in obj[\'value\']]]
+# curl --silent -H "Accept: application/json" -H "Authorization: Basic OmZtcnd6M3JzN2dva3Q3cWFjZnMyd3NramdiYWRvbGczbnV3NHYyNXRmYmh1bWRjb3FicnE=" -H "Content-Type: application/json" -X GET 'https://dev.azure.com/leonardcastaneda/DOU-Assurant-Sandbox/_apis/wit/tags?api-version=6.0-preview.1'
+# curl --silent -H "Accept: application/json" -H "Authorization: Basic OmZtcnd6M3JzN2dva3Q3cWFjZnMyd3NramdiYWRvbGczbnV3NHYyNXRmYmh1bWRjb3FicnE=" -H "Content-Type: application/json" -X GET 'https://dev.azure.com/leonardcastaneda/DOU-Assurant-Sandbox/_apis/wit/tags?api-version=6.0-preview.1' | python -c "import sys, json; obj=json.load(sys.stdin);print(json.dumps([y for y in [x['name'] for x in obj['value']]]))"
+# curl --silent -H "Accept: application/json; api-version=6.0" -H "Authorization: Basic OmZtcnd6M3JzN2dva3Q3cWFjZnMyd3NramdiYWRvbGczbnV3NHYyNXRmYmh1bWRjb3FicnE=" -H "Content-Type: application/json-patch+json" -X POST --data '[{"op": "add","path": "/fields/System.Title","from": null,"value": "Sample task from Selmans Curl Command 2"},{"op": "add", "path": "/fields/System.Tags", "value": "ado; assurant; dou; airflow"}]' 'https://dev.azure.com/leonardcastaneda/DOU-Assurant-Sandbox/_apis/wit/workitems/$Task\?api-version\=6.0'
+
+    t5 = BashOperator(
+        task_id='ado_curl_create_work_item_1',
+        bash_command='curl --silent \
+            -H "Accept: application/json; \
+                        api-version=6.0" \
+            -H "Authorization: Basic {tokenBase64}" \
+            -H "Content-Type: application/json-patch+json" \
+            -X POST \
+            -d """{curlBody}""" \
+            https://dev.azure.com/{organizationName}/{teamProject}/_apis/wit/workitems/${workItemType}?api-version=6.0'.format(organizationName = ORGANIZATION_NAME.replace(" ", "%20"), tokenBase64 = token_base64, teamProject = TEAM_PROJECT.replace(" ", "%20"), curlBody=curl_body, workItemType=WORK_ITEM_TYPE.replace(" ", "%20")),
+    )
+    t6 = BashOperator(
+        task_id='ado_curl_create_work_item_2',
+        bash_command='curl --silent \
+            -H "Accept: application/json; \
+                        api-version=6.0" \
+            -H "Authorization: Basic {tokenBase64}" \
+            -H "Content-Type: application/json-patch+json" \
+            -X POST \
+            -d "{curlBody}" \
+            https://dev.azure.com/{organizationName}/{teamProject}/_apis/wit/workitems/${workItemType}?api-version=6.0'.format(organizationName = ORGANIZATION_NAME.replace(" ", "%20"), tokenBase64 = token_base64, teamProject = TEAM_PROJECT.replace(" ", "%20"), curlBody=curl_body, workItemType=WORK_ITEM_TYPE.replace(" ", "%20")),
+    )
+
+DOU_ADO_ACCESS_TOKEN
+fmrwz3rs7gokt7qacfs2wskjgbadolg3nuw4v25tfbhumdcoqbrq
+
+DOU_TEAMS_WEBHOOK_URL
+https://digitalonus01.webhook.office.com/webhookb2/c2d4961c-68b2-4186-b6db-efb35df520cf@c8cd0425-e7b7-4f3d-9215-7e5fa3f439e8/IncomingWebhook/9cb66fb11d2147d799efd64cebd195da/6044b3c9-e4c1-4105-9315-65b9bf6f6d84
+
+
+
+SELECT_ITEMS = ['[System.Title]', '[System.State]', '[System.AreaPath]', '[System.IterationPath]']
+FROM_ITEMS = "WorkItems"
+WHERE_ITEMS = "[System.TeamProject]='{teamProject}' AND [System.WorkItemType]='{workItemType}' AND [System.Tags] CONTAINS '{tags}'".format(teamProject = get_workspace.set_variables.TEAM_PROJECT, workItemType = get_workspace.set_variables.WORK_ITEM_TYPE, tags=get_workspace.set_variables.WORK_ITEM_TAGS[0])
+ORDER_BY_ITEMS = "[System.Id]"
+ORDER_TYPE = "ASC"
+full_query = my_helper.create_a_query(select_query=SELECT_ITEMS, from_query=FROM_ITEMS, where_query=WHERE_ITEMS, order_by_query=ORDER_BY_ITEMS, type_of_order=ORDER_TYPE)
+
+            project=get_workspace.set_variables.TEAM_PROJECT,
+            token=get_workspace.set_variables.ADO_TOKEN,
+            organization=get_workspace.set_variables.ORGANIZATION_NAME,
+            query=full_query,
+            target="wiql")
+
+    dag.trigger_arguments = {"customer_code": "string"} # these are the arguments we would like to trigger manually
+
+    def parse_job_args_fn(**kwargs):  
+        dag_run_conf = kwargs["dag_run"].conf #  here we get the parameters we specify when triggering
+        global vdc_onboarding_payload
+        vdc_onboarding_payload.update(dag_run_conf)
+        print(vdc_onboarding_payload)
+        return vdc_onboarding_payload
+        if dag_run_conf['application_name'] is not None:
+            kwargs["ti"].xcom_push(key="application_name", value=dag_run_conf["application_name"]) # push it as an airflow xcom
+        kwargs["ti"].xcom_push(key="service_principal", value=dag_run_conf["service_principal"])
+        kwargs["ti"].xcom_push(key="subscription_name", value=dag_run_conf["subscription_name"])
+        kwargs["ti"].xcom_push(key="environment", value=dag_run_conf["environment"])
+        kwargs["ti"].xcom_push(key="sdlc_envrionments", value=dag_run_conf["sdlc_envrionments"])
+        kwargs["ti"].xcom_push(key="tfe_workspace_prefix", value=dag_run_conf["tfe_workspace_prefix"])
+        kwargs["ti"].xcom_push(key="tfe_token_variable_group_name", value=dag_run_conf["tfe_token_variable_group_name"])
+        kwargs["ti"].xcom_push(key="ado_repo_name", value=dag_run_conf["ado_repo_name"])
+        kwargs["ti"].xcom_push(key="ado_project", value=dag_run_conf["ado_project"])
+        if dag_run_conf['solution_architect'] is not None:
+            kwargs["ti"].xcom_push(key="solution_architect", value=dag_run_conf["solution_architect"])
+        if dag_run_conf['application_architect'] is not None:
+            kwargs["ti"].xcom_push(key="application_architect", value=dag_run_conf["application_architect"])
+        if dag_run_conf['technical_leader'] is not None:
+            kwargs["ti"].xcom_push(key="technical_leader", value=dag_run_conf["technical_leader"])
+        kwargs["ti"].xcom_push(key="teamMembers", value=dag_run_conf["teamMembers"])
+        kwargs["ti"].xcom_push(key="owners", value=dag_run_conf["owners"])
+        print(parse_job_args_fn.dag_run_conf)
+        return dag_run_conf
+
+    parse_job_args_task = PythonOperator(  
+        task_id="parse_job_args_task",
+        python_callable=parse_job_args_fn,
+        provide_context=True
+    )
+
+
+
+########################################
+#      API Request for ADO             #
+########################################
+
+
+# TESTING PURPOSE
+tag = 'workloads_adoption'
+# for tag in tags:
+USERNAME = ""
+USER_PASS = USERNAME + ":" + get_workspace.set_variables.ADO_TOKEN
+B64USERPASS = base64.b64encode(USER_PASS.encode()).decode()
+
+ORGANIZATION_URL = 'https://dev.azure.com/{org_name}'.format(org_name=get_workspace.set_variables.ORGANIZATION_NAME.replace(" ", "%20"))
+RESOURCE_PATH = '/_apis/wit/wiql?api-version=6.0'
+# RESOURCE_PATH = '/_apis/projects?api-version=5.1'
+HEADERS = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic %s' % B64USERPASS
+}
+SELECT_ITEMS = ['[System.Title]', '[System.State]', '[System.AreaPath]', '[System.IterationPath]']
+FROM_ITEMS = "WorkItems"
+WHERE_ITEMS = "[System.TeamProject]='{teamProject}' AND [System.WorkItemType]='{workItemType}' AND [System.State]='New' AND [System.Tags] CONTAINS '{tags}'".format(teamProject = get_workspace.set_variables.TEAM_PROJECT.replace(" ", "%20"), workItemType = "Epic", tags=tag)
+ORDER_BY_ITEMS = "[System.Id]"
+ORDER_TYPE = "DESC"
+query = my_helper.create_a_query(select_query=SELECT_ITEMS, from_query=FROM_ITEMS, where_query=WHERE_ITEMS, order_by_query=ORDER_BY_ITEMS, type_of_order=ORDER_TYPE)
+my_data = """{{
+    "query": "{}"
+}}""".format(query)
+try:
+    ADO_RESPONSE = requests.post(
+        ORGANIZATION_URL + RESOURCE_PATH, headers=HEADERS, data=my_data)
+    # obj = json.load(ADO_RESPONSE.text)
+    # print(json.dumps(obj=obj))
+    r = ADO_RESPONSE.json()
+    for item in r['workItems']:
+        if 'id' in item:
+            oldest_work_item_id = item['id']
+            print(oldest_work_item_id)
+        Variable.set("OLDEST_WORK_ITEM", oldest_work_item_id)
+    if oldest_work_item_id is not None:
+        work_item_id_var_name = "WORK_ITEM_ID_{}".format(oldest_work_item_id)
+        work_item_id = Variable.get(work_item_id_var_name, default_var="0")
+
+        onboarding_type_var_name = "ONBOARDING_TYPE_{}".format(oldest_work_item_id)
+        onboarding_type = Variable.get(onboarding_type_var_name, default_var="default")
+
+        airflow_variable_list_to_delete.append(work_item_id_var_name)
+        airflow_variable_list_to_delete.append(onboarding_type_var_name)
+
+        if onboarding_type == "default" or work_item_id == "0" or onboarding_type is None or work_item_id is None:
+            pass
+        else:
+            # Set to none for testing development & demo purposes
+            cron_schedule = '@once'
+            dag_id = "EPIC-{work_item_id}-{onboarding_type}".format(work_item_id = work_item_id, onboarding_type = onboarding_type.replace("_", "-").upper())
+
+            dynamic_default_args = {
+                'owner': 'DOU-DevOps',
+                'start_date': datetime(2018, 1, 1),
+                # 'email': ['devops@digitalonus.com'],
+                # 'email_on_failure': True,
+                # 'email_on_retry': True,
+                'retries': 1,
+                'retry_delay': timedelta(minutes=1),
+            }
+
+            globals()[dag_id] = create_dag(
+                    dag_id=dag_id, 
+                    cron_schedule=cron_schedule, 
+                    default_args=dynamic_default_args,
+                    work_item_id=work_item_id,
+                    onboarding_type_var_name=onboarding_type_var_name,
+            )
+    # ADO_RESPONSE.raise_for_status()
+except requests.exceptions.HTTPError as err:
+    pp.pprint(err)
+
+

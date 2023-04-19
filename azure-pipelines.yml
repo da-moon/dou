@@ -1,0 +1,37 @@
+# File: azure-pipelines.yml
+trigger:
+- develop
+- model
+- master
+pool: 'BF-Agentpool-v2'
+steps:
+- checkout: self
+  persistCredentials: true
+- script: | 
+    echo Setting git identity for Azure Pipeline
+    git config --global user.email "pipeline@assurant.com"
+    git config --global user.name "pipeline"
+  displayName: 'Set Git Identity for Azure Pipeline'
+- script: |
+    wget https://aka.ms/downloadazcopy-v10-linux
+    tar -xvf downloadazcopy-v10-linux
+    sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+    sudo azcopy copy "$(DAGS_DIRECTORY)/*" "$(DEV_DAGS_BLOB_URL)/$(DEV_BLOB_SAS)"
+    sudo azcopy copy "$(LIBRARIES_DIRECTORY)/*" "$(DEV_LIBRARIES_BLOB_URL)/$(DEV_BLOB_SAS)"
+  displayName: 'Deploying to DEV Blob Storage'
+- script: |
+    wget https://aka.ms/downloadazcopy-v10-linux
+    tar -xvf downloadazcopy-v10-linux
+    sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+    sudo azcopy copy "$(DAGS_DIRECTORY)/*" "$(MODEL_DAGS_BLOB_URL)/$(MODEL_BLOB_SAS)"
+    sudo azcopy copy "$(LIBRARIES_DIRECTORY)/*" "$(MODEL_LIBRARIES_BLOB_URL)/$(MODEL_BLOB_SAS)"
+  displayName: 'Deploying to MODEL Blob Storage'
+- script: | 
+    echo Running version-tag.sh
+    chmod +x ./scripts/version-tag.sh
+    export VERSION=`./scripts/version-tag.sh`
+    git tag -a $VERSION -m "version: $VERSION"
+  displayName: 'Run Version Bump Script'
+- script: |
+    git push --tags    
+  displayName: 'Push Version Bump Tag to Repo'

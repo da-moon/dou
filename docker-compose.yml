@@ -1,0 +1,136 @@
+version: '3.7'
+services:
+    redis:
+        image: redis:3.2.7
+        ports:
+            - "6379:6379"
+    postgres:
+        build: "docker/postgres"
+        restart: always
+        ports:
+            - "32769:5432"
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        logging:
+            options:
+                max-size: 10m
+                max-file: "3"
+    adminer:
+        image: wodby/adminer:latest
+        restart: always
+        container_name: adminer
+        ports:
+            - "32767:9000"
+        environment:
+            - ADMINER_DEFAULT_DB_DRIVER=psql
+            - ADMINER_DEFAULT_DB_HOST=postgres
+            - ADMINER_DEFAULT_DB_NAME=airflow_db
+        healthcheck:
+            test: ["CMD", "nc", "-z", "adminer", "9000"]
+            timeout: 45s
+            interval: 10s
+            retries: 10
+        
+
+    webserver:
+        image: airflow:v1
+        restart: always
+        depends_on:
+            - postgres
+            - redis
+        environment:
+            - LOAD_EX=n
+            - AIRFLOW_VAR_WORKSPACE=dou
+            - DOU_ADO_ACCESS_TOKEN=fmrwz3rs7gokt7qacfs2wskjgbadolg3nuw4v25tfbhumdcoqbrq
+            - DOU_TEAMS_WEBHOOK_URL=https://digitalonus01.webhook.office.com/webhookb2/c2d4961c-68b2-4186-b6db-efb35df520cf@c8cd0425-e7b7-4f3d-9215-7e5fa3f439e8/IncomingWebhook/9cb66fb11d2147d799efd64cebd195da/6044b3c9-e4c1-4105-9315-65b9bf6f6d84
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+            - AIRFLOW__CORE__FERNET_KEY="BAMmZeZuRQXUIgOIFqlPbn8uUeH1Fw4f06Cw0HgxVSw=" # Local dev only. Will change in production
+            - AIRFLOW__SMTP__SMTP_HOST=smtp-mail.outlook.com
+            - AIRFLOW__SMTP__SMTP_STARTTLS=True
+            - AIRFLOW__SMTP__SMTP_USER=email@assurant.com
+            - AIRFLOW__SMTP__SMTP_PASSWORD=pass
+            - AIRFLOW__SMTP__SMTP_PORT=587
+            - AIRFLOW__SMTP__SMTP_MAIL_FROM=email@assurant.com
+            - EXECUTOR=Celery
+        logging:
+            options:
+                max-size: 10m
+                max-file: "3"
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            - ./libraries:/usr/local/airflow/libraries
+        ports:
+            - "8080:8080"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+
+    scheduler:
+        image: airflow:v1
+        restart: always
+        depends_on:
+            - redis
+            - webserver
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            - ./libraries:/usr/local/airflow/libraries
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        environment:
+            - LOAD_EX=n
+            - FERNET_KEY=BAMmZeZuRQXUIgOIFqlPbn8uUeH1Fw4f06Cw0HgxVSw=
+            - EXECUTOR=Celery
+            - AIRFLOW_VAR_WORKSPACE=dou
+            - DOU_ADO_ACCESS_TOKEN=fmrwz3rs7gokt7qacfs2wskjgbadolg3nuw4v25tfbhumdcoqbrq
+            - DOU_TEAMS_WEBHOOK_URL=https://digitalonus01.webhook.office.com/webhookb2/c2d4961c-68b2-4186-b6db-efb35df520cf@c8cd0425-e7b7-4f3d-9215-7e5fa3f439e8/IncomingWebhook/9cb66fb11d2147d799efd64cebd195da/6044b3c9-e4c1-4105-9315-65b9bf6f6d84
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        command: scheduler
+
+    flower:
+        image: airflow:v1
+        restart: always
+        depends_on:
+            - redis
+        environment:
+            - AIRFLOW_VAR_WORKSPACE=dou
+            - EXECUTOR=Celery
+            - FERNET_KEY="BAMmZeZuRQXUIgOIFqlPbn8uUeH1Fw4f06Cw0HgxVSw="
+            - DOU_ADO_ACCESS_TOKEN=fmrwz3rs7gokt7qacfs2wskjgbadolg3nuw4v25tfbhumdcoqbrq
+            - AIRFLOW_CONN_POSTGRES_MASTER=postgres://airflow:airflow@localhost:5432/airflow
+            - DOU_TEAMS_WEBHOOK_URL=https://digitalonus01.webhook.office.com/webhookb2/c2d4961c-68b2-4186-b6db-efb35df520cf@c8cd0425-e7b7-4f3d-9215-7e5fa3f439e8/IncomingWebhook/9cb66fb11d2147d799efd64cebd195da/6044b3c9-e4c1-4105-9315-65b9bf6f6d84
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        ports:
+            - "5555:5555"
+        command: flower
+    worker:
+        image: airflow:v1
+        restart: always
+        depends_on:
+            - webserver
+            - redis
+        command: worker
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            - ./libraries:/usr/local/airflow/libraries
+        environment:
+            - AIRFLOW_VAR_WORKSPACE=dou
+            - FERNET_KEY="BAMmZeZuRQXUIgOIFqlPbn8uUeH1Fw4f06Cw0HgxVSw="
+            - EXECUTOR=Celery
+            - DOU_ADO_ACCESS_TOKEN=fmrwz3rs7gokt7qacfs2wskjgbadolg3nuw4v25tfbhumdcoqbrq
+            - AIRFLOW_CONN_POSTGRES_MASTER=postgres://airflow:airflow@localhost:5432/airflow
+            - DOU_TEAMS_WEBHOOK_URL=https://digitalonus01.webhook.office.com/webhookb2/c2d4961c-68b2-4186-b6db-efb35df520cf@c8cd0425-e7b7-4f3d-9215-7e5fa3f439e8/IncomingWebhook/9cb66fb11d2147d799efd64cebd195da/6044b3c9-e4c1-4105-9315-65b9bf6f6d84
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        

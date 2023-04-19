@@ -1,0 +1,29 @@
+vdc_onboarding_payload = {
+    "application_name" : "Example Application Name",
+    "service_principal" : "Service Principal",
+    "subscription_name" : "Subscription Name",
+    "environment" : "Development",
+    "sdlc_envrionments" : ["dev", "model", "prod"],
+    "tfe_workspace_prefix" : "TFE Workspace Prefix",
+    "tfe_token_variable_group_name" : "TFE Token Variable Group",
+    "ado_repo_name" : "ADP-Repo-Name",
+    "ado_project" : "ADO-Project-Name",
+    "solution_architect" : "Solution Architect Name",
+    "application_architect" : "Application Architect Name",
+    "technical_leader" : "Technical Leader Name",
+    "team_members" : ["Member 1", "Member 2", "Member 3"],
+    "owners" : { 
+        "Orchestration Team" : "Nagesh Polturi",    
+        "Worksloads Team" : "Nagesh Polturi",       
+        "IAM/Compliance Team" : "Nagesh Polturi",  
+        "Network Team" : "Nagesh Polturi",         
+        "Observability Team" : "Nagesh Polturi",  
+        "App Team" : "Nagesh Polturi",           
+        "IAC Team" : "Nagesh Polturi",              
+        "CEP Team" : "Nagesh Polturi",               
+        "ServiceNow Team" : "Nagesh Polturi"
+    }
+}
+
+print(vdc_onboarding_payload)
+
