@@ -1,0 +1,44 @@
+*
+!*/
+#  ────────────────────────────────────────────────────────────────────
+!/contrib/**
+!/fixtures/**
+!/assets/**
+!/test/**
+!/docs/**
+!/examples/**
+#  ────────────────────────────────────────────────────────────────────
+!/**/.gitkeep
+#  ────────────────────────────────────────────────────────────────────
+!/.cspell/*.txt
+!/.vscode/**
+!/.devcontainer/**
+!/.github/CODEOWNERS
+!/.github/ISSUE_TEMPLATE/*.md
+!/.github/dependabot.yml
+!/.github/workflows/**
+#  ────────────────────────────────────────────────────────────────────
+!/.editorconfig
+!/.gitignore
+!/.dockerignore
+!/cspell.config.yaml
+!/.markdownlintignore
+!/.stignore
+!/.versionrc
+!/.pre-commit-config.yaml
+!/LICENSE
+!/README.md
+!/commitlint.config.js
+!/Justfile
+!/Makefile
+!/Vagrantfile
+!/docker-bake.hcl
+!/CONTRIBUTING.md
+!/CHANGELOG.md
+
+#  ────────────────────────────────────────────────────────────────────
+!/.tool-versions
+!/*.tf
+!/.github-labels.json
+.terraform.lock.hcl
+**/.terraform/*
