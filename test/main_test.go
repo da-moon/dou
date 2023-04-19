@@ -1,0 +1,67 @@
+package test
+
+import (
+	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/iam"
+
+	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
+)
+
+func TestMain(t *testing.T) {
+	t.Parallel()
+
+	directory := "./"
+
+	test_structure.RunTestStage(t, "SETUP", func() {
+		terraformOption := &terraform.Options{
+			TerraformDir: directory,
+		}
+		test_structure.SaveTerraformOptions(t, directory, terraformOption)
+		terraform.InitAndApply(t, terraformOption)
+	})
+
+	defer test_structure.RunTestStage(t, "TEARDOWN", func() {
+		terraformOption := test_structure.LoadTerraformOptions(t, directory)
+		terraform.Destroy(t, terraformOption)
+	})
+
+	test_structure.RunTestStage(t, "INTERNAL_TESTS", func() {
+		terraformOption := test_structure.LoadTerraformOptions(t, directory)
+
+		roleName := terraform.Output(t, terraformOption, "role_name")
+
+		t.Run("TestCreation", func(t *testing.T) {
+			roleCreationTest(t, roleName)
+		})
+	})
+}
+
+func roleCreationTest(t *testing.T, roleName string) {
+	t.Log("Confirm the IAM role is created")
+
+	sess, err := getAuthorizer(t)
+	if err != nil {
+		t.Error("ERROR: ", err)
+	} else {
+		svc := iam.New(sess)
+		result, err := svc.GetRole(&iam.GetRoleInput{RoleName: aws.String(roleName)})
+
+		if err != nil {
+			t.Errorf("FAIL: The role was not created, error: %s", err)
+		} else {
+			t.Logf("OK: The role was created: %s", *result.Role.Arn)
+		}
+	}
+}
+
+func getAuthorizer(t *testing.T) (*session.Session, error) {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-west-2")},
+	)
+	return sess, err
+}
