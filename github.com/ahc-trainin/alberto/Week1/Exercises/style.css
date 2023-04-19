@@ -1,0 +1,25 @@
+table {
+    font-family:monospace;
+    border-collapse: collapse;
+    width: 60%;
+}
+th,td{
+    border:1px solid;
+    text-align: center;
+    padding: 1rem;
+}
+th{
+    color: dimgray;
+}
+tr:nth-child(even){
+    background-color: darkgray;
+}
+h1{
+    font-size:xx-small;
+}
+h6{
+    font-size:xx-large;
+}
+body{
+    align-content: center;
+}

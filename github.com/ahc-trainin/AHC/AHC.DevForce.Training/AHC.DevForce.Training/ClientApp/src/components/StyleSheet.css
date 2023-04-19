@@ -1,0 +1,23 @@
+.content {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.header h1 {
+    text-align: center;
+}
+
+.header p {
+    text-align: center;
+    color: gray
+}
+
+.tablePatients {
+    text-align: left;
+}
+
+.tablePatients table thead th {
+    border-top: none;
+    border-bottom: 2px solid black;
+}

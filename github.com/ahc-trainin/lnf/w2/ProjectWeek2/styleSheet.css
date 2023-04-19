@@ -1,0 +1,33 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.contentFirstHalf {
+    background-color: gainsboro;
+    padding: 5%;
+} 
+
+.dataList {
+    width: 35%;
+}
+
+.contentSecondHalf {
+    background-color: white;
+    padding: 5%;
+}
+
+footer {
+    padding: 5%;
+}
+
+footer p {
+    padding-top: 2%;
+    width: 100%;
+    border-top: 1px solid lightgray ;
+}

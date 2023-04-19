@@ -1,0 +1,32 @@
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.addScreen {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.addCard {
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    padding: 50px;
+    background-color: #f1f1f1;
+    width: 60%;
+    height: 80%;
+}
+
+.formButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}

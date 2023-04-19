@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Project Week 3</title>
+</head>
+
+<body>
+    <header>
+        <div class="content">
+            <div class="navBar">
+                <img src="../imgs/Logo.png" alt="Logo">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#project">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </nav>
+    </header>
+    <section>
+        <div class="carousel">
+            <img src="../imgs/BR.png" id="BR" alt="BR Architecture" />
+        </div>
+
+        <div class="projects">
+            <div class="subTitle">
+                <h2 id="project"> Projects </h2>
+            </div>
+            <div class="firstHalf">
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Summer House.jpeg" alt="Summer House" />
+                    <p>Summer House</p>
+                </div>
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Brick House.jpeg" alt="Brick House" />
+                    <p>Brick House</p>
+                </div>
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Renovated.jpg" alt="Renovated" />
+                    <p>Renovated House</p>
+                </div>
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Barn House.jpg" alt="Barn House" />
+                    <p>Barn House</p>
+                </div>
+            </div>
+            <div class="secondHalf">
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Brick House.jpeg" alt="Brick House" />
+                    <p>Brick House</p>
+                </div>
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Summer House.jpeg" alt="Summer House" />
+                    <p>Summer House</p>
+                </div>
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Barn House.jpg" alt="Barn House" />
+                    <p>Barn House</p>
+                </div>
+                <div class="img">
+                    <img onclick="changeIt(this.src)" src="../imgs/Renovated.jpg" alt="Renovated" />
+                    <p>Renovated House</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="about">
+            <div class="subTitle">
+                <h2 id="about"> About </h2>
+            </div>
+            <p>Lorem ipsum dolor sit amet consectetur adipiscing, elit eu accumsan sed ridiculus tempus parturient,
+                felis libero aliquet fermentum auctor. Proin parturient gravida mattis eros sollicitudin bibendum
+                vivamus cubilia, nunc in sapien at eget interdum blandit, ultrices pellentesque orci venenatis
+                conubia commodo libero. Felis magna cras taciti porta lectus tempus natoque netus eu, purus fames
+                porttitor nascetur sodales dapibus laoreet non, malesuada tristique parturient dis quisque dictum
+                volutpat interdum. Feugiat habitasse senectus ullamcorper metus risus convallis rutrum est cursus
+                class, aptent tristique morbi ut etiam pretium vivamus commodo nascetur auctor, in sed dignissim nec
+                blandit eget magnis donec malesuada.</p>
+            <div class="cards">
+                <div class="cardStaff">
+                    <img src="../imgs/John Doe.jpg" alt="John Doe" />
+                    <div class="cardContent">
+                        <h5>John Doe</h5>
+                        <h6>CEO & Founder</h6>
+                        <p>qui dolorem ipsum, quia dolor sit amet consectetur adipisci velit, sed
+                            quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat
+                            voluptatem</p>
+                    </div>
+                    <button type="button">Contact</button>
+                </div>
+                <div class="cardStaff">
+                    <img src="../imgs/Jane Doe.jpg" alt="Jane Doe" />
+                    <div class="cardContent">
+                        <h5>Jane Doe</h5>
+                        <h6>Architect</h6>
+                        <p>qui dolorem ipsum, quia dolor sit amet consectetur adipisci velit, sed
+                            quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat
+                            voluptatem</p>
+                    </div>
+                    <button type="button">Contact</button>
+                </div>
+                <div class="cardStaff">
+                    <img src="../imgs/Mike Ross.jpg" alt="Mike Ross" />
+                    <div class="cardContent">
+                        <h5>Mike Ross</h5>
+                        <h6>Architect</h6>
+                        <p>qui dolorem ipsum, quia dolor sit amet consectetur adipisci velit, sed
+                            quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat
+                            voluptatem</p>
+                    </div>
+                    <button type="button">Contact</button>
+                </div>
+                <div class="cardStaff">
+                    <img src="../imgs/Dan Start .jpg" alt="Dan star" />
+                    <div class="cardContent">
+                        <h5>Dan Star</h5>
+                        <h6>Architect</h6>
+                        <p>qui dolorem ipsum, quia dolor sit amet consectetur adipisci velit, sed
+                            quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat
+                            voluptatem</p>
+                    </div>
+                    <button type="button">Contact</button>
+                </div>
+            </div>
+
+            <div class="contact">
+                <div class="subTitle">
+                    <h2 id="contact"> Contact </h2>
+                </div>
+                <p>Lets get in touch and talk about your next project.</p>
+                <form>
+                    <input required type="text" id="fullname" name="full_name" placeholder="Full Name">
+                    <input required type="email" id="email" name="email" placeholder="Email">
+                    <input required type="text" id="subject" name="subject" placeholder="Subject">
+                    <input required type="text" id="" name="comment" placeholder="Comment">
+                    <button type="submit">SEND MESSAGE</button>
+                </form>
+    </section>
+    </div>
+
+    <script>
+        function changeIt(src) {
+            document.querySelector("#BR").src = src;
+        }
+    </script>
+
+</body>
+
+</html>

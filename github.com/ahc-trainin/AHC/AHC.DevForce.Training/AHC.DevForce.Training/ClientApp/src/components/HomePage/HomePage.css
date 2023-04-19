@@ -1,0 +1,95 @@
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.homepageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.homepageHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo img {
+    height: 100px;
+    width: 100px;
+    margin: 5px;
+  }
+
+.logo h1 {
+    color: #1571ff;
+    font-weight: bold;
+    font-size: 100px;
+}
+
+.slogan span {
+    color: black;
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.events {
+    display: flex;
+    flex-direction: row;
+  }
+
+.events img {
+    height: 500px;
+    width: 800px;
+    margin: 5px;
+}
+
+
+.socialMedia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.socialMedia {
+    margin-top: 20px;
+}
+
+.followUs {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 20px;
+}
+
+.socialMediaLinks {
+    display: flex;
+    flex-direction: row;
+}
+
+.links {
+    margin: 20px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.footerInfo {
+    font-style: italic;
+}
+
+

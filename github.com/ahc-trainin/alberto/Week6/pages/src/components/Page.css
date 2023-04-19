@@ -1,0 +1,26 @@
+.Page{
+    display: flex;
+    flex-direction: column;
+    background-color: lightskyblue;
+    width: 50vw;
+    height: 100vh;
+}
+
+.Main{
+    width: 50vw;
+    height: 70vh;
+    background-color: moccasin;
+}
+
+.Footer{
+    width: 50vw;
+    height: 30vh;
+    background-color: lightgrey;
+}
+
+.numPage{
+    position:inherit;
+    
+    bottom: 10px;
+    
+}

@@ -1,0 +1,46 @@
+html, body {
+  height: 100%;
+}
+body {
+  padding: 40px;
+}
+.calculator {
+  display: flex;
+  flex-wrap: wrap;
+  width: 700px;
+  max-width: 700px;
+  background: #ddd;
+}
+.calc-button {
+  width: 125px;
+  height: 80px;
+  flex: 0 1 auto;
+}
+#left-subsection {
+  display: flex;
+  flex-direction: column;
+  flex: 3;
+  width: 500px;
+  max-width: 500px;
+}
+#right-subsection {
+  flex: 1;
+  width: 200px;
+}
+.last-operation {
+  flex: 0 1 auto;
+  align-self: flex-end;
+  height: 20px;
+  font-size: 14px;
+  padding-right: 10px;
+}
+.result-view {
+  font-size: 36px;
+  flex: 0 1 auto;
+  align-self: flex-end;
+  padding-right: 10px;
+}
+.history-container {
+  flex: 0 1 auto;
+  align-self: flex-end;
+}

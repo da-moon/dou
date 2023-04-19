@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+}
+
+
+.header{
+    background-color:mediumseagreen;
+    width: 100%;
+    height: 5rem;
+}
+
+.aside{
+    background-color: powderblue;
+    margin: 1rem;
+}
+
+.container {
+    display: flex; 
+    width: 100%; 
+    height: 43rem;
+    background-color: palevioletred;
+    margin-top: 1rem;
+}
+
+[class*="as-"] {
+    width: 100%;
+    height: 40rem;
+}
+
+@media only screen and (min-width: 500px){
+    .as-s { width: 100%; height: 5rem;}
+}
+
+@media only screen and (min-width: 768px) {
+    .as-c {height: 40rem; width: 33%;}
+  }

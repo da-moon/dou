@@ -1,0 +1,46 @@
+.container-box{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.header{
+    background-color:#45b572;
+    width: 100%;
+    height: 80px;
+}
+
+.left{
+    display: flex;
+    flex-flow: column wrap;
+    border: 16px solid #f25e89;
+    flex: 4;
+    margin: 16px;
+    justify-content: space-between;
+}
+.head{
+    background-color:#5bcec3;
+    width: 100%;
+    flex: 1;
+   
+}
+
+.body-box{
+    background-color: #34c1f9 ;
+    width: 100%;
+    flex: 4;
+}
+
+.center {
+    background-color: #ffc76e;
+    flex: 4;
+    height: 704px;
+    margin: 16px;
+}
+
+.right{
+    background-color: #828fe8;
+    flex: 4;
+    height:704px;
+    margin: 16px;
+}

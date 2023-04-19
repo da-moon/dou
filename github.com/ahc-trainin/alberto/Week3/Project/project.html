@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>Dom manipulation</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="./images/icon.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+                Architects
+            </a>
+            <ul class="navbar-nav d-flex flex-row">
+                <li class="nav-item p-1">
+                <a class="nav-link active" aria-current="page" href="#">Projects</a>
+                </li>
+                <li class="nav-item p-1">
+                <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item p-1">
+                <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+      </nav>
+    <div class="d-flex flex-column bd-highlight mb-2 .bg-light">
+        <div id="Projects" class="p-2 mb-2 bg-white text-dark">
+            <div class="w-75 container-md">
+                <br>
+                <div class="shadow p-3 mb-5 bg-body rounded d-inline-flex mb-3 flex-column bd-highlight justify-content-start">
+                    <img id="carousel" class="img-fluid" alt="...">
+                </div>
+            </div>
+        </div>
+        <div class="p-3 mb-2 bg-white text-dark">
+            <div id="About" class="w-75 container-md">
+                <h1 class="display-6 border-bottom">Projects</h1>
+                <br>
+                <div class="row justify-content-around">
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/1.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/2.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/3.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/4.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/5.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/6.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/7.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="p-1 col-sm-3">
+                        <img src="./images/8.jpeg" class="img-thumbnail" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-3 mb-2 bg-white text-dark">
+            <div id="Contact" class="w-75 container-md">
+                <h1 class="display-6 border-bottom">About</h1>
+                <br>
+                <p class="lh-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur condimentum imperdiet mauris eget condimentum. Morbi malesuada nisi ut augue placerat pretium. Mauris efficitur feugiat est sit amet iaculis. Vestibulum pretium tristique diam, sagittis consectetur neque. Praesent gravida purus non mollis pretium. </p>
+                <div class="row justify-content-around">
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <img src="./images/pp1.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                              <h5 class="card-title">John Doe</h5>
+                              <h6 class="card-subtitle mb-2 text-muted">CEO & founder</h6>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <div class="d-grid gap-2">
+                                <button class="btn btn-secondary" type="button">Contact</button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <img src="./images/pp2.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Mike Ross</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Architect</h6>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <div class="d-grid gap-2">
+                                <button class="btn btn-secondary" type="button">Contact</button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <img src="./images/pp3.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Jane Doe</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Architect</h6>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <div class="d-grid gap-2">
+                                <button class="btn btn-secondary" type="button">Contact</button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <img src="./images/pp4.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                              <h5 class="card-title">Daniel star</h5>
+                              <h6 class="card-subtitle mb-2 text-muted">Architect</h6>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <div class="d-grid gap-2">
+                                <button class="btn btn-secondary" type="button">Contact</button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-3 mb-2 bg-white text-dark">
+            <div id="Contact" class="w-75 container-md">
+                <h1 class="display-6 border-bottom">Contact</h1>
+                <br>
+                <p class="lh-sm">Let's get in touch and talk about our next projects</p>
+                <form id="dataForm">
+                    <div class="mb-3">
+                        <input type="text" placeholder="Name" class="form-control" id="nameInput" aria-describedby="nameHelp">
+                    </div>
+                    <div class="mb-3">
+                      <input type="email" placeholder="example@email.com" class="form-control" id="emailInput" aria-describedby="emailHelp">
+                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Subject" class="form-control" id="subjectInput" aria-describedby="subjectHelp">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Comment" class="form-control" id="commentInput" aria-describedby="commentHelp">
+                    </div>
+                </form>
+                <button id="submitButton" class="btn btn-secondary">Submit</button>
+            </div>
+        </div>
+        <div class="p-3 mb-2 bg-white text-dark">
+            <div class="w-75 container-md">
+                <div id="comments" class="row justify-content-around">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="./dom.js"></script>
+</body>
+</html>
