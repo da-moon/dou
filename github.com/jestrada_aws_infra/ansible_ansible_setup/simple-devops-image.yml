@@ -1,0 +1,18 @@
+---
+ - hosts: all
+
+   tasks:
+   - name: create docker image using war file
+     command: docker build -t simple-devops-image:latest .
+     args:
+       chdir: /opt/kubernetees
+
+   - name: create tag to image
+     command: docker tag simple-devops-image nergalgreed/simple-devops-image
+
+   - name: push image on to dockerhub
+     command: docker push nergalgreed/simple-devops-image
+
+   - name: remove docker images form ansible server
+     command: docker rmi simple-devops-image:latest nergalgreed/simple-devops-image
+     ignore_errors: yes

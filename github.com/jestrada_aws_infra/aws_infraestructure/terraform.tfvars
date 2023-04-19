@@ -1,0 +1,5 @@
+project_name  = "DevOps course"
+vpc_id        = "vpc-23c68059"
+instance_type = "t2.micro"
+avz           = "us-east-1a"
+vpc_cidr      = "10.0.0.0/16"
