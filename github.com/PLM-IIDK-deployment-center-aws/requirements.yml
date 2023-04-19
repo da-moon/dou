@@ -1,0 +1,24 @@
+---
+- src: https://github.com/ryandaniels/ansible-role-create-users.git
+  scm: git
+  version: master
+
+- src: https://github.com/geerlingguy/ansible-role-java.git
+  scm: git
+  version: master
+
+- src: https://github.com/geerlingguy/ansible-role-nodejs.git
+  scm: git
+  version: master
+
+- src: https://github.com/geerlingguy/ansible-role-repo-epel.git
+  scm: git
+  version: master
+
+- src: https://github.com/geerlingguy/ansible-role-pip.git
+  scm: git
+  version: master
+
+- src: https://github.com/brentwg/ansible-role-packages.git
+  scm: git
+  version: master
