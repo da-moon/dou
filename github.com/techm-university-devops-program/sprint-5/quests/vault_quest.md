@@ -1,0 +1,19 @@
+## Vault Quest 🔒
+- What is Vault? 
+- What are Auth Methods?
+- When you enable Auth Methods. Which prefix is used to mount them?
+- You can customize the mount path when you are enabling Auth Methods. Is this true, if so, why?
+- When an auth method is disabled, what happens to all the users authenticated via that method?
+- One ability of root token is to create new tokens. Is this true?
+- What is the command to create a token?
+- How do you log in with the token you created?
+- When you revoke the token what happens to all the tokens it created?
+- How do you enable the GitHub Auth Method?
+- What is the command to list all the authentication methods that Vault has enabled?
+- What is the AppRole Auth method is used for?
+- When enable authrole what are the two ids that apps use to log in?
+- What are Policies?
+- Can you explain the Policy Syntax?
+- What are templated policies?
+- What is the root policy?
+- What is the default policy?
