@@ -1,0 +1,1 @@
+# dinghyfile-example

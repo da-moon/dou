@@ -1,0 +1,45 @@
+{
+  "application": "hello-world",
+  "pipelines": [
+    {
+      "application": "hello-world",
+      "name": "dinghyfile controlled pipeline",
+      "keepWaitingPipelines": false,
+      "lastModifiedBy": "anonymous",
+      "limitConcurrent": true,
+      "spelEvaluator": "v4",
+      "stages": [
+        {
+          "name": "wait",
+          "refId": "1",
+          "requisiteStageRefIds": [],
+          "type": "wait",
+          "waitTime": 5
+        },
+        {
+          "failPipeline": true,
+          "isNew": true,
+          "judgmentInputs": [],
+          "name": "Manual Judgment",
+          "notifications": [],
+          "refId": "2",
+          "requisiteStageRefIds": [
+            "1"
+          ],
+          "type": "manualJudgment"
+        },
+        {
+          "isNew": true,
+          "name": "Wait",
+          "refId": "3",
+          "requisiteStageRefIds": [
+            "2"
+          ],
+          "type": "wait",
+          "waitTime": 5
+        }
+      ],
+      "triggers": []
+    }
+  ]
+}
