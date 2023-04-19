@@ -1,0 +1,14 @@
+.DS_Store
+.terraform
+terraform.auto.tfvars
+.terraform.lock.hcl
+lsf.auto.tfvars
+creds.sh
+terraform.tfstate
+terraform.tfstate.backup
+env.auto.tfvars
+ec2.auto.tfvars
+variables.pkrvars.hcl
+build.log
+fsx_openzfs_dns_name
+packer_manifest.json
