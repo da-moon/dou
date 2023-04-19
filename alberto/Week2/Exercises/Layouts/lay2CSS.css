@@ -1,0 +1,45 @@
+.box{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.header{
+    background-color:seagreen;
+    width: 98%;
+    height: 5rem;
+}
+
+.left{
+    display: flex;
+    flex-flow: column wrap;
+    border: 1em solid palevioletred;
+    flex: 4;
+    margin: 1em;
+}
+.head{
+    background-color:mediumaquamarine;
+    width: 100%;
+    flex: 3;
+    border-bottom: 1em solid palevioletred;
+}
+
+.down{
+    background-color:lightskyblue ;
+    width: 100%;
+    flex: 9;
+}
+
+.center {
+    background-color: orange;
+    flex: 4;
+    height: 44em;
+    margin: 1em;
+}
+
+.right{
+    background-color:mediumpurple;
+    flex: 4;
+    height: 44em;
+    margin: 1em;
+}

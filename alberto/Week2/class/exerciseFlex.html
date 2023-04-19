@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .root{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .space{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            width: 100%;
+            height: 30%;
+            background-color: purple ;
+        }
+        
+        .box{
+            background-color: orange;
+            height: 80%;
+            width: 20%;
+            margin: 1em;
+        }
+
+        .box2{
+            background-color: orange;
+            height: 80%;
+            width: 40%;
+            margin: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="root">
+        <div class="space">
+            <div class="box"></div>
+            <div class="box2"></div>
+            <div class="box"></div>
+        </div>
+
+        <div class="space">
+            <div class="box"></div>
+            <div class="box2"></div>
+            <div class="box"></div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+.App {
+  background-color: #414A50;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.appBody {
+  color: white;
+  height: 500px;
+  width: 700px;
+  border: 1px solid white;
+  border-radius: 3px;
+}
+
+.appHeader {
+  font-size: 50px;
+  text-align: center;
+  text-decoration:underline 3px;
+}
+
+.appContent {
+  font-size: 20px;
+  text-align:left;
+}
+
+label {
+  margin-left: 130px;
+}
+
+input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+}
+
+.alertValidation{
+  color: red;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 130px;
+}
+
+.buttonStyle {
+  color: transparents;
+  font-weight: bold;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 3px;
+  height: 30px;
+  width: 60px;
+  margin-left: 500px;
+}

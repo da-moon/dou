@@ -1,0 +1,61 @@
+html, body {
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.content {
+    height: 100%;
+}
+
+.headline {
+    height: 15%;
+    padding: 10px;
+}
+
+.greenHeadline {
+    background-color:limegreen;
+    height: 100%;
+}
+
+.mainSection {
+    display: flex;
+    height: 85%;
+    padding: 10px;
+}
+
+.pinkColumn {
+    background-color: deeppink;
+    height: calc(100% - 10px);
+    margin-right: 20px;
+    flex: 1;
+ 
+}
+
+.turquoiseSection {
+    background-color:darkturquoise;
+    height: 20%;
+    margin: 20px;
+    
+}
+
+.blueSection {
+    background-color: deepskyblue;
+    height: 70%;
+    margin: 20px;
+}
+
+.orangeColumn {
+    background-color:orange;
+    height: calc(100% - 10px);
+    margin-right: 20px;
+    flex: 1;
+}
+
+.purpleColumn {
+    background-color: blueviolet;
+    height: calc(100% - 10px);
+    flex: 1;
+}

@@ -1,0 +1,12 @@
+{
+  "name": "w4",
+  "version": "1.0.0",
+  "description": "## AHC Training Week 4",
+  "main": "index.js",
+  "scripts": {
+		"dev": "echo 'Hello world!'"
+	},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

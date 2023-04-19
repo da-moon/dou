@@ -1,0 +1,21 @@
+{
+  "name": "moudleBundlers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel index.js -o index-compiled.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0"
+  },
+  "dependencies": {
+    "-": "0.0.1",
+    "@babel/preset-env": "^7.16.0",
+    "D": "^1.0.0"
+  }
+}

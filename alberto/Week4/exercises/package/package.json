@@ -1,0 +1,19 @@
+{
+  "name": "ahc-training",
+  "version": "1.0.0",
+  "description": "This repository contains training material for AHC",
+  "main": "index.js",
+  "scripts": {
+    "dev": "echo 'Hello world!'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DigitalOnUs/ahc-training.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DigitalOnUs/ahc-training/issues"
+  },
+  "homepage": "https://github.com/DigitalOnUs/ahc-training#readme"
+}

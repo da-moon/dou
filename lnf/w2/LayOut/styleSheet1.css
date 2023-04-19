@@ -1,0 +1,41 @@
+html, body {
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.content {
+    display: flex;
+    height: 100%;
+}
+
+.mainSection {
+    flex: 2;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.asideSection {
+    flex: 1;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+}
+
+.pinkSection {
+    background-color:deeppink;
+    height: 100%;
+}
+
+.greenAside {
+    background-color:limegreen;
+    height: 20%;
+    margin-bottom: 10px;
+}
+
+.purpleAside {
+    background-color: blueviolet;
+    height: calc(80% - 10px);
+}

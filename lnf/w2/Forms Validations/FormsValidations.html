@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang=“en”>
+
+<head>
+    <meta charset=“utf-8”>
+    <link rel="stylesheet" href="styleSheet.css">
+    <title> This is a title </title>
+</head>
+
+<body>
+    <header>
+        <h1>HTML Forms</h1>
+    </header>
+    <article>
+        <form action="/action_page.php" method="post">
+            <label for="fname">First Name:</label></br>
+            <input required type="text" id="fname" name="first_name"></br>
+            <label for="lname">Last Name:</label></br>
+            <input required type="text" id="lname" name="last_name"></br></br>
+            <label for="colors">Favorite Color:</label></br>
+            <input type="color" value="#ffffff" id="colors"></br></br>
+            <label for="age">Age:</label></br>
+            <input type="number" id="age" age="user_age"></br></br>
+            <input type="submit" value"Submit"></br>
+        </form>
+        <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php"</p>
+    </article>
+</body>
+
+</html>

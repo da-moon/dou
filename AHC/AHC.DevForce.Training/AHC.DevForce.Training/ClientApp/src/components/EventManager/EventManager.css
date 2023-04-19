@@ -1,0 +1,34 @@
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.add {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    margin-top: -5px;
+    height: 70px;
+    background-color: #1571ff;
+    justify-content: flex-end;
+    width: calc(100% - 200px);
+    z-index: 200;
+}
+
+.cardEvent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 90%;
+    margin-top: 5%;
+}

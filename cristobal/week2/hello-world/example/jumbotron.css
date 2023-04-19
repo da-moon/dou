@@ -1,0 +1,38 @@
+
+body {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.navbar{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+.navbar-collapse{ 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.form-inline{ 
+  display: flex;
+
+}
+
+.navbar-collapse{ 
+  display: flex;
+  align-items: center;
+}
+.jumbotron{ 
+  background: #E9ECEF;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.container{ 
+  padding-top: 40px;
+}

@@ -1,0 +1,15 @@
+.div1{ 
+    background-color: red;
+    width: 100px;
+    padding: 20px;
+    float: left;
+    margin-left: 15px;
+}
+
+.div2{
+    background-color: yellow;
+    width: 100px;
+    padding: 20px;
+    float: right;
+    margin-left: 15px;
+}

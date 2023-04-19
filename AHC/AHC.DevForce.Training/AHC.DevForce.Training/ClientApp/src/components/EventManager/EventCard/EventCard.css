@@ -1,0 +1,106 @@
+.eventCard {
+  width: 70%;
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  border-radius: 30px;
+  padding: 30px;
+  border: 1px solid darkgray;
+  margin: 20px;
+}
+
+.details {
+  padding: 8px 16px;
+}
+
+.generalInformation {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+}
+
+.date p {
+  color: darkgray;
+}
+
+.location {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.location img {
+  width: 25px;
+  height: 25px;
+}
+
+.location p {
+  display: contents;
+}
+
+.rightSide {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.delete {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 20%;
+}
+
+.delete button {
+  border: none;
+  display: contents;
+}
+
+.delete img {
+  width: 30px;
+  height: 30px;
+}
+
+.date {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: right;
+  color: darkgray;
+}
+
+.price {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editar {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.editar button {
+  border: none;
+  display: contents;
+}
+
+.editar img {
+  width: 25px;
+  height: 25px;
+  padding: 2px;
+}

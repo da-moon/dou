@@ -1,0 +1,47 @@
+.root{ display: flex;
+    background: transparent;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+.div1{ 
+    background-color: green;
+    flex: 1;
+}
+.div2{ 
+    background-color: purple; 
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.div2-1{ 
+    background: orange;
+
+    flex-direction: row;
+}
+.div2-2{ 
+    background:purple;
+
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.div2-1-1{background: red;
+width: 400px;
+height: 400px; 
+}
+
+.div2-1-2{ background: blue;
+    width: 200px;
+    height: 200px;
+
+
+}
+.div2-2-1{ background: orange;
+    width: 400px;
+    height: 400px;
+
+}
