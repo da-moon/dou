@@ -1,0 +1,34 @@
+version: 2.1
+workflows:
+    api:
+      jobs:
+          - "build":
+              context: CaaS
+              filters:
+                  branches:
+                      only:
+                        - master
+jobs:
+  "build":
+    docker:
+        - image: dockerdoufer/aws-docker:circleci0.1
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Export environment variables
+          command: |
+            echo export $(grep -v '^#' dwarf.config | xargs) >> $BASH_ENV
+      - run:
+          name: Install DevOps repo
+          command: |
+            git clone -b $CI_VERSION https://${GITHUB_USER}:${GITHUB_TOKEN}@${GITHUB_URL_DEVOPS} ${DEVOPS_CI_PATH} ../devops.ci
+      - run:
+          name: Push image in ECR
+          command: |
+            env
+            ls -la
+            ls -la ..
+            pwd
+            chmod -R +x ../devops.ci/build_types
+            ../devops.ci/build_types/docker_build.sh

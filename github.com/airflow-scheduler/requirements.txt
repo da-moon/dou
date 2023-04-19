@@ -1,0 +1,8 @@
+psycopg2-binary
+boto3
+gitpython
+python-consul
+requests
+pycurl==7.19.3
+azure-devops==5.0.0b5
+pymsteams
