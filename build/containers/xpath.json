@@ -1,0 +1,34 @@
+{
+  "variables": {
+    "app_version": "1.0.2",
+    "repository_uri": "038131160342.dkr.ecr.us-east-1.amazonaws.com",
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_KEY`}}"
+  },
+  "builders":[{
+    "type": "docker",
+    "image": "ubuntu:trusty",
+    "export_path": "xpath.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "scripts": ["build/scripts/apt_upgrade_root.sh","build/scripts/install_xpath.sh"]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-import",
+        "repository": "{{user `repository_uri`}}/xpath",
+        "tag": "{{user `app_version`}}"
+      },
+      {
+        "type": "docker-push",
+        "ecr_login": true,
+        "login_server": "{{user `repository_uri`}}"
+
+      }
+    ]
+  ]
+}

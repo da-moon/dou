@@ -1,0 +1,11 @@
+---
+- hosts: jasper
+  become: true
+  user: ubuntu
+  vars:
+    service: tomcat
+  roles:
+    - common
+    - { role: filebeat, version: 6.4.0 }
+    - { role: datadog-agent }
+    - { role: consul, cli: false }

@@ -1,0 +1,45 @@
+{
+  "variables": {
+    "app_version": "0.0.1",
+    "repository_uri": "038131160342.dkr.ecr.us-east-1.amazonaws.com",
+    "aws_access_key": "",
+    "aws_secret_key": ""
+  },
+  "builders":[{
+    "type": "docker",
+    "image": "phusion/baseimage",
+    "export_path": "talend.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "scripts": ["build/scripts/install_ansible_root_ubuntu_18.sh"]
+    },
+    {
+      "type": "shell",
+      "environment_vars": ["KEY={{user `aws_access_key`}}", "SECRET={{user `aws_secret_key`}}", "VERSION={{user `app_version`}}"],
+      "scripts": ["build/scripts/export_aws_creds.sh"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/linux/ubuntu/playbooks/talend.yml",
+      "inventory_groups": "talend",
+      "playbook_dir": "ansible/linux/ubuntu/playbooks/"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-import",
+        "repository": "{{user `repository_uri`}}/talend",
+        "tag": "{{user `app_version`}}"
+      },
+      {
+        "type": "docker-push",
+        "ecr_login": true,
+        "login_server": "{{user `repository_uri`}}"
+
+      }
+    ]
+  ]
+}

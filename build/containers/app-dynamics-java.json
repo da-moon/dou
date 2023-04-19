@@ -1,0 +1,40 @@
+{
+  "variables": {
+    "app_version": "1.0.2",
+    "repository_uri": "038131160342.dkr.ecr.us-east-1.amazonaws.com",
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_KEY`}}"
+  },
+  "builders":[{
+    "type": "docker",
+    "image": "ubuntu:bionic",
+    "export_path": "app-dynamics-java.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "scripts": ["build/scripts/apt_upgrade_root.sh","build/scripts/install_ansible_root_ubuntu_16_06.sh"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/linux/ubuntu/playbooks/app-dynamics-java.yml",
+      "inventory_groups": "app-dynamics-java",
+      "playbook_dir": "ansible/linux/ubuntu/playbooks/"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-import",
+        "repository": "{{user `repository_uri`}}/app-dynamics-java",
+        "tag": "{{user `app_version`}}"
+      },
+      {
+        "type": "docker-push",
+        "ecr_login": true,
+        "login_server": "{{user `repository_uri`}}"
+
+      }
+    ]
+  ]
+}

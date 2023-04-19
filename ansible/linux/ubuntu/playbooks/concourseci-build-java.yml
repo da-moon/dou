@@ -1,0 +1,6 @@
+---
+- hosts: concourseci-build-java
+  become: true
+  user: ubuntu
+  roles:
+    - container-common

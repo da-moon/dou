@@ -1,0 +1,11 @@
+---
+- name: Get Corvesta Root certificate
+  aws_s3:
+    bucket: '{{ s3bucket }}'
+    object: /ssl/corvesta-root.crt
+    dest: /usr/local/share/ca-certificates/corvesta-root.crt
+    mode: get
+- name: Add Corvesta Root Certificate
+  command: update-ca-certificates
+  become: true
+  become_user: root

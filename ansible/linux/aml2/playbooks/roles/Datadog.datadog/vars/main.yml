@@ -1,0 +1,26 @@
+datadog_api_key: "0aa4680099c20bf6b5a85750dc4e2d5a"
+datadog_agent_version: "6.14.0-1" # for apt-based platforms, use a `6.8.0-1` format on yum-based platforms
+datadog_config:
+  tags: "artifactory, mgmt"
+  log_level: INFO
+  apm_config:
+    enabled: true
+    max_traces_per_second: 10
+  logs_enabled: true  # log collection is available on agent 6
+datadog_checks:
+  process:
+    init_config:
+    instances:
+      - name: ssh
+        search_string: ['ssh', 'sshd' ]
+      - name: syslog
+        search_string: ['rsyslog' ]
+        cpu_check_interval: 0.2
+        exact_match: true
+        ignore_denied_access: true
+  disk:
+    init_config:
+    instances:
+      - use_mount: false
+        device_blacklist:
+          - \/dev\/loop[0-9]+

@@ -1,0 +1,7 @@
+---
+- hosts: nomad-cli
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - { role: nomad, cli: true }

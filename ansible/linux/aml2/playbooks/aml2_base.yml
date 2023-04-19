@@ -1,0 +1,5 @@
+---
+- hosts: all
+  user: ec2-user
+  roles:
+    - { role: Datadog.datadog, become: yes }

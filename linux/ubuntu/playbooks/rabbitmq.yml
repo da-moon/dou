@@ -1,0 +1,15 @@
+---
+- hosts: rabbitmq
+  become: true
+  user: ubuntu
+  vars:
+    service: rabbitmq
+    datadog_process_checks:
+      - { name: rabbitmq-server, search_string: ['rabbitmq'] }
+  roles:
+    - common
+    - ssl
+    - { role: consul, config_file: consul_agent, cli: false, vagrant: false }
+    - { role: rabbitmq, rabbitmq_server_version : 3.7.14-1 }
+    - { role: filebeat, version: 6.4.0}
+    - datadog-agent

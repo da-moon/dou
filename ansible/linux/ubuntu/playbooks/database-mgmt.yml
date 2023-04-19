@@ -1,0 +1,7 @@
+---
+- hosts: database-mgmt
+  become: true
+  user: ubuntu
+  roles:
+    - common
+    - database-mgmt

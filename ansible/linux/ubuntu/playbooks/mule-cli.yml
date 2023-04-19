@@ -1,0 +1,10 @@
+---
+- hosts: mule-cli
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - { role: nodejs}
+    - maven
+    - mule-cli
+    - { role: consul, cli: true}

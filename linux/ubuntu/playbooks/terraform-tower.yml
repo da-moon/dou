@@ -1,0 +1,7 @@
+---
+- hosts: terraform-tower
+  become: true
+  user: ubuntu
+  roles:
+    - common
+    - { role: terraform_tower, terraform_version : 0.11.1 }

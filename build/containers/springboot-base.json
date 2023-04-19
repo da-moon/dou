@@ -1,0 +1,35 @@
+{
+  "variables": {
+    "app_version": "openjdk-8-jdk-alpine",
+    "repository_uri": "038131160342.dkr.ecr.us-east-1.amazonaws.com",
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_KEY`}}"
+  },
+  "builders":[{
+    "type": "docker",
+    "image": "java:{{user `app_version`}}",
+    "export_path": "ks-springboot-base.tar",
+    "run_command": ["-d", "{{.Image}}", "/bin/sh"]
+  }],
+  "provisioners":[
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/linux/ubuntu/playbooks/springboot-base.yml"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-import",
+        "repository": "{{user `repository_uri`}}/ks-springboot-base",
+        "tag": "{{user `app_version`}}"
+      },
+      {
+        "type": "docker-push",
+        "ecr_login": true,
+        "login_server": "{{user `repository_uri`}}"
+
+      }
+    ]
+  ]
+}

@@ -1,0 +1,9 @@
+---
+- hosts: concourseci-deploy
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - java
+    - maven
+    - { role : terraform, version: 0.11.14 }

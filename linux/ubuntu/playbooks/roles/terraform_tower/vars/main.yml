@@ -1,0 +1,16 @@
+repos:
+  name:
+    - https://bitbucket.org/corvesta/devops.infra.vpc.git
+    - https://bitbucket.org/corvesta/devops.infra.management_account.git
+    - https://bitbucket.org/corvesta/devops.infra.account.git
+    - https://bitbucket.org/corvesta/devops.infra.api_utility.git
+    - https://bitbucket.org/corvesta/devops.infra.app_iam.git
+    - https://bitbucket.org/corvesta/devops.infra.app_security.git
+    - https://bitbucket.org/corvesta/devops.infra.buckets.git
+    - https://bitbucket.org/corvesta/devops.infra.consul.git
+    - https://bitbucket.org/corvesta/devops.infra.data.git
+    - https://bitbucket.org/corvesta/devops.infra.logstash.git
+    - https://bitbucket.org/corvesta/devops.infra.modules.git
+    - https://bitbucket.org/corvesta/devops.infra.security.git
+    - https://bitbucket.org/corvesta/devops.infra.tool_utility.git
+    - https://bitbucket.org/corvesta/devops.infra.user_iam.git
