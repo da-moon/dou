@@ -1,0 +1,36 @@
+version: '2.1'
+services:
+    postgres:
+        image: postgres:9.6
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        volumes:
+            - postgres_data:/var/lib/postgres
+
+    webserver:
+        #image: 038131160342.dkr.ecr.us-east-1.amazonaws.com/airflow:0.0.18
+        image: fewknow-airflow:0.1.0
+        restart: always
+        depends_on:
+            - postgres
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Local
+            - AIRFLOW__CORE__FERNET_KEY="BAMmZeZuRQXUIgOIFqlPbn8uUeH1Fw4f06Cw0HgxVSw="" # Local dev only. Will change in production
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        ports:
+            - "8080:8080"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+
+volumes:
+    postgres_data:
