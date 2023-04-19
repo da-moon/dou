@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: spin
+  labels:
+    app: prometheus-spin
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+    path: /aop-prometheus
+  selector:
+    matchLabels:
+      app: spin
