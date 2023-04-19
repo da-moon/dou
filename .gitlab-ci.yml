@@ -1,0 +1,96 @@
+variables:
+     # When you use the dind service, you must instruct Docker to talk with
+     # the daemon started inside of the service. The daemon is available
+     # with a network connection instead of the default
+     # /var/run/docker.sock socket. Docker 19.03 does this automatically
+     # by setting the DOCKER_HOST in
+     # https://github.com/docker-library/docker/blob/d45051476babc297257df490d22cbd806f1b11e4/19.03/docker-entrypoint.sh#L23-L29
+     #
+     # The 'docker' hostname is the alias of the service container as described at
+     # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services.
+     #
+     # Specify to Docker where to create the certificates. Docker
+     # creates them automatically on boot, and creates
+     # `/certs/client` to share between the service and job
+     # container, thanks to volume mount from config.toml
+     DOCKER_TLS_CERTDIR: "/certs"
+
+stages:
+     - gradleBuild
+     - unitTest
+     - checkstyle
+     - spotbugs
+     - pmd
+     - jacoco
+     - dockerBuild
+
+gradleBuild:
+     image: gradle:7.3.2-jdk11
+     stage: gradleBuild
+     script:
+          - echo "Building"
+          - >
+               ./gradlew build
+               -x checkstyleMain
+               -x checkstyleTest
+               -x pmdMain
+               -x pmdTest
+               -x jacocoTestCoverageVerification
+               -x spotbugsMain
+               -x test
+     artifacts:
+          paths:
+               - build/libs/*SNAPSHOT.jar
+
+unitTest:
+     stage: unitTest
+     script:
+          - echo "Unit Test"
+          - >
+               SERVER_PORT=$SERVER_PORT
+               APPLICATION_NAME=profile-searcher-service
+               ./gradlew test
+              #  DATASOURCE_URL=$DATASOURCE_URL
+              #  DATASOURCE_USER=$DATASOURCE_USER
+              #  DATASOURCE_PASSWORD=$DATASOURCE_PASSWORD
+     artifacts:
+          paths:
+               - build/jacoco/test.exec
+
+checkstyle:
+     stage: checkstyle
+     script:
+          - echo "Checkstyle checks"
+          - ./gradlew checkstyleMain
+#          - ./gradlew checkstyleTest
+
+spotbugs:
+     stage: spotbugs
+     script:
+          - echo "Spotbugs checks"
+          - ./gradlew spotbugsMain
+#          - ./gradlew spotbugsTest
+
+pmd:
+     stage: pmd
+     script:
+          - echo "PMD checks"
+          - ./gradlew pmdMain
+
+jacoco:
+     stage: jacoco
+     script:
+          - echo "Running JaCoCo"
+          - ./gradlew jacocoTestReport
+          - ./gradlew jacocoTestCoverageVerification
+
+dockerBuild:
+     image: docker:19.03.12
+     services:
+          - docker:19.03.12-dind
+     stage: dockerBuild
+     script:
+          - echo "It will be fine"
+          - docker build -t $CI_REGISTRY_IMAGE .
+          - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+          - docker push $CI_REGISTRY_IMAGE
