@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  go_tfe_api_wrapper:
+    image: gotfeapiwrapper:1.0
+    ports:
+      - 8000:8000
+    environment:
+      AUTH_TOKEN: vtOrJJY0RH6BoA.atlasv1.gLu6Qq8DwzxZQ4Zj1TvzMPzffaqzlpAVpNPYPNyDxf2azm53N6hyQEjYr9NSaOD36WI
+  waas_portal:
+    image: waasportal:1.0
+    stdin_open: true
+    environment:
+    - CHOKIDAR_USEPOLLING=true # enables a polling mechanism via chokidar
+    - REACT_APP_AIRFLOWHOST=http://localhost:8080
+    - REACT_APP_GOWRAPPER_HOST=http://localhost:8000
+    - REACT_APP_GOWRAPPER_ORG=DoU-TFE
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3000:3000
+    depends_on:
+      - go_tfe_api_wrapper
+    links:
+      - go_tfe_api_wrapper
+
+volumes:
+    waasportal_data:
