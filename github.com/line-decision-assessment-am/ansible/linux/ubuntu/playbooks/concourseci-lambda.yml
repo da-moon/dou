@@ -1,0 +1,7 @@
+---
+- hosts: concourseci-lambda
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - { role : terraform, version: 0.12.4 }

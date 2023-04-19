@@ -1,0 +1,11 @@
+---
+- hosts: datadog-rds
+  become: true
+  user: ubuntu
+  vars:
+    service: postgres
+  roles:
+    - common
+    - postgres
+    - { role: datadog-agent }
+    - { role: consul, cli: false }

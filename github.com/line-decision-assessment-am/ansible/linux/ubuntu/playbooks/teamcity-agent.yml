@@ -1,0 +1,9 @@
+---
+- hosts: teamcity-agent
+  become: true
+  user: ubuntu
+  roles:
+    - common
+    - docker
+    - nodejs
+    - teamcity-agent

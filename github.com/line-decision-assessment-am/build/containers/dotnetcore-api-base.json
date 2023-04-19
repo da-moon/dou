@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "docker_server": "https://quay.io",
+    "app_version": "1.0.0",
+    "repository_uri": "quay.io/snagajob",
+    "atlas_token": "{{env `ATLAS_TOKEN`}}",
+    "docker_username": "{{env `DOCKER_USERNAME`}}",
+    "docker_password": "{{env `DOCKER_PASSWORD`}}"
+  },
+  "builders":[{
+    "type": "docker",
+    "image": "phusion/baseimage",
+    "export_path": "dotnetcore-api-base.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "scripts": ["build/scripts/apt_upgrade_root.sh","build/scripts/install_ansible_root.sh"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/linux/ubuntu/playbooks/dotnetcore-api-base.yml",
+      "inventory_groups": "dotnetcore-api-base",
+      "playbook_dir": "ansible/linux/ubuntu/playbooks/"
+    }
+  ],
+  "push": {
+    "name": "saj/dotnetcore-api-base",
+    "token": "{{user `atlas_token`}}",
+    "vcs": true,
+    "base_dir": "../../",
+    "exclude": ["packer_cache", "output-virtualbox-iso"]
+  },
+  "post-processors": [
+    [
+      {
+        "type": "docker-import",
+        "repository": "{{user `repository_uri`}}/dotnetcore-api-base",
+        "tag": "{{user `app_version`}}"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_server": "{{user `docker_server`}}",
+        "login_username": "{{user `docker_username`}}",
+        "login_password": "{{user `docker_password`}}"
+      }
+    ]
+  ]
+}

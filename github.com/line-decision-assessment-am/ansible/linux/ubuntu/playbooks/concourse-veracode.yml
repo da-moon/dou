@@ -1,0 +1,5 @@
+---
+- hosts: concourse-veracode
+  user: root
+  roles:
+    - concourse-veracode

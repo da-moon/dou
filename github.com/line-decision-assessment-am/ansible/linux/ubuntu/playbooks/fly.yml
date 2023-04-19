@@ -1,0 +1,7 @@
+---
+- hosts: fly
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - fly

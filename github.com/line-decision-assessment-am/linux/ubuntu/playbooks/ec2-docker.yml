@@ -1,0 +1,6 @@
+---
+- hosts: ec2-docker
+  become: true
+  user: ubuntu
+  roles:
+    - { role: docker, bin: true }

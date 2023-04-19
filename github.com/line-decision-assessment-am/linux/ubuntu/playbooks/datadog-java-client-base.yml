@@ -1,0 +1,8 @@
+---
+- hosts: datadog-java-client-base
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - java
+    - datadog-java-client

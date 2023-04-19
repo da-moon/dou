@@ -1,0 +1,75 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
+    "packer_id" : "packer-aml2",
+    "release" : "flag"
+
+  },
+  "builders": [
+    {
+      "vpc_id": "vpc-eab46591",
+      "subnet_id": "subnet-f50f5dda",
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "us-east-1",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "amzn2-ami-hvm-2.0.*-x86_64-gp2",
+          "root-device-type": "ebs"
+        },
+        "owners": ["amazon"],
+        "most_recent": true
+      },
+      "instance_type": "t3.small",
+      "ssh_username": "ec2-user",
+      "communicator": "ssh",
+      "ssh_pty": true,
+      "ami_name" : "aml2_base-{{timestamp}}",
+      "ami_description": "base amazon linux",
+      "ami_virtualization_type": "hvm",
+      "ami_users": [
+        "658620301396",
+        "398155684978",
+        "217267089143",
+        "501520144152",
+        "948881759270"
+      ],
+      "ami_regions": [
+        "us-west-2"
+      ],
+      "tags": {
+        "os": "amazon-linux2",
+        "storage": "ebs",
+        "image": "aml2_base",
+        "manageby": "packer",
+        "timestamp": "{{ timestamp }}",
+        "Name": "{{user `packer_id`}}",
+        "Release": "{{user `release` }}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum -y update",
+        "sudo yum -y upgrade"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "build/scripts/packages_aml2.sh"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/linux/aml2/playbooks/aml2_base.yml",
+      "inventory_groups": "aml2_base",
+      "playbook_dir": "ansible/linux/aml2/playbooks/"
+    }
+  ]
+}

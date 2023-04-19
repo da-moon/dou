@@ -1,0 +1,41 @@
+{
+    "variables": {
+      "app_version": "0.0.1",
+      "repository_uri": "038131160342.dkr.ecr.us-east-1.amazonaws.com",
+      "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+      "aws_secret_key": "{{env `AWS_SECRET_KEY`}}"
+    },
+    "builders":[{
+      "type": "docker",
+      "image": "python:2",
+      "export_path": "concourse-veracode.tar"
+    }],
+    "provisioners":[
+        {
+            "type": "shell",
+            "scripts": ["build/scripts/install_ansible_root_ubuntu_16_06.sh", "build/scripts/install_xpath.sh"]
+            },
+      {
+        "type": "ansible-local",
+        "playbook_file": "ansible/linux/ubuntu/playbooks/concourse-veracode.yml",
+        "inventory_groups": "concourse-veracode",
+        "playbook_dir": "ansible/linux/ubuntu/playbooks/"
+      }
+    ],
+    "post-processors": [
+      [
+        {
+          "type": "docker-import",
+          "repository": "{{user `repository_uri`}}/concourse-veracode",
+          "tag": "{{user `app_version`}}"
+        },
+        {
+          "type": "docker-push",
+          "ecr_login": true,
+          "login_server": "{{user `repository_uri`}}"
+  
+        }
+      ]
+    ]
+  }
+  

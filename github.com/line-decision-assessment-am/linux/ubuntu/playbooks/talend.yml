@@ -1,0 +1,9 @@
+---
+- hosts: talend
+  become: true
+  user: ubuntu
+  roles:
+    - container-common
+    - java
+    - maven
+    - { role: talend, version: 6.4.1 }

@@ -1,0 +1,17 @@
+---
+- hosts: logstash-indexer
+  become: true
+  user: ubuntu
+  vars:
+    service: logstash
+    datadog_process_checks:
+      - { name: vault, search_string: ['logstash'] }
+  roles:
+    - common
+    - java
+    - consul-template
+    - { role: consul, config_file: consul_agent, cli: false}
+    - { role: logstash, logstash_version: 6.4.2}
+    - { role: filebeat, version: 6.4.2}
+    - { role: datadog-agent }
+    - logstash-indexer

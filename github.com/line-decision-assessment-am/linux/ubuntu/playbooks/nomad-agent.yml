@@ -1,0 +1,17 @@
+---
+- hosts: nomad-agent
+  become: true
+  user: ubuntu
+  vars:
+    service: nomad
+    datadog_process_checks:
+      - { name: nomad, search_string: ['nomad'] }
+  roles:
+    - common
+    - { role: filebeat, version: 6.4.0 }
+    - { role: datadog-agent }
+    - { role: consul, config_file: consul_agent, cli: false }
+    - { role: docker, bin : true }
+    - go
+    - { role: nomad, config_file: nomad_agent, cli: false }
+    - java

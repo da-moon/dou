@@ -1,0 +1,7 @@
+---
+- hosts: alfresco
+  become: true
+  user: ubuntu
+  roles:
+    - common
+    - alfresco
