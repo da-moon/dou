@@ -1,0 +1,7 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd pipelines/tc-shared/02_deployment_center
+      - ./run.sh

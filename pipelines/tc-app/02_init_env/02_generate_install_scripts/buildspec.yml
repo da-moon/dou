@@ -1,0 +1,8 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd pipelines/tc-app/02_init_env/02_generate_install_scripts
+      - ./run.sh
+

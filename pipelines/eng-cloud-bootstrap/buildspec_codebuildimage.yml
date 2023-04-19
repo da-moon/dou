@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+       - export ECR_URL=$(echo "${ECR_REPO}" | sed 's|/.*||')
+       - cd pipelines/eng-cloud-bootstrap
+       - docker build -f Dockerfile -t ${ECR_REPO}:latest .
+       - docker tag ${ECR_REPO}:latest ${ECR_REPO}:${SHA}
+       - aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_URL}
+       - docker push ${ECR_REPO}:latest
+       - docker push ${ECR_REPO}:${SHA}
+

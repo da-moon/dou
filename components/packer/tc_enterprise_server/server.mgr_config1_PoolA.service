@@ -1,0 +1,46 @@
+# @<COPYRIGHT>@
+#===============================================================================
+# Copyright 2020.
+# Siemens Product Lifecycle Management Software Inc.
+# All Rights Reserved.
+#===============================================================================
+# @<COPYRIGHT>@
+#
+# Server Manager Systemd Service Definition
+#
+#===============================================================================
+
+[Unit]
+Description=Server Manager Systemd Service config1
+
+# Unit starts up after machine connects to network
+After=update_hostname.service
+
+[Service]
+# Systemd considers the service to be started up immediately with simple type
+Type=simple
+
+# Command to execute when the service is started
+ExecStart=/usr/Siemens/Teamcenter13/teamcenter_root/pool_manager/confs/config1/mgrstart
+
+# Command to execute when the service is stopped
+ExecStop=/usr/Siemens/Teamcenter13/teamcenter_root/pool_manager/confs/config1/mgrstop
+
+# Outputs log file through syslog
+StandardOutput=syslog
+StandardError=syslog
+
+# Identifier used in server.mgr.conf file for server manager logging
+SyslogIdentifier=ServerManagerSystemdServiceLog_config1
+
+# Service will always restart when the process exits, is killed, or a timeout is reached
+Restart=always
+
+RestartSec=3
+User=tc
+Group=tc
+WorkingDirectory=/usr/Siemens/Teamcenter13/teamcenter_root/pool_manager/confs/config1
+
+[Install]
+# Necessary for keeping this unit enabled by default
+WantedBy=multi-user.target

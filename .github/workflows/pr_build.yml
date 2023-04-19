@@ -1,0 +1,49 @@
+name: Push to CodeCommit
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+      - 'fix/**'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::520983883852:role/github-role
+          aws-region: us-east-1
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.1.9
+
+      - name: Resolve environment
+        id: resolve_env
+        run: |
+          BRANCH=${GITHUB_REF#refs/heads*/}
+          ENV=$(echo ${BRANCH#*/} | sed 's|/.*||')
+          echo "Running for environment: $ENV"
+          echo "##[set-output name=env;]$ENV"
+          echo "##[set-output name=env_dir;].github/workflows/test_envs/$ENV"
+
+      - name: Delete CodeCommit repository
+        run: |
+          REPO_NAME=$(grep "vcs_reponame" ${{ steps.resolve_env.outputs.env_dir }}/bootstrap.tfvars | awk '{print $3}' | sed -e 's/^"//' -e 's/"$//')
+          aws codecommit delete-repository --repository-name ${REPO_NAME}
+
+      - name: Install
+        run: |
+          cp -R ${{ steps.resolve_env.outputs.env_dir }}/* environments/
+          AUTO_APPROVE=true ./install.sh
+

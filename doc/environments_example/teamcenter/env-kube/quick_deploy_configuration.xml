@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<quickDeployConfig configName="env-kube" version="1.0">
+    <archType types="J2EE"/>
+    <quickDeploySoftware>
+        <software id="Foundation" version="13.2.0.9"/>
+        <software id="MicroServiceFramework" version="5.2.6"/>
+        <software id="ActiveWorkspace" version="5.2.6"/>
+    </quickDeploySoftware>
+    <quickDeployApplications>
+        <package id="clientconfiguration"/>
+        <package id="xrteditor"/>
+    </quickDeployApplications>
+    <quickDeployClients>
+        <client id="fnd0_4tierrichclient" machineName="win-desktop" massDeploy="true" platform="wntx64">
+            <property id="fnd0_compressWebResponse" value="true"/>
+            <property id="fnd0_4tierrichclientInstallationPath" value="C:\Program Files\Siemens\Teamcenter13\teamcenter_root"/>
+            <property id="fnd0_racRuntimeTempFolder" value=""/>
+            <property id="fnd0_4tierrichclient.massDeployCheck" value="true"/>
+            <property id="fnd0_4tierrichclient.appSupportedList" value="selectedApps"/>
+            <connectedTo component="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <package id="fnd0_foundation"/>
+        </client>
+        <client id="fnd0_tccs" machineName="win-desktop" massDeploy="true" platform="wntx64">
+            <property id="fnd0_tccsInstallationPath" value="C:\Program Files\Siemens\Teamcenter13\teamcenter_root"/>
+            <property id="fnd0_tccs.massDeployCheck" value="true"/>
+            <property id="fnd0_reverseProxyCriteriaList" value=""/>
+            <property id="fnd0_tccsMergeFromFMSHome" value=""/>
+            <property id="fnd0_tccsFscAssignmentMode" value="clientmap"/>
+            <property id="fnd0_tccsEnableClientCommunicationConfig" value=""/>
+            <property id="fnd0_tccsFccOptions" value="installFCC"/>
+            <connectedTo component="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_fsc" machineName="enterprise-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </client>
+        <client id="fnd0_blserver" machineName="enterprise-server-kube.engcloud.com" massDeploy="false" platform="lnx64">
+            <property id="fnd0_blserver.massDeployCheck" value="false"/>
+            <property id="fnd0_blserverTcDataPath" value="/usr/Siemens/Teamcenter13/tc_data"/>
+            <property id="fnd0_blserverPasswordSecurityDir" value="/usr/Siemens/Teamcenter13/teamcenter_root/security"/>
+            <property id="fnd0_tcBLServerInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_licensingserver" machineName="54.82.215.218"/>
+            <connectedTo component="fnd0_tcdbserver" machineName="db-server-kube.engcloud.com"/>
+            <connectedTo component="fnd0_corporateserver" machineName="corporate-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </client>
+    </quickDeployClients>
+    <quickDeployComponents>
+        <component id="fnd0_tcdbserver" machineName="db-server-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_oracleDBPort" value="1521"/>
+            <property id="fnd0_oracleDBUserPassword" value="REPLACEME" encrypted="false"/>
+            <property id="fnd0_MSSQLUtf8ModeCheck" value="false"/>
+            <property id="fnd0_oracleDBUser" value="admin"/>
+            <property id="fnd0_dbStateOptions" value="dbAlreadyExist"/>
+            <property id="fnd0_databaseServerOptions" value="Oracle"/>
+            <property id="fnd0_characterEncodingType" value="UTF8"/>
+            <property id="fnd0_oracleDBService" value="TC"/>
+            <property id="fnd0_grantPermissionsCheck" value="false"/>
+        </component>
+        <component id="fnd0_corporateserver" machineName="corporate-server-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_genClientCache" value="true"/>
+            <property id="fnd0_tcAdminUser" value="infodba"/>
+            <property id="fnd0_unixClientTransientVolumeDir" value="/tmp/transientVolume"/>
+            <property id="fnd0_tcAdminPassword" value="REPLACEME" encrypted="false"/>
+            <property id="fnd0_tcCorporateServerInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="fnd0_xercesCheck" value="true"/>
+            <property id="fnd0_passwordSecurityDir" value="/usr/Siemens/Teamcenter13/teamcenter_root/security"/>
+            <property id="fnd0_tcVolumeName" value="DefaultVolume"/>
+            <property id="fnd0_tcDataPath" value="/usr/Siemens/Teamcenter13/tc_data"/>
+            <property id="fnd0_tcVolumeDirPath" value="/usr/Siemens/Teamcenter13/volumes"/>
+            <property id="fnd0_genServerCache" value="true"/>
+            <property id="fnd0_windowsClientTransientVolumeDir" value="c:\temp\transientVolume"/>
+            <connectedTo component="fnd0_licensingserver" machineName="54.82.215.218"/>
+            <connectedTo component="fnd0_microservice" machineName="microservice-node-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_tcdbserver" machineName="db-server-kube.engcloud.com"/>
+            <connectedTo component="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+        <component id="fnd0_microservice" machineName="microservice-node-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_ms_file_repo_uid" value="0"/>
+            <property id="fnd0_ms_tcgqlInstance" value="4"/>
+            <property id="fnd0_microservice_protocol" value="http"/>
+            <property id="fnd0_containerRegistry" value="ecr-internal"/>
+            <property id="fnd0_msType" value="master"/>
+            <property id="fnd0_ms_file_repoInstance" value="4"/>
+            <property id="fnd0_k8s_microservice_url" value=""/>
+            <property id="fnd0_msfMicroServiceManager" value="true"/>
+            <property id="fnd0_microservice_url" value="http://microservice-node-kube.engcloud.com:30001/"/>
+            <property id="fnd0_containerManager" value="Kubernetes"/>
+            <property id="fnd0_ms_darsiInstance" value="4"/>
+            <property id="fnd0_msfServiceRegistry_port" value="8787"/>
+            <property id="fnd0_ms_microserviceparameterstoreInstance" value="4"/>
+            <property id="fnd0_msfServiceRegistry_url" value="http://microservice-node-kube.engcloud.com:8787/eureka/v2/"/>
+            <property id="fnd0_microservice_keyStorePassword" value="REPLACEME" encrypted="false"/>
+            <property id="fnd0_microservice_InstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="fnd0_microservice_port" value="30001"/>
+            <property id="fnd0_msfServiceRegistry_protocol" value="http"/>
+            <property id="fnd0_k8sNamespace" value="env-kube"/>
+            <property id="fnd0_ms_file_repo_gid" value="0"/>
+            <property id="fnd0_ms_file_repo_file_storage_path" value="/usr/Siemens/Teamcenter13/filerepo"/>
+            <connectedTo component="fnd0_corporateserver" machineName="corporate-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_microservice" machineName="microservice-node-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="aws2_client_gateway_webtier" machineName="microservice-node-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+        <component id="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_fscServerID" value="FSC_fscserver_tc"/>
+            <property id="fnd0_fccPartialFileReadCacheMaxSize" value="3000"/>
+            <property id="fnd0_fscURL" value="http://fsc-server-kube.engcloud.com:4544"/>
+            <property id="fnd0_fccUNIXCacheDir" value="/tmp/$USER/FCCCache"/>
+            <property id="fnd0_fscInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="fnd0_fscUNIXWriteCacheDir" value="/tmp/FSCCache"/>
+            <property id="fnd0_fccWriteCacheMaxSize" value="1000"/>
+            <property id="fnd0_fscWriteCacheMaxSize" value="10"/>
+            <property id="fnd0_fccReadCacheMaxSize" value="1000"/>
+            <property id="fnd0_fscServerProtocol" value="http"/>
+            <property id="fnd0_fsc_machineUser" value="tc"/>
+            <property id="fnd0_isMaster" value="true"/>
+            <property id="fnd0_isCloudVolumeHost" value=""/>
+            <property id="fnd0_fscUNIXReadCacheDir" value="/tmp/FSCCache"/>
+            <property id="fnd0_fscServerPort" value="4544"/>
+            <property id="fnd0_osUserOptions" value="thisAccount"/>
+            <property id="fnd0_fscReadCacheMaxSize" value="10"/>
+            <property id="fnd0_fccWindowsCacheDir" value="$HOME\FCCCache"/>
+            <property id="fnd0_fsc_machinePassword" value="REPLACEME" encrypted="false"/>
+            <connectedTo component="fnd0_fsc" machineName="enterprise-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+        <component id="fnd0_serverManager" machineName="enterprise-server-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_loginsPerMinute" value="0"/>
+            <property id="fnd0_assignmentServicePort" value="8086"/>
+            <property id="fnd0_serverManagerInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="fnd0_maxServersCount" value="30"/>
+            <property id="fnd0_serverHost" value=""/>
+            <property id="fnd0_jmxAdaptorPort" value="8088"/>
+            <property id="fnd0_minWarmServersCount" value="1"/>
+            <property id="fnd0_TECSAdminPort" value="8084"/>
+            <property id="fnd0_SSLEnable" value=""/>
+            <property id="fnd0_muxPort" value="8087"/>
+            <property id="fnd0_serverPoolId" value="PoolA"/>
+            <property id="fnd0_availableServerAt" value="0700 3,1700 2"/>
+            <property id="fnd0_startUpMode" value="fnd0_commandLine"/>
+            <connectedTo component="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_tcdbserver" machineName="db-server-kube.engcloud.com"/>
+            <connectedTo component="fnd0_serverpool_DBConfig" machineName="db-server-kube.engcloud.com"/>
+        </component>
+        <component id="fnd0_fsc" machineName="enterprise-server-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_fscServerID" value="FSC_enterpriseserverkube"/>
+            <property id="fnd0_fscURL" value="http://enterprise-server-kube.engcloud.com:4544"/>
+            <property id="fnd0_fscInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="fnd0_fscUNIXWriteCacheDir" value="/tmp/FSCCache"/>
+            <property id="fnd0_fscWriteCacheMaxSize" value="10"/>
+            <property id="fnd0_fscServerProtocol" value="http"/>
+            <property id="fnd0_fsc_machineUser" value="tc"/>
+            <property id="fnd0_isMaster" value="false"/>
+            <property id="fnd0_isCloudVolumeHost" value=""/>
+            <property id="fnd0_fscServerPort" value="4544"/>
+            <property id="fnd0_fscUNIXReadCacheDir" value="/tmp/FSCCache"/>
+            <property id="fnd0_osUserOptions" value="thisAccount"/>
+            <property id="fnd0_fscReadCacheMaxSize" value="10"/>
+            <property id="fnd0_fsc_machinePassword" value="REPLACEME" encrypted="false"/>
+            <connectedTo component="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+        <component id="aws2_indexingengine" machineName="solr-indexing-kube.engcloud.com" platform="lnx64">
+            <property id="aws2_runAsService" value="runAsService"/>
+            <property id="aws2_indexingEngineUser" value="solr"/>
+            <property id="aws2_Select_additionalSearchEngineURL" value=""/>
+            <property id="aws2_indexingEngineUserPassword" value="REPLACEME" encrypted="false"/>
+            <property id="aws2_indexingEngineURL" value="http://solr-indexing-kube.engcloud.com:8983/solr"/>
+            <property id="aws2_tcIndexingEngineInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="aws2_solrJavaLocation" value="/usr/lib/jvm/java"/>
+            <property id="aws2_machinePassword" value="REPLACEME" encrypted="false"/>
+            <property id="aws2_machineUser" value="tc"/>
+        </component>
+        <component id="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_j2ee_tcwebtierInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="fnd0_tcJavaConnectionTag" value="RAC4T"/>
+            <property id="fnd0_j2ee_JMXRMIPort" value="8089"/>
+            <property id="fnd0_j2ee_tcwebtier.protocol" value="https"/>
+            <property id="fnd0_j2ee_LogVolumeLocation" value="logs"/>
+            <property id="fnd0_j2ee_connectionTimeOut" value="30000"/>
+            <property id="fnd0_j2ee_tcwebtiertrustStorePassword" value="REPLACEME" encrypted="false"/>
+            <property id="fnd0_j2ee_treeCachePeersHost" value="tc-web-kube.engcloud.com"/>
+            <property id="fnd0_j2ee_tcwebtier.port" value="443"/>
+            <property id="fnd0_j2ee_tcLocale" value="en_US"/>
+            <property id="fnd0_j2ee_4tierURI" value="https://tc-web-kube.engcloud.com/tc"/>
+            <property id="fnd0_j2ee_sessionTimeOut" value="1440"/>
+            <property id="fnd0_j2ee_distributable" value="false"/>
+            <property id="fnd0_j2ee_microservice_SSLEnable" value=""/>
+            <property id="fnd0_j2ee_tcwebtiertrustStore" value=""/>
+            <property id="fnd0_j2ee_LogVolumeName" value="LogVol1"/>
+            <property id="fnd0_tcJavaConnectionName" value="TC_RAC4T"/>
+            <property id="fnd0_j2ee_deployableFileName" value="tc"/>
+            <connectedTo component="fnd0_serverManager" machineName="enterprise-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_microservice" machineName="microservice-node-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+        <component id="fnd0_licensingserver" machineName="54.82.215.218" platform="lnx64">
+            <property id="fnd0_tcLincensingPort" value="28000"/>
+            <property id="fnd0_lcsStateOptions" value="Flexlm"/>
+        </component>
+        <component id="aws2_ftsIndexer" machineName="awc-indexer-kube.engcloud.com" platform="lnx64">
+            <property id="aws2_indexingEnvOptions" value="standaloneBasedOption"/>
+            <property id="aws2_ftsIndexer_lb_4tier_deployableFileName" value="tc"/>
+            <property id="aws2_installDatabaseTrigger" value="true"/>
+            <property id="aws2_maxTeamcenterConnections" value="3"/>
+            <property id="aws2_ftsIndexer_Tc4TierConOptions" value="directConnectionToWebtier"/>
+            <property id="aws2_exportBatchSize" value="1000"/>
+            <property id="aws2_indexerInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="aws2_indexerStagingDirPath" value="/usr/Siemens/Teamcenter13/teamcenter_root/TcFTSIndexer/working"/>
+            <property id="aws2_teamcenterRetryCount" value="5"/>
+            <property id="aws2_extractionStartTime" value="2020-08-04 17:52"/>
+            <property id="aws2_extractionEndTime" value=""/>
+            <property id="aws2_maxQueryTimeSpan" value="20000"/>
+            <connectedTo component="fnd0_tcdbserver" machineName="db-server-kube.engcloud.com"/>
+            <connectedTo component="aws2_indexingengine" machineName="solr-indexing-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_corporateserver" machineName="corporate-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+        <component id="aws2_client_builder" machineName="aw-client-builder" platform="lnx64">
+            <property id="aws2_client_builder_publish" value="true"/>
+            <property id="aws2_clientBuilderInstallationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <property id="aws2_client_builder_locales" value="en_US"/>
+            <connectedTo component="aws2_client_gateway_webtier" machineName="microservice-node-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root">
+                <property id="aws2_client_gateway_webtier_url" value="http://tc-gateway-kube.engcloud.com:30000"/>
+            </connectedTo>
+        </component>
+        <component id="fnd0_serverpool_DBConfig" machineName="db-server-kube.engcloud.com" platform="lnx64">
+            <property id="fnd0_serverManagerDatabaseServerOptions" value="Oracle"/>
+            <property id="fnd0_serverManagerOracleDBPort" value="1521"/>
+            <property id="fnd0_serverManagerClusterId" value="TcCluster"/>
+            <property id="fnd0_serverManagerDBStateOptions" value="serverManagerDBAlreadyExist"/>
+            <property id="fnd0_serverManagerOracleDBService" value="TC"/>
+            <property id="fnd0_serverManagerOracleDBUser" value="TCClusterDB"/>
+            <property id="fnd0_serverManagerOracleDBUserPassword" value="REPLACEME" encrypted="false"/>
+            <connectedTo component="fnd0_tcdbserver" machineName="db-server-kube.engcloud.com"/>
+        </component>
+        <component id="aws2_client_gateway_webtier" machineName="microservice-node-kube.engcloud.com" platform="lnx64">
+            <property id="aws2_client_gateway_productExcellenceProgram" value="true"/>
+            <property id="aws2_client_gateway_webtier_url" value="http://microservice-node-kube.engcloud.com:30000"/>
+            <property id="aws2_client_gateway_webtier_bootstrapClientIP" value=""/>
+            <property id="aws2_client_gateway_webtier_volumeConnectionOptions" value="useAsBootstrapUrlsOption"/>
+            <property id="aws2_client_has_additional_customRoutes" value=""/>
+            <property id="aws2_client_gateway_webtier_useSSL" value="http"/>
+            <property id="aws2_client_gateway_webtier_unit" value="Months"/>
+            <property id="aws2_client_gateway_webtier_gatewayPort" value="30000"/>
+            <property id="aws2_lb_4tier_deployableFileName" value="tc"/>
+            <property id="aws2_Tc4TierConOptions" value="directConnectionToWebtier"/>
+            <property id="aws2_client_gateway_webtier_maxAge" value="6"/>
+            <property id="aws2_client_gateway_webtier_installationPath" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_fsc" machineName="enterprise-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_microservice" machineName="microservice-node-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_fsc" machineName="fsc-server-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+            <connectedTo component="fnd0_j2ee_tcwebtier" machineName="tc-web-kube.engcloud.com" installationPath="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        </component>
+    </quickDeployComponents>
+    <quickDeployProperties>
+        <property id="InstallDirectory" value="/usr/Siemens/Teamcenter13/teamcenter_root"/>
+        <property id="MachineUser" value="tc"/>
+        <property id="JavaHome" value="/usr/lib/jvm/java"/>
+        <property id="MachineUserPassword" value="REPLACEME" encrypted="false"/>
+    </quickDeployProperties>
+</quickDeployConfig>

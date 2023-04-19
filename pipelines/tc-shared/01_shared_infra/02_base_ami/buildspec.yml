@@ -1,0 +1,8 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd pipelines/tc-shared/01_shared_infra/02_base_ami
+      - ./run.sh
+

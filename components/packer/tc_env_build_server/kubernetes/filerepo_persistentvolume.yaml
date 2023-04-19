@@ -1,0 +1,24 @@
+# @<COPYRIGHT>@
+# ==================================================
+# Copyright 2021.
+# Siemens Product Lifecycle Management Software Inc.
+# All Rights Reserved.
+# ==================================================
+# @<COPYRIGHT>@
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: filerepo-pv-${NAMESPACE}
+  namespace: "${NAMESPACE}"
+spec:
+  storageClassName: efs-sc
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: "${EFS_ID}"

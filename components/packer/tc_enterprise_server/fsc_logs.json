@@ -1,0 +1,22 @@
+{
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "/usr/Siemens/Teamcenter13/teamcenter_root/fsc/logs/FSC/process/FSC_${machine_name_prefix}*_fsc.log",
+						"log_group_name": "/teamcenter/${env_name}/fsc",
+						"log_stream_name": "${machine_name}/FSC_fsc.log",
+						"retention_in_days": 30
+					},
+					{
+						"file_path": "/usr/Siemens/Teamcenter13/teamcenter_root/fsc/logs/FSC/process/FSC_${machine_name_prefix}*_audit.log",
+						"log_group_name": "/teamcenter/${env_name}/fsc",
+						"log_stream_name": "${machine_name}/FSC_audit.log",
+						"retention_in_days": 30
+					}
+				]
+			}
+		}
+	}
+}

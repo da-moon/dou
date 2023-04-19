@@ -1,0 +1,9 @@
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+users:
+- name: tc
+  ssh-authorized-keys:
+  - ${ssh_public_key}
+  groups: tc
+  sudo: ['ALL=(ALL) NOPASSWD:ALL']

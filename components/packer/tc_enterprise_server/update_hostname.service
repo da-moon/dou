@@ -1,0 +1,15 @@
+[Unit]
+Description=Set the right hostname
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/hostnamectl set-hostname "${machine_name}"
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=Hostname
+
+[Install]
+WantedBy=multi-user.target
+
