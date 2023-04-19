@@ -1,0 +1,4 @@
+Flask<1
+botbuilder-core>=4.4.0b1
+botbuilder-dialogs>=4.4.0b1
+aiohttp
