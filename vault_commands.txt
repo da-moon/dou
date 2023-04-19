@@ -1,0 +1,30 @@
+export VAULT_ADDR=http://127.0.0.1:8200
+export ROOT_TOKEN=4100d2fd-e457-7c36-c6ef-ed2d84eb33c6
+
+vault auth $ROOT_TOKEN
+
+vault mount database
+
+
+vault write database/config/postgresql plugin_name=postgresql-database-plugin allowed_roles="readonly" connection_url="postgresql://myuser:mypass@postgres:5432/meetup?sslmode=disable"
+
+
+vault write database/roles/readonly \
+db_name=postgresql \
+creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; \
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";" \
+default_ttl="1m" \
+max_ttl="24h"
+
+
+vault read database/creds/readonly
+
+psql -d meetup -U myuser
+
+\du
+
+password       	f6743ce2-566e-e9e3-5078-dc180f0002b4
+username       	v-root-readonly-SxbCrSdNSehDm5ZDXkHQ-1499406003
+
+
+psql -d meetup -U v-root-readonly-yIstPePww1PJoqw3oh2k-1499457186
