@@ -1,0 +1,66 @@
+#-----------------------------------------------------------------------------------------------------------------
+# Example configuration for using SQL as a caching store for ocra.
+#
+# Documentation: https://spinnaker.io/setup/productionize/persistence/orca-sql/
+#-----------------------------------------------------------------------------------------------------------------
+apiVersion: spinnaker.armory.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+spec:
+  spinnakerConfig:
+    profiles:
+      orca:
+        spinnaker:
+          extensibility:
+            pluginsRootPath: /opt/orca/lib/plugins
+            plugins:
+              Armory.IAM:
+                enabled: true
+        sql:
+          enabled: true
+          connectionPool:
+            jdbcUrl: jdbc:mysql://mysql-armory.cixhbyd62zv2.us-west-2.rds.amazonaws.com:3306/orca?useSSL=false&useUnicode=true&characterEncoding=utf8 # useUnicode and utf8 makes sure the database can store an emoji if one is ever added to the database
+            user: orca_service
+            password: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:dou.mysql.orca.password
+            connectionTimeout: 5000
+            maxLifetime: 30000
+            # MariaDB-specific:
+            maxPoolSize: 50
+          migration:
+            jdbcUrl: jdbc:mysql://mysql-armory.cixhbyd62zv2.us-west-2.rds.amazonaws.com:3306/orca?useSSL=false&useUnicode=true&characterEncoding=utf8 # useUnicode and utf8 makes sure the database can store an emoji if one is ever added to the database
+            user: orca_migrate
+            password: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:dou.mysql.orca.migratePassword
+
+        # Ensure we're only using SQL for accessing execution state
+        executionRepository:
+          sql:
+            enabled: true
+          redis:
+            enabled: false
+
+        # Reporting on active execution metrics will be handled by SQL
+        monitor:
+          activeExecutions:
+            redis: false
+
+        # Use SQL for Orca's work queue
+        # Settings from Netflix and may require adjustment for your environment
+        # Only validated with AWS Aurora MySQL 5.7
+        # Please PR if you have success with other databases
+        # keiko:
+        #   queue:
+        #     sql:
+        #       enabled: true
+        #     redis:
+        #       enabled: false
+
+        # queue:
+        #   zombieCheck:
+        #     enabled: true
+        #   pendingExecutionService:
+        #     sql:
+        #       enabled: true
+        #     redis:
+        #       enabled: false
+        

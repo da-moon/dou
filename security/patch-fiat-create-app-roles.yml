@@ -1,0 +1,30 @@
+apiVersion: spinnaker.armory.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+spec:
+  spinnakerConfig:
+    profiles:
+    #  deck: # Enable this setting under core_config/patch-deck.yml
+    #    settings-local.js: |
+    #      window.spinnakerSettings.authEnabled = true;
+      fiat:
+        auth:
+          permissions:
+            provider:
+              application: aggregate
+            source:
+              application:
+                prefix:
+                  enabled: true
+                  prefixes:
+                  - prefix: "*"
+                    permissions:
+                      CREATE:
+                      - "armory-professional-services" # group members that CAN create applications if enabled
+                      READ:
+                      - "armory-professional-services" # group members that CAN read applications if enabled
+                      WRITE:
+                      - "armory-professional-services" # group members that CAN write applications if enabled
+                      EXECUTE:
+                      - "armory-professional-services" # group members that CAN execute applications if enabled

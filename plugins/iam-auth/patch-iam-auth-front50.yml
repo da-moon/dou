@@ -1,0 +1,53 @@
+#-----------------------------------------------------------------------------------------------------------------
+# Example configuration for enabling a IAM Authentication plugin for Front50 service into spinnaker
+#-----------------------------------------------------------------------------------------------------------------
+apiVersion: spinnaker.armory.io/v1alpha2
+kind: SpinnakerService
+metadata:
+  name: spinnaker
+spec:
+  spinnakerConfig:
+    profiles:
+      # Configs in the spinnaker profile get applied to all services
+      spinnaker:
+        armory:
+          iam-auth:
+            awsAccessKeyId: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:dou.aws.accessKeyId # Your AWS Access Key ID. If not provided, the plugin will try to find AWS credentials as described at http://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html#credentials-default
+            secretAccessKey: encrypted:s3!r:us-west-2!b:dou-armory-spinnaker-secrets!f:spinnaker-secrets.yml!k:dou.aws.secretAccessKey # Your AWS Secret Key. If not provided, the plugin will try to find AWS credentials as described at http://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html#credentials-default
+            region: us-west-2
+
+      front50:
+        spinnaker:
+          extensibility:
+            plugins:
+              Armory.IAM:
+                enabled: true
+            repositories:
+              iamPlugin:
+                enabled: true
+                # The init container will install plugins.json to this path.
+                url: file:///opt/spinnaker/lib/local-plugins/iam/plugins.json
+
+  kustomize:
+    front50:
+      deployment:
+        patchesStrategicMerge:
+          - |
+            spec:
+              template:
+                spec:
+                  initContainers:
+                  - name: iam
+                    image: armory/iam-plugin:1.0.0
+                    imagePullPolicy: Always
+                    volumeMounts:
+                      - mountPath: /opt/iam/target
+                        name: iam-plugin
+                  containers:
+                  - name: front50
+                    volumeMounts:
+                      - mountPath: /opt/spinnaker/lib/local-plugins
+                        name: iam-plugin
+                  volumes:
+                  - name: iam-plugin
+                    emptyDir: {}
