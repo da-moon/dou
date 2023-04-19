@@ -1,0 +1,19 @@
+image: docker
+
+services:
+  - docker:dind
+
+stages:
+  - deploy
+
+step-deploy-prod:
+  stage: deploy
+  only:
+    - main
+  script:
+    - sudo docker image prune -f
+    - mvn clean package -DskipTests
+    - docker-compose build --no-cache
+    - docker-compose up -d
+  environment: main
+  when: manual
