@@ -1,0 +1,1 @@
+Module for AWS ECS alb with no target groups
