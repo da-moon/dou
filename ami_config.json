@@ -1,0 +1,20 @@
+[
+    {
+        "os_type": "redhat-7.9",
+        "AMI_Account_Name": "cfg-consumer-dev",
+        "owner": "660023206487",
+        "AWS_region": "us-east-1",
+        "bootdisk": "/dev/sda1",
+        "Name": "TALEND-Springboot-BASE-BUILD",
+        "amiosversionfilter": "RHEL7_9-CFG-AMI*",
+        "Requester": "Deployed by Packer",
+        "ApplicationID": "SYSID-06169",
+        "BusinessMapping": "",
+        "Environment": "Dev",
+        "Schedule": "",
+        "Criticality": "Tier 3",
+        "Support": "DL-AWSEDOInfrastructureSupport@CompanyA.com",
+        "assignmentgroup": "",
+        "applicationname": ""
+    }
+]
