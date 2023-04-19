@@ -1,0 +1,56 @@
+version: '2.1'
+orbs:
+  terraform: circleci/terraform@2.1.0
+jobs:
+  single-job-lifecycle:
+    executor: terraform/default
+    steps:
+      - checkout
+      - run:
+          command: | 
+            apk update
+            apk upgrade
+            apk add bash jq curl
+          name: install dependencies
+      - run:
+          command: >-
+            echo "credentials \"app.terraform.io\" {token =
+            \"$TERRAFORM_CLOUD_API_TOKEN\"}" > $HOME/.terraformrc
+          name: Create .terraformrc file locally
+      - run:
+          command: | 
+            wget -P /tmp https://releases.hashicorp.com/terraform/0.13.7/terraform_0.13.7_linux_amd64.zip
+            ls /tmp/terraform_0.13.7_linux_amd64.zip
+            unzip /tmp/terraform_0.13.7_linux_amd64.zip
+            ls -la
+            mv terraform /usr/local/bin
+          name: install terraform binary 
+      - terraform/fmt:
+          path: .
+      - terraform/validate:
+          path: .
+      - run:
+          command: | 
+            terraform init -input=false || true 
+            terraform workspace select gmlp
+            terraform init -input=false
+          name: terraform init
+      - run:
+          command: | 
+            terraform plan -input=false -no-color > plan.log
+            cat plan.log
+          name: terraform plan 
+      - run:
+          command: | 
+            bash sentinel-datadog-demo.sh 
+          name: send demo datadog metrics
+      - run:
+          command: | 
+            bash sentinel-datadog.sh 
+          name: send datadog metrics
+    working_directory: ~/src
+workflows:
+  single-job-lifecycle:
+    jobs:
+      - single-job-lifecycle:
+          context: CaaS
