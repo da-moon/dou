@@ -1,0 +1,28 @@
+[
+  {
+    "id": "a7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "userId": "e7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "company": "Digital On Us",
+    "project": "Resume Builder",
+    "job-role": "Java Programmer",
+    "location" : "Mexico",
+    "current": false,
+    "start-date": "01-01-2022",
+    "end-date": "01-02-202",
+    "toPresent": true,
+    "description": "Create a resume builder tool"
+  },
+  {
+    "id": "a7e22ca8-52d3-11ec-bf63-0242ac130003",
+    "userId": "e7e22ca8-52d3-11ec-bf63-0242ac130002",
+    "company": "Tech Mahindra",
+    "project": "Resume Builder 2.0",
+    "job-role": "Front-end Developer",
+    "location" : "USA",
+    "current": true,
+    "start-date": "01-02-2022",
+    "end-date": "01-03-202",
+    "toPresent": false,
+    "description": "Create a new resume builder tool"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "devops": ["Jenkins","AWS","Terraform","Kubernetes","Ansible","Datadog","Splunk"]
+  },
+  {
+    "frontend": ["Javascript","React","Angular","css","Saas","Vue"]
+  },
+  {
+    "backend": ["Java","Spring","Python","NodeJs","PHP"]
+  },
+  {
+    "QA": ["Selenium","Postman","Jmeter","Docker"]
+  },
+  {
+    "DBMS": ["MySQL","MSSQL","Oracle","MongoDB","MariaDB"]
+  }
+]
