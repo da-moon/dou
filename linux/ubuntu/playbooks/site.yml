@@ -1,0 +1,4 @@
+---
+- import_playbook: iidk-hello-world.yml
+- import_playbook: iidk-consul-aws.yml
+

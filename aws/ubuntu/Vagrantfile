@@ -1,0 +1,102 @@
+
+require 'vagrant-aws'
+
+class Hash
+  def slice(*keep_keys)
+    h = {}
+    keep_keys.each { |key| h[key] = fetch(key) if has_key?(key) }
+    h
+  end unless Hash.method_defined?(:slice)
+  def except(*less_keys)
+    slice(*keys - less_keys)
+  end unless Hash.method_defined?(:except)
+end
+
+# Create and configure the AWS instance(s)
+Vagrant.configure("2") do |config|
+
+
+  # Use rsync for sync folders
+  #config.vm.synced_folder ".", "/vagrant", disabled: false, type: 'rsync'
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  
+  # Use dummy AWS box
+  config.vm.box = "aws-dummy"
+  config.vm.guest = "windows"
+  config.vm.boot_timeout = 600
+
+  # Specify AWS provider configuration
+  config.vm.provider :aws do |aws, override|
+    # Read AWS authentication information from environment variables
+    aws.access_key_id = ENV["AWS_ACCESS_KEY_ID"]
+    aws.secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
+
+    # Specify SSH keypair to use
+    aws.keypair_name = "jestrada-vagrant-ssh-key"
+
+    # Specify region, AMI ID, and security group(s)
+    aws.region = "us-west-1"
+
+    #aws.ami = "ami-0b08e71a81ba4200f" #ubuntu image ID
+    aws.ami  = "ami-0f87a682fa9d0ff58" #windows image ID
+    aws.subnet_id = "subnet-06450526abdac287c"
+    aws.security_groups = ["sg-06b9d51f2ed53c24b"]
+    aws.instance_type = "t3.medium"
+    aws.associate_public_ip = true
+
+
+    aws.tags = {
+      'Name' => 'jestrada-vagrant-ec2',
+      'Automation' => 'vagrant',
+      'Environment' => 'sandbox',
+      'ansible_id' => 'ubuntu'
+    }
+
+    aws.user_data = File.read("user_data.txt")
+    override.nfs.functional = false # workaround for issue 340
+    override.winrm.username = "Administrator"
+    override.winrm.password = "julio123"
+    override.winrm.port     = "5985"
+    override.vm.communicator = "winrm"
+    #config.vm.network :forwarded_port, guest: 3389, host: 33389
+    
+    # Use rsync for sync folders
+    config.vm.synced_folder ".", "/vagrant", disabled: true #, type: 'rsync'
+
+    # Specify username and private key path
+  #  override.ssh.username = "ubuntu"
+     override.ssh.private_key_path = "../vagrant.key"
+  #end
+
+  # First, install python
+  #config.vm.provision "shell" do |s|
+  #  s.inline = "sudo apt-get update -y && sudo apt-get install -y python3-pip"
+    #s.inline = "keytool -importcert -file /etc/ssl/certs/CASERVER-CA.pem -keystore /usr/lib/jvm/java-8-openjdk-amd64//jre/lib/security/cacerts -trustcacerts -noprompt -storepass changeit -alias fewknow"
+  #end
+
+  #provisioner = Vagrant::Util::Platform.windows? ? :guest_ansible : :ansible
+
+  end
+  provisioner = :ansible
+
+  #if index == groups.size - 1
+    #machine.vm.provision provisioner do |ansible|
+
+
+  config.vm.provision provisioner do |ansible|
+    ansible.playbook       = "playbooks/site.yml"
+    ansible.limit          = "all" # or only "nodes" group, etc.
+    ansible.inventory_path = "inventories/ansible_plugins"
+    ansible.compatibility_mode = "2.0"
+    # ansible.start_at_task = "Install datadog java client"
+    # ansible.verbose = "-vvvv"
+    # ansible.ask_vault_pass = true
+    # ansible.tags = ["test"]
+  end
+
+
+  #end
+
+
+end
